@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Phone_Text_XLarge_Bold_Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Please select the type of offer you want to create" />
+
+                <LinearLayout
+                    android:id="@+id/offer_spend_x_discount_x"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp"
+                    android:padding="15dp"
+                    android:background="@color/bg_grey"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Spend X and Get X% Discount" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Create multiple levels of discount to reward those who spend more at your restaurant" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/discount_offer_with_percentage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp"
+                    android:padding="15dp"
+                    android:background="@color/bg_grey">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Percentage Discount" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Customer will receive a percentage discount for selected items or for their entire order" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/offering_flat_amount_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp"
+                    android:padding="15dp"
+                    android:background="@color/bg_grey">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Money Off Discount" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Customer will receive a monetary discount for selected items or for their entire order" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/combo_offers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp"
+                    android:padding="15dp"
+                    android:background="@color/bg_grey"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Combo Offer" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Create combo offers with discounts when food items are purchased together" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>

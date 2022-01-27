@@ -1,0 +1,158 @@
+<resources>
+
+    <string name="login_hint_username">Username</string>
+    <string name="login_hint_password">Password</string>
+    <string name="login_button_login">Login</string>
+    <string name="login_error_message">There was an error logging in.</string>
+    <string name="login_button_contact_support">Contact Support</string>
+    <string name="login_button_forgot_password">Forgot Password?</string>
+    <string name="login_button_register">Register</string>
+
+    <string name="forgot_password_forgot_your_password">Forgot your password</string>
+    <string name="forgot_password_forgot_text">Enter the email address associated with your account and we\'ll help you for resetting your password.</string>
+    <string name="forgot_password_enter_your_email_address">Enter your email address</string>
+
+    <!-- Header -->
+    <string name="content_desc_menu_icon">Open Menu Icon</string>
+    <string name="content_desc_header_back_button">Header Back Button</string>
+    <string name="content_desc_easyfood_logo">EasyFood logo</string>
+    <!-- End Header -->
+
+    <!-- Start Contact Support -->
+    <string name="contact_support_page_name">Contact Support</string>
+    <string name="contact_support_title">Support</string>
+    <string name="contact_support_enter_your_email_address">Enter your email address</string>
+    <string name="contact_support_enter_your_message">Enter your message</string>
+    <string name="contact_support_body_text">
+        Please tell us your issue and a member of our team will be in touch shortly.
+    </string>
+    <string name="contact_support_footer">Alternatively, call our support team on 0333 344 9769</string>
+    <string name="contact_support_button_cancel">Cancel</string>
+    <string name="contact_support_button_send">Send</string>
+    <!-- End Contact Support -->
+
+    <!-- Menu -->
+    <string name="menu_serve_style">Change Serve Style</string>
+    <string name="menu_orders">Orders</string>
+    <string name="content_desc_menu_item_orders">Menu Icon</string>
+    <string name="menu_menu">Menu</string>
+    <string name="menu_delivery_settings">Delivery Settings</string>
+    <string name="menu_restaurant_timings">Restaurant Timings</string>
+    <string name="menu_orders_report">Orders Report</string>
+    <string name="menu_revenue_report">Revenue Report</string>
+    <string name="menu_content_desc_close_icon">Close Icon</string>
+    <string name="menu_offers">Offers</string>
+    <string name="menu_reviews_n_ratings"><![CDATA[Reviews & Ratings]]></string>
+    <string name="menu_charity">Charity</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_change_password">Change Password</string>
+    <string name="menu_logout">Logout</string>
+    <!-- End Menu -->
+
+    <!-- Delivery Settings and Postcodes -->
+    <string name="delivery_settings_title">Set Delivery Charges</string>
+    <string name="delivery_settings_area_title">Delivery Area</string>
+    <string name="delivery_settings_area_desc">Tell us the miles within which you are delivering the food:</string>
+    <string name="delivery_settings_miles_title">Tell us the miles within which you are delivering the food:</string>
+    <string name="delivery_settings_content_desc_location_icon">Location Icon</string>
+    <string name="delivery_settings_average_delivery_time_title">Average Delivery Time:</string>
+    <string name="delivery_settings_delivery_charge">Delivery Charge</string>
+    <string name="delivery_settings_min_order_value">Min Order Value</string>
+    <string name="delivery_settings_free_delivery">Free Delivery</string>
+    <string name="delivery_settings_average_preparation_time">Avg Preparation Time</string>
+    <string name="delivery_settings_miles_1_6_suffix">Miles (1–6)</string>
+    <string name="delivery_settings_avg_delivery_time_minutes_suffix">Minutes</string>
+    <string name="delivery_settings_button_update">Update</string>
+    <string name="delivery_settings_postcodes_title">Postcodes</string>
+    <string name="delivery_settings_postcodes_within_3_miles">Following Postcodes are in 3 miles of radius for deliveries</string>
+    <string name="delivery_settings_checkbox_all_postcodes">Set one amount for all postcodes</string>
+    <string name="delivery_settings_content_desc_postcode_item_action">Delivery Settings Postcode Item Action</string>
+    <string name="delivery_settings_list_header_action">Action</string>
+    <string name="delivery_settings_list_header_free_delivery">Free Delivery</string>
+    <string name="delivery_settings_list_header_delivery_charges">Delivery Charges</string>
+    <string name="delivery_settings_list_header_min_order_value">Min Order Value</string>
+    <string name="delivery_settings_list_header_postcode">Postcode</string>
+    <string name="delivery_settings_pound_symbol">GBP (£)</string>
+    <string name="delivery_settings_free_delivery_at">Free Delivery at:</string>
+    <string name="delivery_settings_button_set">SET</string>
+    <string name="delivery_settings_button_cancel">Cancel</string>
+    <!-- End Delivery Settings and Postcodes -->
+
+    <!-- Restaurant Timings -->
+    <string name="restaurant_timings_days_title">Days</string>
+    <string name="restaurant_timings_opening_time_title">Opening Time</string>
+    <string name="restaurant_timings_collection_time">Collection Time</string>
+    <string name="restaurant_timings_delivery_time">Delivery Time</string>
+    <string name="restaurant_timings_action_title">Action</string>
+    <!-- End Restaurant Timings -->
+
+    <!-- Charity -->
+    <string name="charity_previous_donations">Previous Donations</string>
+    <string name="charity_button_cancel">Cancel</string>
+    <string name="charity_donate_meals">Donate Meals</string>
+    <string name="charity_donate_yes">Yes</string>
+    <string name="charity_donate_no">No</string>
+    <string name="meals_target">Meals Target</string>
+    <string name="charity_target_image_content_desc">Target Image</string>
+    <string name="charity_meals_donated">Meals Donated</string>
+    <string name="charity_banner_image_content_desc">Charity Banner Image</string>
+    <string name="charity_food_collected_by_charity">Food collected by charity?</string>
+    <string name="charity_donated_template">You have donated %1$s meals</string>
+    <string name="donate_book_a_charity_collection">Book a Charity Collection</string>
+    <string name="donate_how_many_meals">How many meals would you like to donate?</string>
+    <string name="donate_when_will_these_meals_be_ready">When will these meals be ready to collect?</string>
+    <string name="donate_please_allow_time">Please allow plenty of time for the local charity to reach your restaurant</string>
+    <string name="donate_now_button">Donate Now</string>
+    <string name="donate_number_of_meals_hint">Enter No of Meals</string>
+    <string name="donate_success_ok_button">OK</string>
+    <string name="donate_success_thank_you">Thank you</string>
+    <string name="donate_cancel_success_dialog_msg">Meal donations are desperately required by local charities to\nhelp feed those in need.\nWe hope you’ll continue to support our mission to help to\nfeed the homeless, reduce food waste and to cut green house\ngasses in the environment.</string>
+    <string name="donate_cancelled">Your charitable food\ndonation has been cancelled</string>
+    <string name="donate_alerted_local">We have now alerted local\ncharities about your available meals.</string>
+    <string name="donate_success">Should any local charities accept your donation, we’ll\n send a notification to your device.\nThank you again for donating your meals and for helping\n us to feed those in need.</string>
+    <string name="donate_cancel_button">Cancel</string>
+    <string name="donate_are_you_sure_you_want_to_cancel">Are you sure you want to\ncancel your donation?</string>
+    <string name="donate_cancel_dialog_msg">By donating any left over meals which your restaurant has at the end of service, you’ll be helping to feed the most needy in society. \nAre you sure you want to cancel your charitable donation?</string>
+    <!-- End Charity -->
+
+    <!-- Ratings -->
+    <string name="ratings_start_and_end_date">Start and End Date</string>
+    <string name="ratings_search">Search</string>
+    <string name="rating_your_average_rating">Your Average Rating</string>
+    <string name="ratings_start_date">Start Date</string>
+    <string name="ratings_end_date">End Date</string>
+    <string name="ratings_no_reviews">%1$s Reviews</string>
+    <string name="ratings_send_reply">Send Reply</string>
+    <string name="ratings_send_thanks">Send Thanks</string>
+    <string name="rating_would_you_recommend_us">Would you recommend us?</string>
+    <string name="rating_will_you_order_again_from_here">Will you order again from here?</string>
+    <string name="rating_was_order_on_time">Was order on time?</string>
+    <string name="rating_food_quality">Food Quality</string>
+    <string name="ratings_filter_by_ratings">Filter by Ratings:</string>
+    <string-array name="ratings_arrays">
+        <item>All Ratings</item>
+        <item>One Star</item>
+        <item>Two Stars</item>
+        <item>Three Stars</item>
+        <item>Four Stars</item>
+        <item>Five Stars</item>
+    </string-array>
+    <!-- End Ratings -->
+
+    <!-- Offers -->
+    <string name="offers_running_offers">Running Offers</string>
+    <string name="offers_not_running_or_expired">Offers Not Running or Expired</string>
+    <string name="offer_add_new_offer">Add New Offer</string>
+    <string name="offers_tap_to_view">Tap to View</string>
+    <string name="offers_with_discount_percentage">Offers with Discount Percentage</string>
+    <string name="offers_discount_icon">Offers Discount Icon</string>
+    <string name="offers_with_discount_amount">Offers with Discount Amount</string>
+    <string name="offers_combo_meal_offers">Combo Meal Offers</string>
+    <string name="offers_actions">Actions</string>
+    <string name="offers_min_order_amt">Min Order Amt.</string>
+    <string name="offers_days_of_the_week">Days of the Week</string>
+    <string name="offers_start_amp_end_date"><![CDATA[Start & End Date]]></string>
+    <string name="offer_title_amp_type"><![CDATA[Offer Title & Type]]></string>
+    <!-- End Offers -->
+
+</resources>

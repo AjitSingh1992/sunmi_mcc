@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageListOfOffers" />
+    </data>
+
+    <FrameLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:background="@color/bg_white"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="120dp"
+                        android:orientation="vertical"
+                        android:paddingStart="32dp"
+                        android:paddingEnd="0dp"
+                        android:layout_margin="16dp"
+                        android:onClick="@{() -> data.outputEvents.onClickRunningOffer()}"
+                        android:background="@color/bg_green"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Text_Large_Regular_Black"
+                            android:id="@+id/running_offers_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/offers_running_offers" />
+
+                        <TextView
+                            style="@style/Text_XXLarge_Bold_Black"
+                            android:id="@+id/running_offers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/txt_green"
+                            android:textSize="32sp"
+                            android:text="@{data.runningOffers}"
+                            tools:text="0" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="120dp"
+                        android:orientation="vertical"
+                        android:paddingStart="32dp"
+                        android:layout_margin="16dp"
+                        android:onClick="@{() -> data.outputEvents.onClickExpiredOffer()}"
+                        android:background="@color/bg_red"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Text_Large_Regular_Black"
+                            android:id="@+id/not_running_offers_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/offers_not_running_or_expired" />
+
+                        <TextView
+                            style="@style/Text_XXLarge_Bold_Black"
+                            android:id="@+id/expired_offers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="32sp"
+                            android:textColor="@color/txt_red"
+                            android:text="@{data.expiredOffers}"
+                            tools:text="0" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/Text_XXLarge_Bold_Black"
+                        android:id="@+id/add_new_offer"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:padding="32dp"
+                        android:gravity="center"
+                        android:layout_margin="16dp"
+                        android:textColor="@color/txt_white"
+                        android:background="@color/txt_green"
+                        android:text="@string/offer_add_new_offer"
+                        app:drawableTint="@color/txt_white"
+                        android:onClick="@{() -> data.outputEvents.onClickAddOffer()}"
+                        app:drawableEndCompat="@drawable/ic_baseline_add_circle_outline_24" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/odp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="24dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:padding="24dp"
+                        android:background="@drawable/rectangle_variant_border_dashed"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Text_XXLarge_Bold_Black"
+                            android:id="@+id/discount_percentage"
+                            android:textColor="@color/txt_orange"
+                            android:textSize="48sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{data.percentageDiscount}"
+                            tools:text="0" />
+
+                        <TextView
+                            style="@style/Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/offers_with_discount_percentage" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_percentage_discount"
+                        android:background="@drawable/circle_white"
+                        android:padding="12dp"
+                        android:translationX="-20dp"
+                        android:contentDescription="@string/offers_discount_icon" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:onClick="@{() -> data.outputEvents.onClickPercentageDiscount()}"
+                        android:text="@string/offers_tap_to_view"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/oda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="24dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:padding="24dp"
+                        android:background="@drawable/rectangle_variant_border_dashed"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Text_XXLarge_Bold_Black"
+                            android:id="@+id/discount_amount"
+                            android:textColor="@color/txt_orange"
+                            android:textSize="48sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{data.flatDiscount}"
+                            tools:text="0" />
+
+                        <TextView
+                            style="@style/Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/offers_with_discount_amount" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_pound_sign"
+                        android:padding="12dp"
+                        android:background="@drawable/circle_white"
+                        android:translationX="-20dp"
+                        android:contentDescription="@string/offers_discount_icon" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+
+                        android:onClick="@{() -> data.outputEvents.onClickFlatDiscount()}"
+                        android:text="@string/offers_tap_to_view"/>
+
+                </LinearLayout>
+
+                <!--<LinearLayout
+                    android:id="@+id/combo_offer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="24dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:padding="24dp"
+                        android:background="@drawable/rectangle_variant_border_dashed"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Text_XXLarge_Bold_Black"
+                            android:id="@+id/combo_meal"
+                            android:textColor="@color/txt_orange"
+                            android:textSize="48sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{data.comboDiscount}"
+                            tools:text="0" />
+
+                        <TextView
+                            style="@style/Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:text="@string/offers_combo_meal_offers" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_food_meal"
+                        android:padding="12dp"
+                        android:background="@drawable/circle_white"
+                        android:translationX="-20dp"
+                        android:contentDescription="@string/offers_discount_icon" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:onClick="@{() -> data.outputEvents.onClickComboDiscount()}"
+                        android:text="@string/offers_tap_to_view"/>
+
+                </LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/bg_grey">
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:padding="24dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/offer_title_amp_type" />
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:padding="24dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/offers_start_amp_end_date" />
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="24dp"
+                        android:text="@string/offers_days_of_the_week" />
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="24dp"
+                        android:text="@string/offers_min_order_amt" />
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="24dp"
+                        android:text="@string/offers_actions" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/offers_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/row_offers_list"
+                    android:layout_marginEnd="24dp"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+</layout>

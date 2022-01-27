@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:gravity="center"
+        android:layout_margin="32dp"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Phone_Text_XLarge_Bold_Black"
+                    android:id="@+id/txt_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    tools:text="Set the same settings for all Postcodes."
+                    android:text="" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Phone_Text_Large_Regular_Grey"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/delivery_settings_min_order_value"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bg_grey"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:text="@string/delivery_settings_pound_symbol" />
+
+                    <EditText
+                        android:id="@+id/edtMinOrder"
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:padding="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:background="@drawable/rectangle_border"
+                        android:inputType="numberDecimal"
+                        android:text=""
+                        android:autofillHints=""
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    style="@style/Phone_Text_Large_Regular_Grey"
+                    android:text="@string/delivery_settings_delivery_charge" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:padding="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bg_grey"
+                        android:gravity="center"
+                        android:text="@string/delivery_settings_pound_symbol" />
+
+                    <EditText
+                        android:id="@+id/edtDeliveryCharge"
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:padding="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:background="@drawable/rectangle_border"
+                        android:inputType="numberDecimal"
+                        android:text=""
+                        android:autofillHints=""
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    style="@style/Phone_Text_Large_Regular_Grey"
+                    android:text="@string/delivery_settings_free_delivery_at" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:padding="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bg_grey"
+                        android:gravity="center"
+                        android:text="@string/delivery_settings_pound_symbol" />
+
+                    <EditText
+                        android:id="@+id/edtFreeDelivery"
+                        style="@style/Phone_Text_XLarge_Bold_Black"
+                        android:padding="16dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:background="@drawable/rectangle_border"
+                        android:inputType="numberDecimal"
+                        android:text=""
+                        android:autofillHints=""
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Phone_Button_Orange_Bold"
+                android:text="@string/delivery_settings_button_set" />
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Phone_Button_White_Bold"
+                android:layout_marginStart="32dp"
+                android:text="@string/delivery_settings_button_cancel" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

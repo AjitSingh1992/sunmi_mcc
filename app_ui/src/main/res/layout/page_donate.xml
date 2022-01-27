@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageDonate" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="32dp"
+        android:background="@color/bg_white">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:contentDescription="@string/charity_banner_image_content_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:src="@drawable/banner_six"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tv_total_donated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:layout_marginTop="24dp"
+                    style="@style/Text_XLarge_Bold_Black"
+                    android:text="@string/donate_book_a_charity_collection"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/donate_how_many_meals"
+                    style="@style/Text_Large_Regular_Black"/>
+
+                <EditText
+                    android:id="@+id/et_no_of_meals"
+                    android:layout_width="240dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@={data.numberMeals}"
+                    style="@style/Text_XLarge_Bold_Orange"
+                    android:hint="@string/donate_number_of_meals_hint"
+                    android:background="@drawable/rectangle_rounded_medium_border_orange"
+                    android:autofillHints="" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/donate_when_will_these_meals_be_ready"
+                    style="@style/Text_Large_Regular_Grey"
+                    android:layout_marginTop="16dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    app:spanCount="4"
+                    tools:itemCount="8"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/row_donate_time"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/donate_please_allow_time"
+                    style="@style/Text_Large_Regular_Grey"
+                    android:layout_marginTop="16dp"/>
+
+                <Button
+                    android:id="@+id/cv_donate_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/donate_now_button"
+                    android:layout_gravity="center"
+                    style="@style/Button_Orange_Bold"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> data.outputEvents.onClickDonate()}"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</layout>

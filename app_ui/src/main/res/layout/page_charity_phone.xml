@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageCharity" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:background="@color/bg_white">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:contentDescription="@string/charity_banner_image_content_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/charity_banner_image_height_phone"
+                    android:src="@drawable/banner_one"
+                    android:scaleType="centerCrop"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="16dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/target_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/donated_container">
+
+                        <ImageView
+                            android:id="@+id/target_image"
+                            android:layout_width="@dimen/charity_target_image_width_phone"
+                            android:layout_height="@dimen/charity_target_image_width_phone"
+                            android:src="@drawable/ic_target"
+                            android:padding="12dp"
+                            android:background="@drawable/circle_orange"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:contentDescription="@string/charity_target_image_content_desc" />
+
+                        <TextView
+                            android:id="@+id/tv_target"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingStart="16dp"
+                            tools:text="2000"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/target_image"
+                            style="@style/Phone_Text_XLarge_Bold_Black"
+                            android:text="@{data.targetMeals}"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingStart="16dp"
+                            android:text="@string/meals_target"
+                            app:layout_constraintTop_toBottomOf="@id/tv_target"
+                            app:layout_constraintStart_toEndOf="@id/target_image"
+                            style="@style/Phone_Text_Large_Regular_Black" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/donated_container"
+                        android:layout_width="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/target_container"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/donated_image"
+                            android:layout_width="@dimen/charity_target_image_width_phone"
+                            android:layout_height="@dimen/charity_target_image_width_phone"
+                            android:src="@drawable/ic_baseline_favorite_border_24"
+                            android:padding="12dp"
+                            android:background="@drawable/circle_orange"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:contentDescription="@string/charity_target_image_content_desc" />
+
+                        <TextView
+                            android:id="@+id/tv_donated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingStart="16dp"
+                            tools:text="2000"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/donated_image"
+                            style="@style/Phone_Text_XLarge_Bold_Black"
+                            android:text="@{data.donatedMeals}" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingStart="16dp"
+                            android:text="@string/charity_meals_donated"
+                            app:layout_constraintTop_toBottomOf="@id/tv_donated"
+                            app:layout_constraintStart_toEndOf="@id/donated_image"
+                            style="@style/Phone_Text_Large_Regular_Black" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/charity_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:progressTint="@color/button_orange"
+                    android:thumbTint="@color/button_orange"
+                    tools:targetApi="lollipop" />
+
+                <TextView
+                    android:id="@+id/tv_total_donated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    tools:text="You have donated 0 meals"
+                    style="@style/Phone_Text_XLarge_Bold_Black"
+                    android:text="@{@string/charity_donated_template(data.donatedMeals)}"/>
+
+                <Button
+                    android:id="@+id/cv_donate_meals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    style="@style/Phone_Button_Orange_Bold"
+                    android:layout_gravity="center"
+                    android:text="@string/charity_donate_meals"
+                    android:onClick="@{() -> data.outputEvents.onClickDonate()}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/charity_previous_donations"
+                    style="@style/Phone_Text_XLarge_Bold_Black"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_previous_donation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/row_previous_donation_phone"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</layout>

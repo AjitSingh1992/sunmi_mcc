@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+    Styles in here are intended to only be used as a parent within another style (to prevent duplication).
+    So these shouldn't be used within a layout, the __ is to discourage that.
+
+    You could put the font sizes in dimens, but there's no need really
+    -->
+
+    <style name="__Phone_Text_Very_Bold">
+        <item name="android:fontFamily">@font/raleway_extra_bold</item>
+    </style>
+
+    <style name="__Phone_Text_Bold">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+    </style>
+
+    <style name="__Phone_Text_Regular">
+        <item name="android:fontFamily">@font/raleway_semi_bold</item>
+    </style>
+
+
+
+    <style name="__Phone_Text_XXXLarge_Bold" parent="__Phone_Text_Very_Bold">
+        <item name="android:textSize">@dimen/phone_text_xxxlarge_bold</item>
+    </style>
+
+    <style name="__Phone_Text_Large_Bold" parent="__Phone_Text_Very_Bold">
+        <item name="android:textSize">@dimen/phone_text_large_bold</item>
+    </style>
+
+
+
+    <style name="__Phone_Text_XXLarge_Bold" parent="__Phone_Text_Bold">
+        <item name="android:textSize">@dimen/phone_text_xxlarge_bold</item>
+    </style>
+
+    <style name="__Phone_Text_XLarge_Bold" parent="__Phone_Text_Bold">
+        <item name="android:textSize">@dimen/phone_text_xlarge_bold</item>
+    </style>
+
+
+
+    <style name="__Phone_Text_XLarge_Regular" parent="__Phone_Text_Regular">
+        <item name="android:textSize">@dimen/phone_text_xlarge_regular</item>
+    </style>
+
+    <style name="__Phone_Text_Large_Regular" parent="__Phone_Text_Regular">
+        <item name="android:textSize">@dimen/phone_text_large_regular</item>
+    </style>
+
+    <style name="__Phone_Text_Small_Regular" parent="__Phone_Text_Regular">
+        <item name="android:textSize">@dimen/phone_text_small_regular</item>
+        <item name="android:letterSpacing" tools:ignore="NewApi">0.1</item>
+    </style>
+
+    <style name="__Phone_Button_Medium_Bold" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:fontFamily">@font/raleway_bold</item>
+        <item name="android:textSize">@dimen/phone_text_medium_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minWidth">80sp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataPageRevenueReport" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="26dp"
+        android:background="@color/bg_white">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{data.isPinCheckSuccessful &amp; data.isDataLoaded ? View.VISIBLE : View.GONE}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="32dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="left|center_vertical"
+                        android:text="QUICK FILTER:" />
+
+                    <Button
+                        style="@style/Phone_Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="All"
+                        android:onClick="@{(v) -> data.outputEvents.onClickAll()}"/>
+
+                    <Button
+                        style="@style/Phone_Button_Orange_Bold"
+                        android:id="@+id/btn_yesterday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Yesterday"
+                        android:onClick="@{(v) -> data.outputEvents.onClickYesterday()}"/>
+
+                    <Button
+                        style="@style/Phone_Button_Orange_Bold"
+                        android:id="@+id/btn_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:visibility="gone"
+                        android:text="Today"
+                        android:onClick="@{(v) -> data.outputEvents.onClickToday()}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:id="@+id/startDate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:paddingEnd="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="Start Date"
+                        android:background="@drawable/rectangle_border_grey_hint"
+                        app:drawableEndCompat="@drawable/ic_calendar"
+                        android:text="@{data.startDate}"
+                        android:onClick="@{(v) -> data.outputEvents.onClickStartDate()}" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:id="@+id/endDate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:paddingEnd="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="End Date"
+                        android:background="@drawable/rectangle_border_grey_hint"
+                        app:drawableEndCompat="@drawable/ic_calendar"
+                        android:text="@{data.endDate}"
+                        android:onClick="@{(v) -> data.outputEvents.onClickEndDate()}" />
+
+                    <Button
+                        style="@style/Phone_Button_Orange_Bold"
+                        android:id="@+id/findReportBetweenDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Go"
+                        android:onClick="@{(v) -> data.outputEvents.onClickFindBetweenDates()}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/total_orders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TOTAL ORDERS" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/text_total_orders"
+                            android:text="@{data.totalOrders}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/product_sold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TOTAL ITEMS SOLD" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/total_product_sold"
+                            android:text="@{data.totalProductSold}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/discount_applied"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="DISCOUNTS APPLIED" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tot_discount_applied"
+                            android:text="@{data.totalDiscountApplied}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/revenue_collected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="REVENUE COLLECTED" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:id="@+id/total_revenue_collected"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{data.totalRevenueCollected}" />
+
+                    </LinearLayout>
+
+                    <!-- Unused layout right now -->
+                    <LinearLayout
+                        android:id="@+id/taxes_applied"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TOTAL TAXES APPLIED" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/total_tax_applied"
+                            android:text="@{data.totalTaxApplied}" />
+
+                    </LinearLayout>
+
+                    <!-- Unused layout right now -->
+                    <LinearLayout
+                        android:id="@+id/gross_profit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="GROSS PROFIT" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/text_grossProfit"
+                            android:text="@{data.grossProfit}" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+</layout>

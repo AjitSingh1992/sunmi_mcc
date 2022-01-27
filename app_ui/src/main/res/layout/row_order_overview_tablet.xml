@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowOrderOverview" />
+
+        <import type="com.easyfoodvone.app_common.viewdata.DataRowOrderOverview.OrderStatus" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/merge_orders_list_column_guides_tablet"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/viewBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/bg_white"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_min="100dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?selectableItemBackground"
+            android:onClick="@{() -> data.outputEvents.onClickViewDetail()}"
+            app:layout_constraintStart_toStartOf="@+id/viewBackground"
+            app:layout_constraintEnd_toEndOf="@+id/viewBackground"
+            app:layout_constraintTop_toTopOf="@+id/viewBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/viewBackground" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideContentTop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="30dp" />
+
+        <ImageView
+            android:id="@+id/buttonAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:src="@drawable/ic_new_order_accept"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> data.status == OrderStatus.NEW ? data.outputEvents.onClickNewOrderAccept() : void}"
+            android:visibility="@{data.status == OrderStatus.NEW ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1Start"
+            app:layout_constraintTop_toBottomOf="@+id/textDeliveryType" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="8dp"
+            android:src="@drawable/ic_new_order_reject"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> data.status == OrderStatus.NEW ? data.outputEvents.onClickNewOrderReject() : void}"
+            android:visibility="@{data.status == OrderStatus.NEW ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toEndOf="@+id/buttonAccept"
+            app:layout_constraintTop_toBottomOf="@+id/textDeliveryType" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/textDeliveryType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.deliveryTypeTablet}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn2Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/__Text_Large_Bold"
+            android:id="@+id/textOrderStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red : 0, default=@color/txt_green}"
+            android:text="@{data.status == OrderStatus.ACCEPTED ? (data.currentAcceptedStatus + ` ▼`) : data.status == OrderStatus.REJECTED ? `Rejected` : ``, default=`Accepted`}"
+            android:onClick="@{() -> data.status == OrderStatus.ACCEPTED ? data.outputEvents.onClickEditAcceptedStatusBegin() : void}"
+            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn2Start"
+            app:layout_constraintTop_toBottomOf="@+id/textDeliveryType" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/orderDate"
+            android:layout_width="110sp"
+            android:layout_height="wrap_content"
+            android:text="@{data.orderDateTablet, default=`7 Oct 2020`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/orderTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.orderTimeTablet, default=`15:30`}"
+            app:layout_constraintStart_toEndOf="@+id/orderDate"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn3Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/Text_Small_Regular_Black"
+            android:id="@+id/textRequestedFor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Requested for"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn3Start"
+            app:layout_constraintTop_toBottomOf="@+id/orderDate" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/deliveryDate"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.deliveryDateTablet, default=`15:30`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2Start"
+            app:layout_constraintTop_toBottomOf="@+id/textRequestedFor" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.deliveryTimeTablet, default=`15:30`}"
+            app:layout_constraintStart_toEndOf="@+id/deliveryDate"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn3Start"
+            app:layout_constraintTop_toBottomOf="@+id/textRequestedFor" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/textOrderID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.orderID, default=`1234567890`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn3Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn4Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/Text_Large_Bold_Black"
+            android:id="@+id/textOrderAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.orderAmount, default=`£19.95`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn4Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn5Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Hint"
+            android:id="@+id/textPaymentType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.paymentType, default=`Cash Pre Del`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn4Start"
+            app:layout_constraintEnd_toStartOf="@+id/guideColumn5Start"
+            app:layout_constraintTop_toBottomOf="@+id/textOrderAmount" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Black"
+            android:id="@+id/textCustomerName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.customerName + ` (` + data.previousOrder + `)`, default=`Saruman the White (New)`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn5Start"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn5Start"
+            app:layout_constraintTop_toTopOf="@+id/guideContentTop" />
+
+        <TextView
+            style="@style/Text_Large_Regular_Hint"
+            android:id="@+id/textCustomerAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.customerAddress, default=`Lord of Isengard, The White Council, Tower of Orthanc, Isengard`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn5Start"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn5Start"
+            app:layout_constraintTop_toBottomOf="@+id/textCustomerName" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:barrierAllowsGoneWidgets="false"
+            app:constraint_referenced_ids="buttonAccept,textOrderStatus,deliveryDate,textOrderID,textPaymentType,textCustomerAddress"/>
+
+        <!-- The height of this element controls the "minimum" padding at the bottom of the cell -->
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="27dp"
+            app:layout_constraintTop_toBottomOf="@+id/barrier"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

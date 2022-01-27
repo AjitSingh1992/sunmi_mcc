@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataPageContactSupport" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white">
+
+        <include
+            layout="@layout/include_header_phone"
+            bind:data="@{data.dataHeader}"
+            android:id="@+id/header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/bg_white"
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Phone_Text_Large_Regular_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/contact_support_body_text" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <EditText
+                        style="@style/Phone_Text_Large_Regular_Hint"
+                        android:id="@+id/contactSupportEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:inputType="textEmailAddress"
+                        android:padding="8dp"
+                        android:background="@drawable/rectangle_rounded_medium_border"
+                        android:hint="@string/forgot_password_enter_your_email_address"
+                        android:text="@={data.inputEmailAddress}"
+                        android:autofillHints="" />
+
+                    <!-- During text fade out animation keep the old text while the view is disappearing -->
+                    <TextView
+                        style="@style/Phone_Text_Small_Regular_Error"
+                        android:id="@+id/emailError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{data.keepOldTextIfNowEmpty(emailError, data.emailError)}"
+                        android:visibility="@{data.emailError.empty ? View.INVISIBLE : View.VISIBLE}"/>
+
+                    <EditText
+                        style="@style/Phone_Text_Large_Regular_Hint"
+                        android:id="@+id/contactSupportMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="120dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="5dp"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:padding="8dp"
+                        android:gravity="top"
+                        android:background="@drawable/rectangle_rounded_medium_border"
+                        android:hint="@string/contact_support_enter_your_message"
+                        android:text="@={data.inputMessage}"
+                        android:autofillHints="" />
+
+                    <!-- During text fade out animation keep the old text while the view is disappearing -->
+                    <TextView
+                        style="@style/Phone_Text_Small_Regular_Error"
+                        android:id="@+id/messageError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{data.keepOldTextIfNowEmpty(messageError, data.messageError)}"
+                        android:visibility="@{data.messageError.empty ? View.INVISIBLE : View.VISIBLE}"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:padding="4dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/Phone_Button_Orange_Bold"
+                        android:id="@+id/resetPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginRight="2dp"
+                        android:text="@string/contact_support_button_send"
+                        android:onClick="@{() -> data.outputEvents.onClickSend()}"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        style="@style/Phone_Button_White_Bold"
+                        android:id="@+id/tryAgain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/contact_support_button_cancel"
+                        android:onClick="@{() -> data.outputEvents.onClickCancel()}"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/Phone_Text_Large_Regular_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/contact_support_footer" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

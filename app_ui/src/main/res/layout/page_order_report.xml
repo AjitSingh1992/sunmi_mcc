@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataPageOrderReport" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="32dp"
+        android:background="@color/bg_white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="15dp"
+            android:visibility="@{data.isPinCheckSuccessful &amp; data.isDataLoaded ? View.VISIBLE : View.GONE}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.46"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_marginEnd="25dp">
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="left|center_vertical"
+                        android:text="QUICK FILTER:" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:id="@+id/btn_yesterday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="30dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Yesterday"
+                        android:onClick="@{(v) -> data.outputEvents.onClickYesterday()}" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:id="@+id/btn_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="30dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Today"
+                        android:visibility="gone"
+                        android:onClick="@{(v) -> data.outputEvents.onClickToday()}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.56"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Orange"
+                        android:id="@+id/startDate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:paddingEnd="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="Start Date"
+                        android:background="@drawable/rectangle_border_grey_hint"
+                        app:drawableEndCompat="@drawable/ic_calendar"
+                        android:text="@{data.startDate}"
+                        android:onClick="@{(v) -> data.outputEvents.onClickStartDate()}" />
+
+                    <TextView
+                        style="@style/Text_Large_Bold_Orange"
+                        android:id="@+id/endDate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="30dp"
+                        android:paddingStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:paddingEnd="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="End Date"
+                        android:background="@drawable/rectangle_border_grey_hint"
+                        app:drawableEndCompat="@drawable/ic_calendar"
+                        android:text="@{data.endDate}"
+                        android:onClick="@{(v) -> data.outputEvents.onClickEndDate()}" />
+
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:id="@+id/findReportBetweenDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="30dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="Search"
+                        android:onClick="@{(v) -> data.outputEvents.onClickSearchBetweenDates()}" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.46"
+                    android:layout_marginEnd="25dp">
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/boxBottomRight"
+                        app:layout_constraintTop_toBottomOf="@+id/boxMiddleLeft"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.75"
+                        android:id="@+id/boxBottomLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:id="@+id/accepted_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="ACCEPTED (100)"
+                            android:text="@{`ACCEPTED (` + data.acceptedCount + `)`}" />
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:id="@+id/accepted_per"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="80%"
+                            android:text="@{data.acceptedPercent}" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/accepted_amt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 55.25"
+                            android:text="@{data.acceptedAmount}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/boxBottomLeft"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/boxMiddleRight"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.75"
+                        android:id="@+id/boxBottomRight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:id="@+id/declined_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="DECLINED (20)"
+                            android:text="@{`DECLINED (` + data.declinedCount + `)`}" />
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:id="@+id/declined_per"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="10%"
+                            android:text="@{data.declinedPercent}" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/declined_amt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 15.25"
+                            android:text="@{data.declinedAmount}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/boxMiddleRight"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.445"
+                        android:id="@+id/boxMiddleLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TOTAL REVENUE" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/total_revenue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 1500.00"
+                            android:text="@{data.totalRevenue}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/boxMiddleLeft"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.445"
+                        android:id="@+id/boxMiddleRight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TOTAL DISCOUNT" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/total_discount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 55.25"
+                            android:text="@{data.totalDiscount}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/boxTopRight"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/boxMiddleLeft"
+                        app:layout_constraintVertical_bias="0"
+                        android:id="@+id/boxTopLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TOTAL ORDERS" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/total_orders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="200"
+                            android:text="@{data.totalOrders}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/boxTopLeft"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/boxMiddleRight"
+                        app:layout_constraintVertical_bias="0"
+                        android:id="@+id/boxTopRight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TOTAL ITEMS" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="35sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/total_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="300"
+                            android:text="@{data.totalItems}" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.56"
+                    android:orientation="vertical">
+
+                    <androidx.coordinatorlayout.widget.CoordinatorLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.appbar.AppBarLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null">
+
+                            <com.google.android.material.appbar.CollapsingToolbarLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:paddingTop="14dp"
+                                        android:paddingBottom="12dp"
+                                        android:background="@drawable/rectangle_border_grey_background">
+
+                                        <include
+                                            layout="@layout/merge_order_report_column_guides" />
+
+                                        <TextView
+                                            style="@style/Text_Small_Regular_Black"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="ORDER ID"
+                                            app:layout_constraintStart_toStartOf="@+id/column1"
+                                            app:layout_constraintEnd_toEndOf="@+id/column1" />
+
+                                        <TextView
+                                            style="@style/Text_Small_Regular_Black"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="POSTCODE"
+                                            app:layout_constraintStart_toStartOf="@+id/column2"
+                                            app:layout_constraintEnd_toEndOf="@+id/column2" />
+
+                                        <TextView
+                                            style="@style/Text_Small_Regular_Black"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="ORDER DATE"
+                                            app:layout_constraintStart_toStartOf="@+id/column3"
+                                            app:layout_constraintEnd_toEndOf="@+id/column3" />
+
+                                        <TextView
+                                            style="@style/Text_Small_Regular_Black"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="ITEMS"
+                                            app:layout_constraintStart_toStartOf="@+id/column4"
+                                            app:layout_constraintEnd_toEndOf="@+id/column4" />
+
+                                        <TextView
+                                            style="@style/Text_Small_Regular_Black"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="TOTAL"
+                                            app:layout_constraintStart_toStartOf="@+id/column5"
+                                            app:layout_constraintEnd_toEndOf="@+id/column5" />
+
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                </LinearLayout>
+
+                            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+                        </com.google.android.material.appbar.AppBarLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/total_orders_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="15dp"
+                            android:paddingBottom="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:visibility="@{data.isDataLoaded ? View.VISIBLE : View.INVISIBLE}">
+
+                        <ImageView
+                            android:id="@+id/button_email"
+                            android:layout_width="45dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="40dp"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_file"
+                            android:scaleType="fitCenter"
+                            android:onClick="@{() -> data.isDataLoaded ? data.outputEvents.onClickEmailReport() : void}" />
+
+                        <ImageView
+                            android:id="@+id/button_print"
+                            android:layout_width="45dp"
+                            android:layout_height="48dp"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_printer"
+                            android:scaleType="fitCenter"
+                            android:onClick="@{() -> data.isDataLoaded ? data.outputEvents.onClickPrintReport() : void}" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

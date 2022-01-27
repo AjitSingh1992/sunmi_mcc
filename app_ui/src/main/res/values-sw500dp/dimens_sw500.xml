@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    ONLY VALUES INDEPENDENT OF WHETHER IT IS A TABLET OR PHONE LAYOUT
+
+    Relatively large size values we are using which will fit within a screen LARGER than 500dp
+    -->
+    <dimen name="dialog_width_max">300dp</dimen>
+    <dimen name="side_menu_width">355sp</dimen>
+</resources>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageListOfOffers" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        android:layout_marginTop="16dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:onClick="@{() -> data.outputEvents.onClickRunningOffer()}"
+                        android:background="@drawable/rectangle_left_bar_border_grey_hint_phone"
+                        android:padding="10dp"
+                        android:paddingStart="13dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Regular_Black"
+                            android:id="@+id/running_offers_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="RUNNING" />
+
+                        <TextView
+                            style="@style/Phone_Text_XXLarge_Bold_Orange"
+                            android:id="@+id/running_offers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="11.33dp"
+                            android:layout_marginTop="5dp"
+                            android:text="@{data.runningOffers}"
+                            tools:text="0" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Orange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginStart="11.33dp"
+                            android:text="View" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="7dp"
+                        android:orientation="vertical"
+                        android:onClick="@{() -> data.outputEvents.onClickExpiredOffer()}"
+                        android:background="@drawable/rectangle_left_bar_border_grey_hint_phone"
+                        android:padding="10dp"
+                        android:paddingStart="13dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Regular_Black"
+                            android:id="@+id/not_running_offers_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="NOT RUNNING / EXPIRED" />
+
+                        <TextView
+                            style="@style/Phone_Text_XXLarge_Bold_Orange"
+                            android:id="@+id/expired_offers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="11.33dp"
+                            android:layout_marginTop="5dp"
+                            android:text="@{data.expiredOffers}"
+                            tools:text="0" />
+
+                        <TextView
+                            style="@style/Phone_Text_Large_Bold_Orange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginStart="11.33dp"
+                            android:text="View" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:id="@+id/add_new_offer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="7dp"
+                        android:padding="10dp"
+                        android:paddingStart="13dp"
+                        android:paddingEnd="13dp"
+                        android:textColor="@color/txt_white"
+                        android:background="@drawable/button_rounded_orange_clipped_ripple"
+                        android:text="CREATE NEW OFFER"
+                        android:onClick="@{() -> data.outputEvents.onClickAddOffer()}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/odp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:onClick="@{() -> data.outputEvents.onClickPercentageDiscount()}"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_XXLarge_Bold_Orange"
+                        android:id="@+id/discount_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-6dp"
+                        android:text="@{data.percentageDiscount}"
+                        tools:text="0" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/offers_with_discount_percentage" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="24dp"
+                        android:text="View" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/oda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:onClick="@{() -> data.outputEvents.onClickFlatDiscount()}"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_XXLarge_Bold_Orange"
+                        android:id="@+id/discount_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-6dp"
+                        android:text="@{data.flatDiscount}"
+                        tools:text="0" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/offers_with_discount_amount" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="24dp"
+                        android:text="View" />
+
+                </LinearLayout>
+
+                <!--<LinearLayout
+                    android:id="@+id/combo_offer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal"
+                    android:onClick="@{() -> data.outputEvents.onClickComboDiscount()}"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_XXLarge_Bold_Orange"
+                        android:id="@+id/combo_meal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-6dp"
+                        android:text="@{data.comboDiscount}"
+                        tools:text="0" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/offers_combo_meal_offers" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="24dp"
+                        android:text="View" />
+
+                </LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal"
+                    android:background="@color/bg_orange"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="8dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="5dp">
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/txt_white"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/offer_title_amp_type" />
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="80sp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/txt_white"
+                        android:gravity="center"
+                        android:text="@string/offers_start_amp_end_date" />
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/txt_white"
+                        android:gravity="center"
+                        android:text="@string/offers_days_of_the_week" />
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="60sp"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/txt_white"
+                        android:gravity="center"
+                        android:text="@string/offers_min_order_amt" />
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="63sp"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/txt_white"
+                        android:gravity="center"
+                        android:text="@string/offers_actions" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/offers_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/row_offers_list_phone" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+
+</layout>

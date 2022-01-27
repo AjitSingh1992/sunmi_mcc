@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataIncludeHeader" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:contentDescription="@string/content_desc_easyfood_logo"
+            android:id="@+id/imageLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/ic_easyfood_flag_tablet"
+            app:layout_constraintStart_toEndOf="@+id/button_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideUpperElements"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="50dp" />
+
+        <ImageView
+            android:contentDescription="@string/content_desc_header_back_button"
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_baseline_keyboard_backspace_24"
+            app:tint="@color/txt_black"
+            android:background="?selectableItemBackgroundBorderless"
+            android:onClick="@{() -> data.outputEvents.onClickBack()}"
+            app:layout_constraintTop_toTopOf="@+id/guideUpperElements"
+            app:layout_constraintBottom_toBottomOf="@+id/guideUpperElements"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/restaurantLogo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="29dp"
+            app:layout_constraintEnd_toStartOf="@+id/textRestaurantName"
+            app:layout_constraintTop_toTopOf="@+id/guideUpperElements"
+            app:layout_constraintBottom_toBottomOf="@+id/guideUpperElements" />
+
+        <TextView
+            style="@style/Text_Large_Bold_Black"
+            android:id="@+id/textRestaurantName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="90dp"
+            android:text="@{data.restaurantName, default=`Sample Restaurant Name`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toStartOf="@+id/button_burger"
+            app:layout_constraintTop_toTopOf="@+id/guideUpperElements"
+            app:layout_constraintBottom_toTopOf="@+id/textRestaurantPhone"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <TextView
+            style="@style/Text_Large_Bold_Black"
+            android:id="@+id/textRestaurantPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="90dp"
+            android:text="@{data.restaurantNumber, default=`01234 567890`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toStartOf="@+id/button_burger"
+            app:layout_constraintTop_toBottomOf="@+id/textRestaurantName"
+            app:layout_constraintBottom_toTopOf="@+id/textRestaurantAddress"
+            app:layout_constraintWidth_percent="0.5"/>
+
+        <TextView
+            style="@style/Text_Large_Regular_Hint"
+            android:id="@+id/textRestaurantAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="90dp"
+            android:text="@{data.restaurantAddress, default=`999 Long Lane, Long Village, Long City, LONG 999`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toStartOf="@+id/button_burger"
+            app:layout_constraintTop_toBottomOf="@+id/textRestaurantPhone"
+            app:layout_constraintBottom_toBottomOf="@+id/guideUpperElements"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/button_burger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:tint="@color/txt_black"
+            android:src="@drawable/ic_menu_24"
+            android:background="?selectableItemBackgroundBorderless"
+            android:onClick="@{() -> data.outputEvents.onClickBurger()}"
+            android:visibility="@{data.showBurgerMenu ? View.VISIBLE : View.GONE, default=`visible`}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideUpperElements"
+            app:layout_constraintBottom_toBottomOf="@+id/guideUpperElements"
+            android:contentDescription="@string/content_desc_menu_icon" />
+
+        <TextView
+            style="@style/Text_XLarge_Regular_Black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{data.pageTitle, default=`Page Title`}"
+            android:visibility="@{data.pageTitle.empty ? View.GONE : View.VISIBLE, default=`visible`}"
+            app:layout_constraintStart_toStartOf="@+id/imageLogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageLogo"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintHorizontal_bias="0"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

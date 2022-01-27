@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageDonateSuccess" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:background="@color/bg_white">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/iv_banner"
+                    android:contentDescription="@string/charity_banner_image_content_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    tools:src="@drawable/banner_three"
+                    android:src="@{data.isCancellationPage() ? @drawable/banner_two : @drawable/banner_three}"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tv_thank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:layout_marginTop="24dp"
+                    style="@style/Phone_Text_XLarge_Bold_Orange"
+                    android:visibility="@{data.isCancellationPage() ? View.GONE : View.VISIBLE}"
+                    android:text="@string/donate_success_thank_you"/>
+
+                <TextView
+                    android:id="@+id/tv_surity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    tools:text="@string/donate_cancelled"
+                    android:text="@{data.isCancellationPage() ? @string/donate_cancelled : @string/donate_alerted_local}"
+                    style="@style/Phone_Text_Large_Bold_Black"/>
+
+                <TextView
+                    android:id="@+id/tv_sucess_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    tools:text="@string/donate_cancel_success_dialog_msg"
+                    android:text="@{data.isCancellationPage() ? @string/donate_cancel_success_dialog_msg : @string/donate_success}"
+                    style="@style/__Phone_Text_Large_Regular"/>
+
+                <Button
+                    android:id="@+id/cv_donate_now"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/donate_success_ok_button"
+                    android:layout_gravity="center"
+                    style="@style/Phone_Button_Orange_Bold"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> data.outputEvents.onClickOk()}"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</layout>

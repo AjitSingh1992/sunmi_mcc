@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    ONLY VALUES INDEPENDENT OF WHETHER IT IS A TABLET OR PHONE LAYOUT
+
+    Relatively large size values we are using which will fit within a screen SMALLER than 500dp
+    -->
+    <dimen name="dialog_width_max">250dp</dimen>
+    <dimen name="side_menu_width">240sp</dimen>
+
+    <!-- Charity -->
+    <dimen name="charity_popup_padding_phone">16dp</dimen>
+    <dimen name="charity_target_image_width_phone">48dp</dimen>
+    <dimen name="charity_target_image_width_tablet">72dp</dimen>
+    <dimen name="charity_banner_image_height_phone">200dp</dimen>
+</resources>

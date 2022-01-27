@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Phone_Text_XXXLarge_Bold_Black" parent="__Phone_Text_XXXLarge_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_XXLarge_Bold_Black" parent="__Phone_Text_XXLarge_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_XXLarge_Bold_Orange" parent="__Phone_Text_XXLarge_Bold">
+        <item name="android:textColor">@color/txt_orange</item>
+    </style>
+
+    <style name="Phone_Text_XLarge_Bold_Black" parent="__Phone_Text_XLarge_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_XLarge_Regular_Orange" parent="__Phone_Text_XLarge_Regular">
+        <item name="android:textColor">@color/txt_orange</item>
+    </style>
+
+    <style name="Phone_Text_XLarge_Regular_Black" parent="__Phone_Text_XLarge_Regular">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_XLarge_Bold_Orange" parent="__Phone_Text_XLarge_Bold">
+        <item name="android:textColor">@color/txt_orange</item>
+    </style>
+
+    <style name="Phone_Text_Large_Bold_Orange" parent="__Phone_Text_Large_Bold">
+        <item name="android:textColor">@color/txt_orange</item>
+    </style>
+
+    <style name="Phone_Text_Large_Bold_Black" parent="__Phone_Text_Large_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_Large_Regular_Orange" parent="__Phone_Text_Large_Regular">
+        <item name="android:textColor">@color/txt_orange</item>
+    </style>
+
+    <style name="Phone_Text_Large_Regular_Gray_On_Gray" parent="__Phone_Text_Large_Regular">
+        <item name="android:textColor">@color/txt_grey_on_grey</item>
+    </style>
+
+    <style name="Phone_Text_Large_Regular_Black" parent="__Phone_Text_Large_Regular">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_Large_Regular_Grey" parent="__Phone_Text_Large_Regular">
+        <item name="android:textColor">@color/txt_grey_regular</item>
+    </style>
+
+    <style name="Phone_Text_Large_Regular_Hint" parent="__Phone_Text_Large_Regular">
+        <item name="android:textColor">@color/txt_grey_hint</item>
+    </style>
+
+    <style name="Phone_Text_Small_Regular_Black" parent="__Phone_Text_Small_Regular">
+        <item name="android:textColor">@color/txt_black</item>
+    </style>
+
+    <style name="Phone_Text_Small_Regular_Error" parent="__Phone_Text_Small_Regular">
+        <item name="android:textColor">@color/txt_red_error</item>
+    </style>
+
+    <style name="Phone_Button_Green_Bold" parent="__Phone_Button_Medium_Bold">
+        <item name="android:textColor">@color/txt_white</item>
+        <item name="android:background">@drawable/button_rounded_green_clipped_ripple</item>
+    </style>
+
+    <style name="Phone_Button_Orange_Bold" parent="__Phone_Button_Medium_Bold">
+        <item name="android:textColor">@color/txt_white</item>
+        <item name="android:background">@drawable/button_rounded_orange_clipped_ripple</item>
+    </style>
+
+    <style name="Phone_Button_White_Bold" parent="__Phone_Button_Medium_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:background">@drawable/button_rounded_white_clipped_ripple</item>
+    </style>
+
+    <style name="Phone_Button_White_Orange_Border_Bold" parent="__Phone_Button_Medium_Bold">
+        <item name="android:textColor">@color/txt_black</item>
+        <item name="android:background">@drawable/button_rounded_white_orange_border_clipped_ripple</item>
+    </style>
+
+</resources>

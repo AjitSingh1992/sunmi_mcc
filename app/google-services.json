@@ -1,0 +1,139 @@
+{
+  "project_info": {
+    "project_number": "791723792585",
+    "firebase_url": "https://easy-food-v1.firebaseio.com",
+    "project_id": "easy-food-v1",
+    "storage_bucket": "easy-food-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791723792585:android:b8886ce6b874d18d01d518",
+        "android_client_info": {
+          "package_name": "com.easyfoodvone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791723792585-bm905ubp0jso766p6lncc9a8ugspauhv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easyfoodvone",
+            "certificate_hash": "1eca01976a3a4d4ebd17cf668cfe44fa847e5e96"
+          }
+        },
+        {
+          "client_id": "791723792585-pbhi48ct139cdvb9qgjfs3or53cb1mkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easyfoodvone",
+            "certificate_hash": "352c4a1ce35111fea27090795771e759c433ab98"
+          }
+        },
+        {
+          "client_id": "791723792585-r7654iqcd9j91mfmutnkdghbk3gd2nho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easyfoodvone",
+            "certificate_hash": "1c609eb200acb17079dbc3837f831a58e76fb892"
+          }
+        },
+        {
+          "client_id": "791723792585-tqb7mgomobl4esf7u9rtc48lq8ieht87.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.easyfoodvone",
+            "certificate_hash": "6fc478fbf4ba12518bebbcdd885446fe42a158c5"
+          }
+        },
+        {
+          "client_id": "791723792585-1jgl2tqb5lmk19qqip1u5r4u990900fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1s__EzjwC1eM63yXjmGCQsN3GwxOS4tE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791723792585-1jgl2tqb5lmk19qqip1u5r4u990900fa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "791723792585-quo60djplf45thsokhv1ju47k5nrk4cj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.easyfoodv1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791723792585:android:3eeb85cf0e0cc295",
+        "android_client_info": {
+          "package_name": "com.lexxdigitals.easyfoodvone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791723792585-9r687q0cere1k1hbtmvl3q3q7ffer9d0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lexxdigitals.easyfoodvone",
+            "certificate_hash": "1a65756a1e651e82554f9e2dd6831e95718d343b"
+          }
+        },
+        {
+          "client_id": "791723792585-a31698pffei72hmprd83ku4rka006pv5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lexxdigitals.easyfoodvone",
+            "certificate_hash": "352c4a1ce35111fea27090795771e759c433ab98"
+          }
+        },
+        {
+          "client_id": "791723792585-p0j4rsv1oijlqla6po5km21hjdp1cdua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lexxdigitals.easyfoodvone",
+            "certificate_hash": "88d2a5c73dbe2985870e4ebdd0c61f57419213b1"
+          }
+        },
+        {
+          "client_id": "791723792585-1jgl2tqb5lmk19qqip1u5r4u990900fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1s__EzjwC1eM63yXjmGCQsN3GwxOS4tE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791723792585-1jgl2tqb5lmk19qqip1u5r4u990900fa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "791723792585-quo60djplf45thsokhv1ju47k5nrk4cj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.easyfoodv1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

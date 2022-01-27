@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/Text_XXLarge_Bold_Black"
+        android:id="@+id/sizeName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:text="Size Name"/>
+
+    <EditText
+        style="@style/Text_Large_Regular_Black"
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7.5dp"
+        android:background="@drawable/rectangle_left_bar_border_grey_hint"
+        android:inputType="numberDecimal"
+        android:text="0.0" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/modifiresList"/>
+
+</LinearLayout>

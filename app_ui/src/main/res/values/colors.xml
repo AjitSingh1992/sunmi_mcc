@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Use this, not android.color.transparant as that can vary across manufacturers! -->
+    <color name="transparent">#00FFFFFF</color>
+
+    <color name="txt_grey_on_grey">#858585</color>
+    <color name="txt_grey_regular">#535353</color>
+    <color name="txt_grey_hint">#939393</color>
+    <color name="txt_red_error">#AA0000</color>
+    <color name="txt_black">#101010</color>
+    <color name="txt_white">#ffffff</color>
+    <color name="txt_orange">#ff6200</color>
+    <color name="txt_green">#479c69</color>
+    <color name="txt_red">#db1127</color>
+
+    <color name="bg_white">#ffffff</color>
+    <color name="bg_grey">#F3F1F2</color>
+    <color name="bg_grey_solid">#D8D8D8</color>
+    <color name="bg_orange">#FC4F00</color>
+    <color name="bg_red">#FDE9EA</color>
+    <color name="bg_green">#E9FAE8</color>
+
+    <color name="divider">#DCDCDC</color>
+
+    <color name="button_white">#ffffff</color>
+    <color name="button_orange">#ff6200</color>
+    <color name="button_green">#35a360</color>
+
+</resources>

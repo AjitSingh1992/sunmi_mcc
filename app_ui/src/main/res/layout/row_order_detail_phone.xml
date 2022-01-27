@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowOrderDetail" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/expandingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_grey">
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="100dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/txt_orange"
+            android:visibility="@{data.loadingAfterDelay ? View.VISIBLE : View.GONE}" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="148dp"
+        android:visibility="@{data.isExpanded ? View.VISIBLE : View.GONE}">
+
+        <View
+            android:id="@+id/printButtonArea"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/button_print"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/bg_white" />
+
+        <ImageView
+            android:id="@+id/button_print"
+            android:layout_width="45dp"
+            android:layout_height="38dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_printer"
+            android:scaleType="fitCenter"
+            android:onClick="@{() -> data.isExpanded ? data.outputEvents.onClickPrint() : void}"
+            app:layout_constraintTop_toTopOf="@+id/printButtonArea"
+            app:layout_constraintStart_toStartOf="@+id/printButtonArea"
+            app:layout_constraintEnd_toEndOf="@+id/printButtonArea" />
+
+        <include
+            layout="@layout/include_order_detail_heading_phone"
+            android:id="@+id/headingItems"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/printButtonArea"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            bind:headingColumn1="@{`Item`}"
+            bind:headingColumn2="@{`Each`}"
+            bind:headingColumn3="@{`Total`}" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentItems"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/headingItems"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <include
+                layout="@layout/merge_orders_detail_column_guides_phone"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.easyfoodvone.app_ui.textview_orderdetail.TextViewOrderDetailRows
+                android:id="@+id/textViewOrderDetailRows"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+                app:quantityStyle="@style/Phone_Text_Large_Bold_Black"
+                app:mainStyle="@style/Phone_Text_Large_Regular_Black" />
+
+            <com.easyfoodvone.app_ui.textview_orderdetail.TextViewOrderDetailPrice
+                android:id="@+id/textViewOrderDetailPriceEach"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+                app:priceStyle="@style/Phone_Text_Large_Regular_Black"
+                app:priceDisplay="each" />
+
+            <com.easyfoodvone.app_ui.textview_orderdetail.TextViewOrderDetailPrice
+                android:id="@+id/textViewOrderDetailPriceTotal"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3"
+                app:priceStyle="@style/Phone_Text_Large_Regular_Black"
+                app:priceDisplay="total" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/contentItems"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <include
+                layout="@layout/merge_orders_detail_column_guides_phone"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <View
+                android:id="@+id/dividerBelowItems"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/divider"
+                android:layout_marginTop="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/textSubTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:text="@{data.gbpSubTotal, default=`£139.62`}"
+                app:layout_constraintTop_toBottomOf="@+id/dividerBelowItems"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/textDeliveryCharges"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="end"
+                android:text="@{data.gbpDeliveryCharges, default=`£0.00`}"
+                app:layout_constraintTop_toBottomOf="@+id/textSubTotal"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/textDiscount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="end"
+                android:text="@{data.gbpDiscount, default=`£0.00`}"
+                app:layout_constraintTop_toBottomOf="@+id/textDeliveryCharges"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sub Total"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textSubTotal"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Delivery Charges"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textDeliveryCharges"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Discount"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textDiscount"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1" />
+
+            <View
+                android:id="@+id/dividerBelowSubTotals"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/divider"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textDiscount" />
+
+            <TextView
+                style="@style/__Phone_Text_Large_Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textColor="@color/txt_orange"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textTotal"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1" />
+
+            <TextView
+                style="@style/__Phone_Text_Large_Bold"
+                android:id="@+id/textTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:textColor="@color/txt_orange"
+                android:text="@{data.gbpTotal, default=`£139.62`}"
+                app:layout_constraintTop_toBottomOf="@+id/dividerBelowSubTotals"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <include
+                layout="@layout/include_order_detail_heading_phone"
+                android:id="@+id/headingNotes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/textTotal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:headingColumn1="@{`Notes`}"
+                bind:headingColumn2="@{``}"
+                bind:headingColumn3="@{``}" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/textNotes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@{data.notes, default=`Notes go here`}"
+                app:layout_constraintTop_toBottomOf="@+id/headingNotes"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <include
+                layout="@layout/include_order_detail_heading_phone"
+                android:id="@+id/headingDeliveryDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/textNotes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                bind:headingColumn1="@{`Delivery Details`}"
+                bind:headingColumn2="@{``}"
+                bind:headingColumn3="@{``}" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/textDeliveryDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@{data.deliveryCustomerName + `\n` + data.deliveryCustomerPhone + (data.deliveryCustomerAddress.trim().isEmpty() ? `` : `\n\n`) + data.deliveryCustomerAddress, default=`Saruman\n01234567890\n\nLord of Isengard, The White Council, Tower of Orthanc, Isengard`}"
+                app:layout_constraintTop_toBottomOf="@+id/headingDeliveryDetails"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+
+            <ImageView
+                android:id="@+id/imageBarcode"
+                android:layout_width="240dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/textDeliveryDetails"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>

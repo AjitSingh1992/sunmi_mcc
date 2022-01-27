@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="formatter" type="com.easyfoodvone.app_ui.view.ViewRestaurantMenuDetail.Formatter" />
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowRestaurantMenuDetails" />
+
+        <import type="android.view.View" />
+        <import type="com.easyfoodvone.app_common.viewdata.DataRowRestaurantMenuDetails.ToggleUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:minHeight="70dp"
+        android:background="@{data.dragInProgress ? @color/bg_grey : @color/bg_white}">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1.4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/bg_grey" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1.4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/bg_grey" />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@{data.toggleIsOn ? @color/txt_orange : @color/txt_grey_hint}" />
+
+        <ImageView
+            android:id="@+id/dragHandle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/baseline_drag_handle_24"
+            android:visibility="@{data.showDragHandle ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- data.nameExtra == null ? data.name : data.toggleIsOn == false ? (data.name + ` - ` + data.nameExtra) : formatter.orangeAndBlackSpan(context, data.name, ` - ` + data.nameExtra) -->
+        <TextView
+            style="@style/__Phone_Text_Large_Bold"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:text="@{data.nameExtra != null &amp; data.toggleIsOn ? formatter.orangeAndBlackSpan(context, data.name, ` - ` + data.nameExtra) : formatter.noColorSpan(data.name, data.nameExtra == null ? `` : (` - ` + data.nameExtra))}"
+            android:textColor="@{data.toggleIsOn ? @color/txt_orange : @color/txt_grey_hint}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/dragHandle"
+            app:layout_constraintEnd_toStartOf="@+id/textPrice" />
+
+        <TextView
+            style="@style/__Phone_Text_Large_Bold"
+            android:id="@+id/textPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintWidth_min="50sp"
+            android:gravity="center_vertical"
+            android:text="@{data.price}"
+            android:textColor="@{data.toggleIsOn ? @color/txt_black : @color/txt_grey_hint}"
+            android:visibility="@{data.price == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/toggle" />
+
+        <include
+            layout="@layout/toggle_phone"
+            android:id="@+id/toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{() -> data.toggleUI != ToggleUI.UNCLICKABLE_IDLE ? data.outputEvents.onClickToggle() : void}"
+            android:visibility="@{data.toggleUI == ToggleUI.CLICKABLE_LOADING_WS ? View.INVISIBLE : View.VISIBLE}"
+            bind:isOn="@{data.toggleIsOn}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/editButton" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/toggleLoadingSpinner"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            app:indicatorSize="22dp"
+            android:visibility="@{data.toggleUI == ToggleUI.CLICKABLE_LOADING_WS ? View.VISIBLE : View.INVISIBLE}"
+            android:indeterminate="true"
+            app:trackColor="#36a461"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/toggle"
+            app:layout_constraintEnd_toEndOf="@+id/toggle" />
+
+        <ImageView
+            android:id="@+id/editButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_edit"
+            android:alpha="@{data.isEditClickable ? 1f : 0.2f}"
+            android:onClick="@{() -> data.isEditClickable ? data.outputEvents.onClickEdit() : void}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

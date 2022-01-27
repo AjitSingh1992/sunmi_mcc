@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start"
+    android:paddingTop="4dp"
+    android:paddingBottom="1dp">
+
+    <TextView
+        style="@style/Phone_Text_Large_Regular_Black"
+        android:id="@+id/edit_between"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rectangle_border_thick_grey"
+        android:padding="10dp" />
+
+    <TextView
+        style="@style/Phone_Text_Large_Regular_Black"
+        android:id="@+id/edit_and"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/rectangle_border_thick_grey"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Black"
+            android:id="@+id/edit_give_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rectangle_border_thick_grey"
+            android:padding="10dp" />
+
+        <ImageView
+            android:id="@+id/deleteBucket"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end|center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/declined"
+            android:scaleType="centerInside" />
+
+    </LinearLayout>
+
+</LinearLayout>

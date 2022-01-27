@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TextViewOrderDetailPrice">
+        <attr name="priceStyle" format="reference" />
+        <attr name="priceDisplay" format="enum">
+            <enum name="each" value="0"/>
+            <enum name="total" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="TextViewOrderDetailRows">
+        <attr name="quantityStyle" format="reference" />
+        <attr name="mainStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="TextAppearanceOrderDetail">
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        <attr name="android:fontFamily" />
+    </declare-styleable>
+</resources>

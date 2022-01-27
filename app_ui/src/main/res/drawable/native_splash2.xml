@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="fill" >
+        <shape android:shape="rectangle">
+            <solid android:color="#F3F3F3" />
+        </shape>
+    </item>
+
+    <item>
+        <bitmap
+            android:gravity="end|fill_vertical"
+            android:src="@drawable/splash_right" />
+    </item>
+
+    <!-- splash_left_2 is smaller than the design, but more elegant -->
+    <item
+        android:start="30dp"
+        android:left="30dp">
+        <bitmap
+            android:gravity="start|top"
+            android:src="@drawable/splash_left_noscaling" />
+    </item>
+
+    <!-- splash_left is large and scales with the design but looks worse and adds 500KB -->
+    <!--<item
+        android:start="30dp"
+        android:left="30dp">
+        <bitmap
+            android:gravity="start|top"
+            android:src="@drawable/splash_left" />
+    </item>-->
+
+</layer-list>

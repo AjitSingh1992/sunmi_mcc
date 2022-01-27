@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:orientation="horizontal">
+
+    <TextView
+        style="@style/Phone_Text_Large_Regular_Black"
+        android:id="@+id/modifireName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="10dp"
+        android:ellipsize="end"
+        android:text="Size Name"/>
+
+    <EditText
+        style="@style/Phone_Text_Large_Regular_Black"
+        android:id="@+id/modifirePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="100sp"
+        android:background="@drawable/rectangle_left_bar_border_grey_hint"
+        android:inputType="numberDecimal"
+        android:text="0.0" />
+
+</LinearLayout>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowOrderOverview" />
+
+        <import type="com.easyfoodvone.app_common.viewdata.DataRowOrderOverview.OrderStatus" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white">
+
+        <!-- Row divider -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/bg_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Whole clickable cell -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?selectableItemBackground"
+            android:onClick="@{() -> data.outputEvents.onClickViewDetail()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideRowTop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="15dp" />
+
+        <Space
+            android:id="@+id/guideColumn1"
+            android:layout_width="64sp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toStartOf="parent" />
+        
+        <Space
+            android:id="@+id/guideColumn2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintStart_toEndOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- COLUMN 1 -->
+
+        <TextView
+            style="@style/Phone_Text_XLarge_Regular_Orange"
+            android:id="@+id/textOrderAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.orderAmount, default=`£19.95`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/guideRowTop" />
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Black"
+            android:id="@+id/orderDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@{data.orderDatePhone, default=`7 Oct 20`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/textOrderAmount"
+            app:layout_constraintBottom_toTopOf="@+id/orderTime"/>
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Black"
+            android:id="@+id/orderTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="15dp"
+            android:text="@{data.orderTimePhone, default=`5:30 PM`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/orderDate"
+            app:layout_constraintBottom_toTopOf="@+id/spaceVerticalInLeftColumn" />
+
+        <Space
+            android:id="@+id/spaceVerticalInLeftColumn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
+            app:layout_constraintTop_toBottomOf="@+id/orderTime"
+            app:layout_constraintBottom_toTopOf="@+id/deliveryDateTimeLabel" />
+
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Orange"
+            android:id="@+id/deliveryDateTimeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.deliveryTypePhone}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/spaceVerticalInLeftColumn"
+            app:layout_constraintBottom_toTopOf="@+id/deliveryDate"/>
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Black"
+            android:id="@+id/deliveryDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@{data.deliveryDatePhone, default=`7 Oct 20`}"
+            android:visibility="@{data.deliveryDatePhone.equals(data.orderDatePhone) || data.deliveryDatePhone.length == 0 ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/deliveryDateTimeLabel"
+            app:layout_constraintBottom_toTopOf="@+id/deliveryTime"/>
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Black"
+            android:id="@+id/deliveryTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_goneMarginTop="3dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="15dp"
+            android:text="@{data.deliveryTimePhone, default=`5:30 PM`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            app:layout_constraintTop_toBottomOf="@+id/deliveryDate"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- COLUMN 2 -->
+
+        <TextView
+            style="@style/Phone_Text_XLarge_Regular_Black"
+            android:id="@+id/textCustomerName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{data.customerName + ` (` + data.previousOrder + `)`, default=`Saruman the White (New)`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+            app:layout_constraintTop_toBottomOf="@+id/guideRowTop" />
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Hint"
+            android:id="@+id/textCustomerAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:paddingBottom="5dp"
+            android:text="@{data.customerAddress, default=`Lord of Isengard, The White Council, Tower of Orthanc, Isengard`}"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+            app:layout_constraintTop_toBottomOf="@+id/textCustomerName" />
+
+        <!-- COLUMN 2 SUB COLUMNS -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/newLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+            app:layout_constraintTop_toBottomOf="@+id/textCustomerAddress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1"
+            android:visibility="@{data.status == OrderStatus.NEW ? View.VISIBLE : View.INVISIBLE}">
+
+            <!-- GUIDES -->
+
+            <Space
+                android:id="@+id/guideColumn2NewA"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn2NewB" />
+
+            <Space
+                android:id="@+id/guideColumn2NewB"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/guideColumn2NewA"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn2NewC" />
+
+            <Space
+                android:id="@+id/guideColumn2NewC"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/guideColumn2NewB"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- HEADINGS -->
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Hint"
+                android:id="@+id/textLabelOrderIDNew"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ORDER ID"
+                android:ellipsize="end"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2NewA"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2NewA"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Hint"
+                android:id="@+id/textLabelPayTypeNew"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="PAY TYPE"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2NewB"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2NewB"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2NewC"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2NewC"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/buttonAccept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingEnd="4dp"
+                    android:src="@drawable/ic_new_order_accept"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{() -> data.status == OrderStatus.NEW ? data.outputEvents.onClickNewOrderAccept() : void}" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingStart="4dp"
+                    android:src="@drawable/ic_new_order_reject"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{() -> data.status == OrderStatus.NEW ? data.outputEvents.onClickNewOrderReject() : void}" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierBelowColumnBNewHeadings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="false"
+                app:constraint_referenced_ids="textLabelOrderIDNew,textLabelPayTypeNew" />
+
+            <!-- CONTENT -->
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Black"
+                android:id="@+id/textOrderIDNew"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@{data.orderID, default=`1234567890`}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2NewA"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2NewA"
+                app:layout_constraintTop_toBottomOf="@+id/barrierBelowColumnBNewHeadings" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Black"
+                android:id="@+id/textPaymentTypeNew"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@{data.paymentType, default=`Cash Pre`}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2NewB"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2NewB"
+                app:layout_constraintTop_toBottomOf="@+id/barrierBelowColumnBNewHeadings" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/acceptedRejectedLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+            app:layout_constraintTop_toBottomOf="@+id/textCustomerAddress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1"
+            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED ? View.VISIBLE : View.INVISIBLE}">
+
+            <!-- GUIDES -->
+
+            <Space
+                android:id="@+id/guideColumn2A"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn2B" />
+
+            <Space
+                android:id="@+id/guideColumn2B"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/guideColumn2A"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn2C" />
+
+            <Space
+                android:id="@+id/guideColumn2C"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/guideColumn2B"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- HEADINGS -->
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Hint"
+                android:id="@+id/textLabelOrderID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ORDER ID"
+                android:ellipsize="end"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2A"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2A"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Hint"
+                android:id="@+id/textLabelPayType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="PAY TYPE"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2B"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2B"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Hint"
+                android:id="@+id/textLabelRejectedStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2C"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2C"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{data.status == OrderStatus.REJECTED ? View.VISIBLE : View.GONE}" />
+
+            <TextView
+                style="@style/__Phone_Text_Large_Regular"
+                android:id="@+id/buttonEditAcceptedStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="STATUS ▼"
+                android:textColor="@color/txt_green"
+                android:onClick="@{() -> data.status == OrderStatus.ACCEPTED ? data.outputEvents.onClickEditAcceptedStatusBegin() : void}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2C"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2C"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{data.status == OrderStatus.ACCEPTED ? View.VISIBLE : View.GONE}" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierBelowColumnBHeadings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:barrierAllowsGoneWidgets="false"
+                app:constraint_referenced_ids="textLabelOrderID,textLabelPayType,textLabelRejectedStatus,buttonEditAcceptedStatus" />
+
+            <!-- CONTENT -->
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Black"
+                android:id="@+id/textOrderID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@{data.orderID, default=`1234567890`}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2A"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2A"
+                app:layout_constraintTop_toBottomOf="@+id/barrierBelowColumnBHeadings" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Black"
+                android:id="@+id/textPaymentType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@{data.paymentType, default=`Cash Pre`}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2B"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2B"
+                app:layout_constraintTop_toBottomOf="@+id/barrierBelowColumnBHeadings" />
+
+            <!-- android:visibility="@{data.status == OrderStatus.ACCEPTED ? View.VISIBLE : View.GONE}" -->
+            <TextView
+                style="@style/__Phone_Text_Large_Regular"
+                android:id="@+id/textOrderStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red : 0, default=@color/txt_green}"
+                android:text="@{data.status == OrderStatus.ACCEPTED ? data.currentAcceptedStatus : data.status == OrderStatus.REJECTED ? `Rejected` : ``, default=`Accepted`}"
+                android:onClick="@{() -> data.status == OrderStatus.ACCEPTED ? data.outputEvents.onClickEditAcceptedStatusBegin() : void}"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2C"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn2C"
+                app:layout_constraintTop_toBottomOf="@+id/barrierBelowColumnBHeadings" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

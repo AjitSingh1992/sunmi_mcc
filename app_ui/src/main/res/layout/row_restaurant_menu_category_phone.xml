@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowRestaurantMenu" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@{data.dragInProgress ? @color/bg_grey : @android:color/transparent}">
+
+        <Space
+            android:id="@+id/alignment"
+            android:layout_width="0dp"
+            android:layout_height="100sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintWidth_max="@dimen/dialog_width_max" />
+
+        <!--<ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="H,32:21"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintWidth_max="@dimen/dialog_width_max"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/banner_four"/>-->
+
+        <TextView
+            style="@style/Phone_Text_XLarge_Bold_Black"
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/alignment"
+            app:layout_constraintEnd_toStartOf="@+id/dragHandle"
+            app:layout_constraintTop_toTopOf="@+id/alignment"
+            android:text="@{data.title, default=`Category Title`}" />
+
+        <TextView
+            style="@style/Phone_Text_Large_Regular_Grey"
+            android:id="@+id/textItemCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="@+id/alignment"
+            app:layout_constraintEnd_toStartOf="@+id/dragHandle"
+            app:layout_constraintTop_toBottomOf="@+id/textTitle"
+            android:text="@{data.itemCount, default=`3 items`}" />
+
+        <ImageView
+            android:id="@+id/dragHandle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="7sp"
+            android:src="@drawable/baseline_drag_handle_24"
+            app:layout_constraintEnd_toEndOf="@+id/alignment"
+            app:layout_constraintTop_toTopOf="@+id/textTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

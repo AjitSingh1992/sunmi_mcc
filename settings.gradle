@@ -1,0 +1,3 @@
+include ':app_common'
+include ':app_ui'
+include ':app'

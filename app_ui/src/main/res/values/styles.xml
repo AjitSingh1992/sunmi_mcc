@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Material_AlertDialog_Rounded" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/__Material_AlertDialog_Rounded_CornerSpec</item>
+        <item name="colorSurface">@color/bg_white</item>
+    </style>
+
+    <style name="__Material_AlertDialog_Rounded_CornerSpec">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">9dp</item>
+    </style>
+
+</resources>

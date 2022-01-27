@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataIncludeHeader" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:contentDescription="@string/content_desc_easyfood_logo"
+            android:id="@+id/imageLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/ic_easyfood_flag_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Phone_Text_Small_Regular_Black"
+            android:id="@+id/textRestaurantAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="6dp"
+            android:gravity="left"
+            android:text="@{data.restaurantAddress, default=`999 Long Lane, Long Village, Long City, LONG 999`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Phone_Text_Small_Regular_Black"
+            android:id="@+id/textRestaurantName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="left"
+            android:text="@{data.restaurantName, default=`Sample Restaurant Name`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toStartOf="@+id/button_burger"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/textRestaurantAddress"
+            app:layout_constraintBottom_toTopOf="@+id/textRestaurantNumber" />
+
+        <TextView
+            style="@style/Phone_Text_Small_Regular_Black"
+            android:id="@+id/textRestaurantNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="left"
+            android:text="@{data.restaurantNumber, default=`01234 567890`}"
+            app:layout_constraintStart_toEndOf="@+id/imageLogo"
+            app:layout_constraintEnd_toStartOf="@+id/button_burger"
+            app:layout_constraintTop_toBottomOf="@+id/textRestaurantName"
+            app:layout_constraintBottom_toTopOf="@+id/textPageTitle" />
+
+        <ImageView
+            android:id="@+id/button_burger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:tint="@color/txt_black"
+            android:src="@drawable/ic_menu_24"
+            android:background="?selectableItemBackgroundBorderless"
+            android:onClick="@{() -> data.outputEvents.onClickBurger()}"
+            android:visibility="@{data.showBurgerMenu ? View.VISIBLE : View.GONE, default=`visible`}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textRestaurantAddress"
+            app:layout_constraintBottom_toBottomOf="@+id/imageLogo"
+            android:contentDescription="@string/content_desc_menu_icon" />
+
+        <TextView
+            style="@style/__Phone_Text_Very_Bold"
+            android:id="@+id/textPageTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="25sp"
+            android:textColor="@color/txt_black"
+            android:text="@{data.pageTitle, default=`Page Title`}"
+            android:visibility="@{data.pageTitle.empty ? View.GONE : View.VISIBLE, default=`visible`}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageLogo"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View" />
+        <import type="com.easyfoodvone.app_common.viewdata.DataPageOrderList.ActiveTab" />
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataPageOrderList" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/radioButtonContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="19dp"
+            android:paddingEnd="40dp">
+
+            <CheckedTextView
+                style="@style/Text_Large_Regular_Gray_On_Gray"
+                android:id="@+id/tabNew"
+                android:layout_width="170sp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_radio_button_checkable"
+                android:drawablePadding="10dp"
+                android:checked="@{data.activeTab == ActiveTab.NEW, default=true}"
+                android:onClick="@{() -> data.activeTab != ActiveTab.NEW ? data.outputEvents.onClickTabSelector(ActiveTab.NEW) : void}"
+                android:text="@{data.tabNewCount == null ? `New` : (`New (` + data.tabNewCount + `)`), default=`New (5)`}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <CheckedTextView
+                style="@style/Text_Large_Regular_Gray_On_Gray"
+                android:id="@+id/tabAccepted"
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_radio_button_checkable"
+                android:drawablePadding="10dp"
+                android:checked="@{data.activeTab == ActiveTab.ACCEPTED}"
+                android:onClick="@{() -> data.activeTab != ActiveTab.ACCEPTED ? data.outputEvents.onClickTabSelector(ActiveTab.ACCEPTED) : void}"
+                android:text="@{data.tabAcceptedCount == null ? `Accepted` : (`Accepted (` + data.tabAcceptedCount + `)`), default=`Accepted (500)`}"
+                app:layout_constraintStart_toEndOf="@+id/tabNew"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <CheckedTextView
+                style="@style/Text_Large_Regular_Gray_On_Gray"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_radio_button_checkable"
+                android:drawablePadding="10dp"
+                android:checked="@{data.activeTab == ActiveTab.REJECTED}"
+                android:onClick="@{() -> data.activeTab != ActiveTab.REJECTED ? data.outputEvents.onClickTabSelector(ActiveTab.REJECTED) : void}"
+                android:text="@{data.tabRejectedCount == null ? `Rejected` : (`Rejected (` + data.tabRejectedCount + `)`), default=`Rejected (50)`}"
+                app:layout_constraintStart_toEndOf="@+id/tabAccepted"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/columnHeadingsLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioButtonContainer">
+
+            <include
+                layout="@layout/merge_orders_list_column_guides_tablet"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                style="@style/Text_Large_Regular_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Order Status"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1Start"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn2Start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Text_Large_Regular_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Date/Time"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn2Start"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn3Start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Text_Large_Regular_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Order ID"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3Start"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn4Start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Text_Large_Regular_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Payment"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn4Start"
+                app:layout_constraintEnd_toStartOf="@+id/guideColumn5Start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Text_Large_Regular_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Customer"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn5Start"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn5Start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/columnHeadingsLayout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- 5dp margin hides the shadow of pull down refresh spinner which can stick out -->
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerOrdersList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="28dp"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/row_order_overview_tablet"
+                    android:orientation="vertical"/>
+
+                <!--
+                Cover up the thin sliver where content shows through when scrolling
+                (due to 2dp row divider gap included as part of the overview row layout)
+                -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="top"
+                    android:background="@color/bg_grey"/>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

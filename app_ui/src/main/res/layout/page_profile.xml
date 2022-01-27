@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="data"
+            type="com.easyfoodvone.app_common.viewdata.DataPageRestaurantProfile" />
+    </data>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="32dp"
+        android:background="@color/bg_white">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="45dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.38"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Restaurant's Name" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/restname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:hint="Restaurant Name"
+                            android:inputType="textPersonName"
+                            android:padding="10dp"
+                            android:text="@={data.restname}" />
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="Phone Number" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:hint="Phone Number"
+                            android:inputType="number"
+                            android:padding="10dp"
+                            android:text="@={data.phone}" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/landline"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:hint="Landline Number"
+                            android:inputType="number"
+                            android:padding="10dp"
+                            android:text="@={data.landline}" />
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="Address" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:text="@={data.address}"
+                            android:hint="Your Address"
+                            android:padding="10dp"
+                            android:inputType="textMultiLine" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/postcode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:hint="Area Post Code"
+                            android:inputType="textPersonName"
+                            android:padding="10dp"
+                            android:text="@={data.postcode}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.62"
+                        android:layout_marginStart="15dp"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/image_list_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:orientation="horizontal" />
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:text="Restaurant's Description" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/about"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:text="@={data.about}"
+                            android:hint="About Restaurant"
+                            android:gravity="start|left|top"
+                            android:inputType="textMultiLine"
+                            android:padding="10dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/Text_Large_Bold_Black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="E-mail" />
+
+                                <EditText
+                                    style="@style/Text_Large_Regular_Orange"
+                                    android:id="@+id/email"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:background="@drawable/rectangle_border_thick_grey"
+                                    android:enabled="false"
+                                    android:hint="Email Address"
+                                    android:inputType="textEmailAddress"
+                                    android:padding="10dp"
+                                    android:text="@={data.email}" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="30dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/Text_Large_Bold_Black"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Website URL" />
+
+                                <EditText
+                                    style="@style/Text_Large_Regular_Orange"
+                                    android:id="@+id/web"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:background="@drawable/rectangle_border_thick_grey"
+                                    android:enabled="false"
+                                    android:hint="Website URL"
+                                    android:inputType="textPersonName"
+                                    android:padding="10dp"
+                                    android:text="@={data.web}" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Type of Restaurant" />
+
+                        <EditText
+                            style="@style/Text_Large_Regular_Orange"
+                            android:id="@+id/serve_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/rectangle_border_thick_grey"
+                            android:enabled="false"
+                            android:padding="10dp"
+                            android:text="@={data.serve_style}" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Button
+                    style="@style/Button_Orange_Bold"
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Save"
+                    android:onClick="@{() -> data.outputEvents.onClickSave()}"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+</layout>

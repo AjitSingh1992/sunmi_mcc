@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="phone_text_xxxlarge_bold">35sp</dimen>
+
+    <dimen name="phone_text_xxlarge_bold">21sp</dimen>
+
+    <dimen name="phone_text_xlarge_bold">18sp</dimen>
+    <dimen name="phone_text_xlarge_regular">18sp</dimen>
+
+    <dimen name="phone_text_large_bold">14sp</dimen>
+    <dimen name="phone_text_large_regular">14sp</dimen>
+
+    <dimen name="phone_text_small_regular">11sp</dimen>
+
+    <dimen name="phone_text_medium_bold">12sp</dimen>
+</resources>

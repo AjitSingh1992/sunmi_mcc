@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="headingColumn1" type="java.lang.String" />
+        <variable name="headingColumn2" type="java.lang.String" />
+        <variable name="headingColumn3" type="java.lang.String" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_orange"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp">
+
+        <include
+            layout="@layout/merge_orders_detail_column_guides_phone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            style="@style/__Phone_Text_Large_Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#EAEAEA"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn1"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+            android:text="@{headingColumn1, default=`Column 1`}" />
+
+        <TextView
+            style="@style/__Phone_Text_Large_Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#EAEAEA"
+            android:gravity="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn2"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn2"
+            android:text="@{headingColumn2, default=`Column 2`}" />
+
+        <TextView
+            style="@style/__Phone_Text_Large_Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#EAEAEA"
+            android:gravity="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+            app:layout_constraintEnd_toEndOf="@+id/guideColumn3"
+            android:text="@{headingColumn3, default=`Column 3`}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

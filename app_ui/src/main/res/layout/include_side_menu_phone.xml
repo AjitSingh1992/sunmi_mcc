@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataIncludeSideMenu" />
+        <import type="com.easyfoodvone.app_common.viewdata.DataIncludeSideMenu.SideMenuItem" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white">
+
+        <ImageView
+            android:contentDescription="@string/menu_content_desc_close_icon"
+            android:id="@+id/buttonClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_baseline_close_24"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> data.outputEvents.onClickClose()}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            layout="@layout/toggle_wide_phone"
+            android:id="@+id/toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:onClick="@{() -> data.outputEvents.onClickOpenToggle()}"
+            bind:isOn="@{data.isRestaurantOpen}"
+            bind:textOn="@{`Open`}"
+            bind:textOff="@{`Closed`}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonClose"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ScrollView
+            android:layout_width="@dimen/side_menu_width"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonClose"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.SERVE_STYLE)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_profile"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_serve_style"
+                        android:layout_marginStart="16dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.ORDERS)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_order_list"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_orders"
+                        android:layout_marginStart="16dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.MENU)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_menu"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_menu"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.DELIVERY_SETTINGS)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_location"
+                        android:alpha="@{data.deliverySettingsEnabled ? 1f : 0.4f}" />
+
+                    <TextView
+                        style="@style/__Phone_Text_Large_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_delivery_settings"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@{data.deliverySettingsEnabled ? @color/txt_black : @color/txt_grey_hint}" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.RESTAURANT_TIMINGS)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_clock"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_restaurant_timings"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.ORDERS_REPORT)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_checklist"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_orders_report"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.REVENUE_REPORT)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_file"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_revenue_report"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.OFFERS)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_pricetag"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_offers"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.REVIEW_N_RATINGS)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_reviews_ratings"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_reviews_n_ratings"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.CHARITY)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_charity"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_charity"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.PROFILE)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_profile"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_profile"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.CHANGE_PASSWORD)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_padlock"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_change_password"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:onClick="@{() -> data.outputEvents.onClickItem(SideMenuItem.LOGOUT)}"
+                    android:background="?selectableItemBackground"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/content_desc_menu_item_orders"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_logout"/>
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_logout"
+                        android:layout_marginStart="16dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

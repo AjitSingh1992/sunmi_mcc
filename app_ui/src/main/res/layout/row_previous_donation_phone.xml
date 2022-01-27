@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="11dp"
+            android:paddingBottom="11dp">
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Orange"
+                android:id="@+id/tv_meals"
+                android:layout_width="wrap_content"
+                android:minWidth="100sp"
+                tools:text="4 Meals"
+                android:paddingEnd="16dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                style="@style/Phone_Text_Large_Regular_Black"
+                android:id="@+id/tv_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                tools:text="06 Oct 2020 16:20"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                style="@style/Phone_Button_White_Orange_Border_Bold"
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/charity_button_cancel"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_food_collected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Orange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/cv_no"
+                android:gravity="end"
+                android:text="@string/charity_food_collected_by_charity"/>
+
+            <Button
+                style="@style/Phone_Button_White_Bold"
+                android:id="@+id/cv_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/cv_yes"
+                android:layout_marginStart="16dp"
+                android:text="@string/charity_donate_yes"/>
+
+            <Button
+                style="@style/Phone_Button_Orange_Bold"
+                android:id="@+id/cv_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/charity_donate_no"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"/>
+
+    </LinearLayout>
+</layout>

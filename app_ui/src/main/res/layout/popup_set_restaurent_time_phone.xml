@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataDialogRestaurantTime" />
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="25dp"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Phone_Text_Large_Bold_Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mark This Day as" />
+
+                <include
+                    layout="@layout/toggle_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:onClick="@{() -> data.outputEvents.onClickIsOpen()}"
+                    bind:isOn="@{data.isOpen}" />
+
+                <TextView
+                    style="@style/Phone_Text_Large_Bold_Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="Opening Time:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="From" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.openingTimeFrom}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.openingTimeFrom)}" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="To" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.openingTimeTo}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.openingTimeTo)}" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/Phone_Text_Large_Bold_Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Delivery Time:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="From" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.deliveryTimeFrom}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.deliveryTimeFrom)}" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="To" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.deliveryTimeTo}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.deliveryTimeTo)}" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/Phone_Text_Large_Bold_Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Collection Time:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/rectangle_left_bar_border_grey_hint_phone">
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="From" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.collectionTimeFrom}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.collectionTimeFrom)}" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="To" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Regular_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="62sp"
+                        android:padding="5dp"
+                        android:gravity="center"
+                        android:background="@drawable/rectangle_border_thick"
+                        android:text="@{data.collectionTimeTo}"
+                        android:onClick="@{() -> data.outputEvents.onClickTime(data.collectionTimeTo)}" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                style="@style/Phone_Button_Orange_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update"
+                android:onClick="@{() -> data.outputEvents.onClickUpdate()}" />
+
+            <Space
+                android:layout_width="25dp"
+                android:layout_height="0dp" />
+
+            <Button
+                style="@style/Phone_Button_White_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:onClick="@{() -> data.outputEvents.onClickCancel()}" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
