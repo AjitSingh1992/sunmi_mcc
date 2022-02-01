@@ -1,6 +1,7 @@
 package com.easyfoodvone;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -8,8 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.easyfoodvone.app_ui.fragment.RoundedDialogFragment;
 import com.easyfoodvone.controller.fragment.ControllerRootNoAuth;
 import com.easyfoodvone.controller.fragment.ControllerRootWithAuth;
 import com.easyfoodvone.utility.PrefManager;
@@ -107,6 +112,59 @@ public class OrdersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+
+
+
+
+
+
+            int count = getSupportFragmentManager().getBackStackEntryCount();
+
+            if (count == 0) {
+                View layoutView = LayoutInflater.from(OrdersActivity.this).inflate(R.layout.popup_confirmation, null, false);
+               RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
+
+            TextView yes = layoutView.findViewById(R.id.btn_yes);
+            TextView no = layoutView.findViewById(R.id.btn_no);
+            TextView messge = layoutView.findViewById(R.id.txt_message);
+
+            messge.setText("Do you want to exit?");
+            yes.setText("YES");
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            no.setText("NO");
+            no.setTextColor(getResources().getColor(R.color.black));
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.showNow(getSupportFragmentManager(), null);
+
+
+
+
+
+
+            } else {
+                getSupportFragmentManager().popBackStack();
+            }
+
+
+
+
+
+
+
+/*
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.root);
 
         if (fragment instanceof ControllerRootNoAuth) {
@@ -117,7 +175,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         } else {
             throw new IllegalArgumentException("Never happen case");
-        }
+        }*/
     }
 
     @Override

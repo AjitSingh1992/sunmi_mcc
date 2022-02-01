@@ -20,6 +20,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/bg_white"
             android:descendantFocusability="@{data.childDialogVisible ? ViewGroup.FOCUS_BLOCK_DESCENDANTS : ViewGroup.FOCUS_AFTER_DESCENDANTS}">
 
             <com.google.android.material.appbar.AppBarLayout

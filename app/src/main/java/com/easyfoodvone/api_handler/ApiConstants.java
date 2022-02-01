@@ -72,4 +72,10 @@ public class ApiConstants {
     public static final String UPDATE_MENU_ITEM_DETAILS = "save_menu_product";
     public static final String GET_RESTAURANT_DELIVERY_SLOTS = "get_restaurant_delivery_slots";
     public static final String get_restaurant_closing_time_by_date = "get_restaurant_closing_time_by_date\n";
+
+
+    //API's BY AJIT
+    public static final String CHANGE_MENU_POSITION = "menu_category_position_update";
+    public static final String CHANGE_ITEM_POSITION = "menu_category_position_update";
+
 }

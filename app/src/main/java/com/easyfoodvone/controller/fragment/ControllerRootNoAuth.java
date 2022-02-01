@@ -53,6 +53,7 @@ public class ControllerRootNoAuth extends Fragment {
     }
 
     public void handleBackPress() {
+
         boolean isHome = getChildFragmentManager().findFragmentById(R.id.root) instanceof LoginFragment;
         if ( ! isHome) {
             transactHome(true);

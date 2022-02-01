@@ -6,6 +6,7 @@ import com.easyfoodvone.app_common.ws.NewDetailBean;
 import com.easyfoodvone.app_common.ws.OrdersListResponse;
 import com.easyfoodvone.charity.webservice.responsebean.CharityInfoBean;
 import com.easyfoodvone.charity.webservice.responsebean.CommonResponseBean;
+import com.easyfoodvone.models.menu_response.CategorySwipeModel;
 import com.google.gson.JsonObject;
 import com.easyfoodvone.contact_support.models.SupportRequest;
 import com.easyfoodvone.contact_support.models.SupportResponse;
@@ -115,6 +116,7 @@ public interface ApiInterface {
 
     @POST(ApiConstants.SET_MENU_CATEGORY_ITEM_POSITION)
     Single<MenuCategoryItemsResponse> getMenuCategoryItemsPositin(@Header("Authorization") String Authorization,@Body CommonRequest request);
+
 
     @POST(ApiConstants.ACTIVE_DEACTIVE_MENU_PRODUCT)
     Single<MenuCategoryItemsResponse> activeDeactiveMenuProduct(@Header("Authorization") String Authorization,@Body CommonRequest request);
@@ -249,5 +251,10 @@ public interface ApiInterface {
     @POST(ApiConstants.get_restaurant_closing_time_by_date)
     Single<RestaurantClosingTimeByDataModel> getRestaurantClosingTimeByDate(@Header("Authorization") String Authorization,@Body TimeSlotRequest request);
 
+
+    //APi by Ajit
+
+    @POST(ApiConstants.CHANGE_MENU_POSITION)
+    Single<MenuCategoryItemsResponse> changeCategoryPosition(@Header("Authorization") String Authorization,@Body CategorySwipeModel request);
 
 }

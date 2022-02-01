@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -189,107 +190,214 @@ public class ControllerRootWithAuth extends Fragment {
     private void openFragment(@NonNull DataIncludeSideMenu.SideMenuItem item) {
         if (item == DataIncludeSideMenu.SideMenuItem.SERVE_STYLE) {
             // Kick the user back to the home page - simple solution to needing a reload of the profile page
-            loadHomeFragment();
+           // clearAllPreviousFragments();
+           // loadHomeFragment();
             getServeStyle();
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.ORDERS) {
-            loadHomeFragment();
+            clearAllPreviousFragments();
+            //loadHomeFragment();
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.MENU) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Menu");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerMenu(restaurantMenuParentInterface, prefManager, isPhone));
-            ft.commit();
+            ControllerMenu fragment  =  new ControllerMenu(restaurantMenuParentInterface, prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.DELIVERY_SETTINGS) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Set Delivery Charges");
             data.getDataOrdersHeader().getPageTitle().set("");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerDeliverySetting(getActivity(), prefManager, userPreferences, isPhone));
-            ft.commit();
+            ControllerDeliverySetting fragment  =  new ControllerDeliverySetting(getActivity(), prefManager, userPreferences, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.RESTAURANT_TIMINGS) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Restaurant Timings");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerRestaurantTimings(prefManager, userPreferences, isPhone));
-            ft.commit();
+            ControllerRestaurantTimings fragment  =  new ControllerRestaurantTimings(prefManager, userPreferences, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.ORDERS_REPORT) {//
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Order Report");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerOrderReport(orderReportParentInterface, prefManager, userPreferences, isPhone));
-            ft.commit();
+            ControllerOrderReport fragment  =  new ControllerOrderReport(orderReportParentInterface, prefManager, userPreferences, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.REVENUE_REPORT) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Revenue Report");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerRevenueReport(revenueReportParentInterface, prefManager, isPhone));
-            ft.commit();
+            ControllerRevenueReport fragment  =  new ControllerRevenueReport(revenueReportParentInterface, prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.OFFERS) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("List of Offers");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerOffersList(listOfOffersInterface, prefManager, isPhone));
-            ft.commit();
+            ControllerOffersList fragment  =  new ControllerOffersList(listOfOffersInterface, prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.REVIEW_N_RATINGS) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Ratings & Reviews");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerRatingReview(getActivity(), prefManager, isPhone));
-            ft.commit();
+            ControllerRatingReview fragment  =  new ControllerRatingReview(getActivity(), prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.CHARITY) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Charity");
             data.getDataOrdersHeader().getPageTitle().set("");
-            ControllerCharityHome childFragment = new ControllerCharityHome(
+            ControllerCharityHome fragment = new ControllerCharityHome(
                     charityPageParentInterface,
                     prefManager,
                     LocalBroadcastManager.getInstance(requireActivity()),
                     isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
 
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, childFragment);
-            ft.commit();
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.PROFILE) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Profile");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ProfileFragment(isPhone));
-            ft.commit();
+            ProfileFragment fragment =  new ProfileFragment(isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.CHANGE_PASSWORD) {
+            clearAllPreviousFragments();
             isDashBoard = false;
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Change Password");
             data.getDataOrdersHeader().getPageTitle().set("");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerChangePassword(changePasswordParentInterface, prefManager, isPhone));
-            ft.commit();
+            ControllerChangePassword fragment =  new ControllerChangePassword(changePasswordParentInterface, prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.LOGOUT) {
             orderListParentInterface.stopNotificationSound();
@@ -297,6 +405,12 @@ public class ControllerRootWithAuth extends Fragment {
         }
     }
 
+    public void clearAllPreviousFragments(){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+    }
     private final ControllerMenu.ParentInterface restaurantMenuParentInterface = new ControllerMenu.ParentInterface() {
         @Override
         public void openMenuDetails(MenuCategoryList.MenuCategories item) {
@@ -304,18 +418,27 @@ public class ControllerRootWithAuth extends Fragment {
                 return;
             }
 
+
             isDashBoard = false;
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Menu Details");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerMenuDetails(
+            ControllerMenuDetails fragment  =  new ControllerMenuDetails(
                     item,
                     prefManager,
                     userPreferences.getLoggedInResponse(getActivity()),
-                    isPhone));
-            ft.addToBackStack(null);
-            ft.commit();
+                    isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
         }
     };
 
@@ -326,10 +449,18 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Spend X and get X% Discount");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerNewOfferSpendX(prefManager, offerSpendXGetDiscountInterface, isPhone));
-            ft.addToBackStack(null);
-            ft.commit();
+            ControllerNewOfferSpendX fragment  =  new ControllerNewOfferSpendX(prefManager, offerSpendXGetDiscountInterface, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
         }
 
         @Override
@@ -338,10 +469,18 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Money Off Discount");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerNewOfferFlat(prefManager, offerFlatDiscountAmountInterface, isPhone, toEdit));
-            ft.addToBackStack(null);
-            ft.commit();
+            ControllerNewOfferFlat fragment  =  new ControllerNewOfferFlat(prefManager, offerFlatDiscountAmountInterface, isPhone, toEdit);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
         }
 
         @Override
@@ -350,10 +489,19 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Percentage Discount");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerNewOfferPercent(prefManager, offerPercentDiscountInterface, isPhone, toEdit));
-            ft.addToBackStack(null);
-            ft.commit();
+            ControllerNewOfferPercent fragment  =  new ControllerNewOfferPercent(prefManager, offerPercentDiscountInterface, isPhone, toEdit);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
         }
 
         @Override
@@ -362,10 +510,19 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Combo Discount");
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.framePageContent, new ControllerNewOfferCombo(prefManager, offerComboMealsInterface, isPhone));
-            ft.addToBackStack(null);
-            ft.commit();
+            ControllerNewOfferCombo fragment  =  new ControllerNewOfferCombo(prefManager, offerComboMealsInterface, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
         }
     };
 
@@ -792,9 +949,11 @@ public class ControllerRootWithAuth extends Fragment {
         data.getShowRestaurantHeader().set(true);
         data.getDataHeader().getPageTitle().set("");
         data.getDataOrdersHeader().getPageTitle().set("Orders");
+        String backStateName = fragment.getClass().getName();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.replace(R.id.framePageContent, fragment);
+        ft.add(R.id.framePageContent, fragment);
+        ft.addToBackStack(backStateName);
         ft.commit();
     }
 
@@ -853,56 +1012,64 @@ public class ControllerRootWithAuth extends Fragment {
     }
 
     public void onBackPressed() {
-        if (isDashBoard) {
-            View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
-            RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
 
-            TextView yes = layoutView.findViewById(R.id.btn_yes);
-            TextView no = layoutView.findViewById(R.id.btn_no);
-            TextView messge = layoutView.findViewById(R.id.txt_message);
+//Comment by ajit
+            /*if (fragCount > 1) {
+                ControllerCharityHome fragment = new ControllerCharityHome(
+                        charityPageParentInterface,
+                        prefManager,
+                        LocalBroadcastManager.getInstance(requireActivity()),
+                        isPhone);
 
-            messge.setText("Do you want to exit?");
-            yes.setText("YES");
-            yes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    parentInterface.exitApp();
-                }
-            });
-            no.setText("NO");
-            no.setTextColor(getResources().getColor(R.color.black));
-            no.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.showNow(getChildFragmentManager(), null);
-
-        } else {
-
-            if (fragCount > 1) {
                 isDashBoard = false;
                 data.getShowRestaurantHeader().set(false);
                 data.getDataHeader().getPageTitle().set("Charity");
                 data.getDataOrdersHeader().getPageTitle().set("");
 
-                // "Success" Fragment
-                FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-                ftTransaction.replace(R.id.framePageContent, new ControllerCharityHome(
-                        charityPageParentInterface,
-                        prefManager,
-                        LocalBroadcastManager.getInstance(requireActivity()),
-                        isPhone));
-                ftTransaction.addToBackStack(null);
-                ftTransaction.commit();
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.commit();
 
             } else {
                 loadHomeFragment();
+            }*/
+
+            int count = getFragmentManager().getBackStackEntryCount();
+
+            if (count == 0) {
+
+                View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
+                RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
+
+                TextView yes = layoutView.findViewById(R.id.btn_yes);
+                TextView no = layoutView.findViewById(R.id.btn_no);
+                TextView messge = layoutView.findViewById(R.id.txt_message);
+
+                messge.setText("Do you want to exit?");
+                yes.setText("YES");
+                yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        parentInterface.exitApp();
+                    }
+                });
+                no.setText("NO");
+                no.setTextColor(getResources().getColor(R.color.black));
+                no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.showNow(getChildFragmentManager(), null);
+                //additional code
+            } else {
+                getFragmentManager().popBackStack();
             }
-        }
+
+
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
@@ -415,12 +416,15 @@ public class ControllerMenuDetails extends Fragment {
     private final EditMenuItemsDialog.ParentInterface editItemPopupInterface = new EditMenuItemsDialog.ParentInterface() {
         @Override
         public void close() {
-            FragmentManager fm = getChildFragmentManager();
-            Fragment child = fm.getFragments().get(0);
-            fm.beginTransaction()
-                    .remove(child)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commitNow();
+            //Comment By Ajit
+//            FragmentManager fm = getChildFragmentManager();
+//            Fragment child = fm.getFragments().get(0);
+//            fm.beginTransaction()
+//                    .remove(child)
+//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                    .commitNow();
+            getFragmentManager().popBackStack();
+
             ControllerMenuDetails.this.data.getChildDialogVisible().set(false);
 
             Helper.hideKeyboard(getActivity());
@@ -451,17 +455,27 @@ public class ControllerMenuDetails extends Fragment {
 
         @Override
         public void onPinCheckPassed(MenuProductDetails data) {
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .replace(childFragmentId, new EditMenuItemsDialog(
-                            getActivity(),
-                            prefManager,
-                            editItemPopupInterface,
-                            data,
-                            menuCategories,
-                            isPhone))
-                    .commitNow();
+
+
+            EditMenuItemsDialog fragment = new EditMenuItemsDialog(
+                    getActivity(),
+                    prefManager,
+                    editItemPopupInterface,
+                    data,
+                    menuCategories,
+                    isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(childFragmentId, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
             ControllerMenuDetails.this.data.getChildDialogVisible().set(true);
         }
     }
