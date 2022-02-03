@@ -97,10 +97,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red : 0, default=@color/txt_green}"
-            android:text="@{data.status == OrderStatus.ACCEPTED ? (data.currentAcceptedStatus + ` ▼`) : data.status == OrderStatus.REJECTED ? `Rejected` : ``, default=`Accepted`}"
+            android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red : data.status == OrderStatus.REFUNDED ? @color/txt_red : 0, default=@color/txt_green}"
+            android:text="@{data.status == OrderStatus.ACCEPTED ? (data.currentAcceptedStatus + ` ▼`) : data.status == OrderStatus.REJECTED ? `Rejected` : data.status == OrderStatus.REFUNDED ? `Refunded` : ``, default=`Accepted`}"
             android:onClick="@{() -> data.status == OrderStatus.ACCEPTED ? data.outputEvents.onClickEditAcceptedStatusBegin() : void}"
-            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED ? View.VISIBLE : View.GONE}"
+            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED| data.status == OrderStatus.REFUNDED ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="@+id/guideColumn1Start"
             app:layout_constraintEnd_toStartOf="@+id/guideColumn2Start"
             app:layout_constraintTop_toBottomOf="@+id/textDeliveryType" />

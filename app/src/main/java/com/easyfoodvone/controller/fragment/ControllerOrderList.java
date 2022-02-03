@@ -120,6 +120,7 @@ public class ControllerOrderList extends Fragment {
                 new ObservableField<>(0),
                 new ObservableField<>(0),
                 new ObservableField<>(0),
+                new ObservableField<>(0),
                 new ObservableArrayList<>(),
                 viewEventHandler,
                 new ObservableField<>(null));
@@ -248,6 +249,7 @@ public class ControllerOrderList extends Fragment {
             case NEW:      requestStatus = OrdersRequest.STATUS_NEW;      break;
             case ACCEPTED: requestStatus = OrdersRequest.STATUS_ACCEPTED; break;
             case REJECTED: requestStatus = OrdersRequest.STATUS_REJECTED; break;
+            case REFUNDED: requestStatus = OrdersRequest.STATUS_REFUNDED; break;
             default: throw new IllegalArgumentException("Missing case");
         }
 
@@ -293,7 +295,9 @@ public class ControllerOrderList extends Fragment {
                                         data.getData().getOrders(),
                                         data.getData().getTotal_new_order(),
                                         data.getData().getTotal_accepted_order(),
-                                        data.getData().getTotal_rejected_order());
+                                        data.getData().getTotal_rejected_order(),
+                                        data.getData().getTotal_refunded_order()
+                                        );
 
                                 parentInterface.updateStoreOpen(data.getData().isIs_open());
 

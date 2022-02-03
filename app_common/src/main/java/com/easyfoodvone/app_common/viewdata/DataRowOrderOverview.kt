@@ -42,6 +42,7 @@ class DataRowOrderOverview(
     enum class OrderStatus {
         NEW,
         ACCEPTED,
-        REJECTED
+        REJECTED,
+        REFUNDED
     }
 }

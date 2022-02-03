@@ -46,8 +46,18 @@ public class OrdersListResponse implements Serializable {
         int total_new_order;
         int total_rejected_order;
         int total_accepted_order;
+        int total_refunded_order;
         String android_version;
         boolean is_open;
+
+        public int getTotal_refunded_order() {
+            return total_refunded_order;
+        }
+
+        public void setTotal_refunded_order(int total_refunded_order) {
+            this.total_refunded_order = total_refunded_order;
+        }
+
         String delivery_partner;
 
         public String getAndroid_version() {

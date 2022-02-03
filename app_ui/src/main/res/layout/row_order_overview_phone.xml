@@ -308,7 +308,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textCustomerAddress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="1"
-            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED ? View.VISIBLE : View.INVISIBLE}">
+            android:visibility="@{data.status == OrderStatus.ACCEPTED | data.status == OrderStatus.REJECTED | data.status == OrderStatus.REFUNDED ? View.VISIBLE : View.INVISIBLE}">
 
             <!-- GUIDES -->
 
@@ -368,7 +368,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guideColumn2C"
                 app:layout_constraintEnd_toEndOf="@+id/guideColumn2C"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{data.status == OrderStatus.REJECTED ? View.VISIBLE : View.GONE}" />
+                android:visibility="@{data.status == OrderStatus.REJECTED | data.status == OrderStatus.REFUNDED ? View.VISIBLE : View.GONE}" />
 
             <TextView
                 style="@style/__Phone_Text_Large_Regular"
@@ -424,8 +424,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red : 0, default=@color/txt_green}"
-                android:text="@{data.status == OrderStatus.ACCEPTED ? data.currentAcceptedStatus : data.status == OrderStatus.REJECTED ? `Rejected` : ``, default=`Accepted`}"
+                android:textColor="@{data.status == OrderStatus.ACCEPTED ? @color/txt_green : data.status == OrderStatus.REJECTED ? @color/txt_red :data.status == OrderStatus.REFUNDED ? @color/txt_red : 0, default=@color/txt_green}"
+                android:text="@{data.status == OrderStatus.ACCEPTED ? data.currentAcceptedStatus : data.status == OrderStatus.REJECTED ? `Rejected` : data.status == OrderStatus.REFUNDED ? `Refunded`: ``, default=`Accepted`}"
                 android:onClick="@{() -> data.status == OrderStatus.ACCEPTED ? data.outputEvents.onClickEditAcceptedStatusBegin() : void}"
                 app:layout_constraintStart_toStartOf="@+id/guideColumn2C"
                 app:layout_constraintEnd_toEndOf="@+id/guideColumn2C"

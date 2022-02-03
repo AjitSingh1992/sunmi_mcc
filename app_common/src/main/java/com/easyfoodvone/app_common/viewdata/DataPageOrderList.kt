@@ -10,6 +10,7 @@ class DataPageOrderList(
         val tabNewCount: ObservableField<Int?>,
         val tabAcceptedCount: ObservableField<Int?>,
         val tabRejectedCount: ObservableField<Int?>,
+        val tabRefundedCount: ObservableField<Int?>,
         val ordersList: ObservableArrayList<OrdersListResponse.Orders>,
         val outputEvents: OutputEvents,
         val inputEvents: ObservableField<InputEvents?>) {
@@ -29,7 +30,8 @@ class DataPageOrderList(
     enum class ActiveTab {
         NEW,
         ACCEPTED,
-        REJECTED
+        REJECTED,
+        REFUNDED
     }
 
     enum class AcceptedOrderRequestStatus {
@@ -41,15 +43,16 @@ class DataPageOrderList(
 
     fun setActiveTab(tab: ActiveTab) {
         activeTab.set(tab)
-        setOrdersList(emptyList(), null, null, null)
+        setOrdersList(emptyList(), null, null, null,null)
     }
 
-    fun setOrdersList(newItems: List<OrdersListResponse.Orders?>?, countNew: Int?, countAccepted: Int?, countRejected: Int?) {
+    fun setOrdersList(newItems: List<OrdersListResponse.Orders?>?, countNew: Int?, countAccepted: Int?, countRejected: Int?, countRefunded: Int?) {
         val filtered = newItems?.filterNotNull() ?: emptyList()
-
+//If we want to implement 1k functionality we have to do implement code here
         tabNewCount.set(countNew)
         tabAcceptedCount.set(countAccepted)
         tabRejectedCount.set(countRejected)
+        tabRefundedCount.set(countRefunded)
 
         ordersList.clear()
         if (filtered.isNotEmpty()) {
@@ -73,12 +76,14 @@ class DataPageOrderList(
             ActiveTab.NEW -> tabNewCount
             ActiveTab.ACCEPTED -> tabAcceptedCount
             ActiveTab.REJECTED -> tabRejectedCount
+            ActiveTab.REFUNDED -> tabRefundedCount
         }
 
         val toObservable: ObservableField<Int?> = when (moveToTab) {
             ActiveTab.NEW -> tabNewCount
             ActiveTab.ACCEPTED -> tabAcceptedCount
             ActiveTab.REJECTED -> tabRejectedCount
+            ActiveTab.REFUNDED -> tabRefundedCount
         }
 
         fromObservable.let { it.set(it.get()?.let { it-1 } ?: null) }

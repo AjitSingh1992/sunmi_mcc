@@ -131,6 +131,7 @@ class ControllerRowOrderOverview(
             DataPageOrderList.ActiveTab.NEW -> DataRowOrderOverview.OrderStatus.NEW
             DataPageOrderList.ActiveTab.ACCEPTED -> DataRowOrderOverview.OrderStatus.ACCEPTED
             DataPageOrderList.ActiveTab.REJECTED -> DataRowOrderOverview.OrderStatus.REJECTED
+            DataPageOrderList.ActiveTab.REFUNDED -> DataRowOrderOverview.OrderStatus.REFUNDED
         }
     }
 

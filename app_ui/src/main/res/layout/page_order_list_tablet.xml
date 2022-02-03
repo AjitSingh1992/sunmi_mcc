@@ -54,6 +54,7 @@
             <CheckedTextView
                 style="@style/Text_Large_Regular_Gray_On_Gray"
                 android:layout_width="180sp"
+                android:id="@+id/tabRejected"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_radio_button_checkable"
                 android:drawablePadding="10dp"
@@ -61,6 +62,19 @@
                 android:onClick="@{() -> data.activeTab != ActiveTab.REJECTED ? data.outputEvents.onClickTabSelector(ActiveTab.REJECTED) : void}"
                 android:text="@{data.tabRejectedCount == null ? `Rejected` : (`Rejected (` + data.tabRejectedCount + `)`), default=`Rejected (50)`}"
                 app:layout_constraintStart_toEndOf="@+id/tabAccepted"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+   <CheckedTextView
+                style="@style/Text_Large_Regular_Gray_On_Gray"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_radio_button_checkable"
+                android:drawablePadding="10dp"
+                android:checked="@{data.activeTab == ActiveTab.REFUNDED}"
+                android:onClick="@{() -> data.activeTab != ActiveTab.REFUNDED ? data.outputEvents.onClickTabSelector(ActiveTab.REFUNDED) : void}"
+                android:text="@{data.tabRefundedCount == null ? `Refunded` : (`Refunded (` + data.tabRefundedCount + `)`), default=`Refunded (50)`}"
+                app:layout_constraintStart_toEndOf="@+id/tabRejected"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -9,6 +9,7 @@ public class OrdersRequest implements Serializable {
     public final static transient String STATUS_NEW = "new";
     public final static transient String STATUS_ACCEPTED = "accepted";
     public final static transient String STATUS_REJECTED = "rejected";
+    public final static transient String STATUS_REFUNDED = "refunded";
 
     @Expose
     @SerializedName("restaurant_id")
