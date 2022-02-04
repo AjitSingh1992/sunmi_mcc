@@ -253,7 +253,6 @@ public interface ApiInterface {
 
 
     //APi by Ajit
-
     @POST(ApiConstants.CHANGE_MENU_POSITION)
     Single<MenuCategoryItemsResponse> changeCategoryPosition(@Header("Authorization") String Authorization,@Body CategorySwipeModel request);
 

@@ -97,7 +97,7 @@ public class ControllerMenu extends Fragment {
 
             }
             //Completed by ajit
-         //   changeCategoryPosition(orderRequests);
+            changeCategoryPosition(orderRequests);
         }
 
         /*@Override
