@@ -7,13 +7,14 @@ import com.easyfoodvone.app_common.ws.DeliveryPostCodeBean
 class DataPageDeliverySettingsAndPostcodes(
         val outputEvents: OutputEvents,
         val inputEvents: ObservableField<InputEvents?>,
-        val inputMiles: ObservableField<String>,
-        val inputDeliveryTime: ObservableField<String>,
-        val inputDeliveryCharge: ObservableField<String>,
-        val inputMinOrder: ObservableField<String>,
-        val inputFreeDelivery: ObservableField<String>,
-        val inputAvgPrepTime: ObservableField<String>,
+        val inputQuiteTime: ObservableField<String>,
+        val inputNormalTime: ObservableField<String>,
+        val inputBusyTime: ObservableField<String>,
+        val inputDeliveryTravelTime: ObservableField<String>,
         val allPostcodesChecked: ObservableField<Boolean>,
+        val rbQuiteChecked: ObservableField<Boolean>,
+        val rbNormalChecked: ObservableField<Boolean>,
+        val rbBusyChecked: ObservableField<Boolean>,
         val postcodesList: ObservableArrayList<DeliveryPostCodeBean.DataBean?>) {
 
     interface OutputEvents {

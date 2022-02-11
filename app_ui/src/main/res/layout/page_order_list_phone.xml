@@ -199,6 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="28dp"
+                    android:layout_marginBottom="@dimen/_16sdp"
                     android:clipToPadding="false"
                     tools:listitem="@layout/row_order_overview_phone"
                     android:orientation="vertical"/>

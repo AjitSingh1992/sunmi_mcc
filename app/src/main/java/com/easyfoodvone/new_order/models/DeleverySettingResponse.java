@@ -10,11 +10,20 @@ public class DeleverySettingResponse implements Serializable
     int distance;
     int Average_delivery_time;
     String free_delivery;
+    String type;
     String delivery_charges;
     String avg_preparation_time;
     String min_order_value;
     boolean set_one_amount;
     List<Data> data;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public boolean isSuccess() {
         return success;

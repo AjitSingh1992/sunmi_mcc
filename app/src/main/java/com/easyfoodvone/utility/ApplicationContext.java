@@ -20,6 +20,7 @@ import com.newrelic.agent.android.NewRelic;
 
 public class ApplicationContext extends Application {
     private static ApplicationContext applicationContext;
+    private static Context context;
     private MediaPlayer player;
     private Handler handler;
 
@@ -48,12 +49,15 @@ public class ApplicationContext extends Application {
         ).start(this.getApplicationContext());
 
         applicationContext = this;
+        context = getApplicationContext();
         handler = new Handler();
         AidlUtil.getInstance().connectPrinterService(this);
 
         timer.endIfSplashRemainingBlockThread();
     }
-
+    public static Context getAppContext() {
+        return context;
+    }
     public void playNotificationSound() {
         try {
             if (player == null) {

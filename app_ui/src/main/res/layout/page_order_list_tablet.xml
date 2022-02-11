@@ -166,6 +166,7 @@
                     android:layout_height="match_parent"
                     android:paddingBottom="28dp"
                     android:clipToPadding="false"
+                    android:layout_marginBottom="@dimen/_16sdp"
                     tools:listitem="@layout/row_order_overview_tablet"
                     android:orientation="vertical"/>
 

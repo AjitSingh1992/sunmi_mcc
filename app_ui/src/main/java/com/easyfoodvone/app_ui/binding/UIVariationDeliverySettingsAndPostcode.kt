@@ -1,6 +1,7 @@
 package com.easyfoodvone.app_ui.binding
 
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
@@ -11,23 +12,29 @@ import com.easyfoodvone.app_ui.databinding.PageDeliverySettingsAndPostcodesPhone
 
 sealed class UIVariationDeliverySettingsAndPostcode<T : ViewDataBinding> {
     abstract val binding: T
-    abstract val distance: TextView
     abstract val recyclerTimeList: RecyclerView
-    abstract val etDeliveryCharge: EditText
-    abstract val etMinimumOrder: EditText
-    abstract val etFreeDelivery: EditText
-    abstract val deliveryTime: EditText
-    abstract val etAvgPrepTime: EditText
+    abstract val etDeliveryTravelTime: EditText
+    abstract val etQuiet: EditText
+    abstract val etNormal: EditText
+    abstract val etBusy: EditText
+
+    abstract val rbQuiet: RadioButton
+    abstract val rbNormal: RadioButton
+    abstract val rbBusy: RadioButton
     abstract fun setData(data: DataPageDeliverySettingsAndPostcodes, lifecycle: LifecycleSafe)
 
     class Phone(override val binding: PageDeliverySettingsAndPostcodesPhoneBinding): UIVariationDeliverySettingsAndPostcode<PageDeliverySettingsAndPostcodesPhoneBinding>() {
-        override val distance = binding.distance
         override val recyclerTimeList = binding.recyclerTimeList
-        override val etDeliveryCharge = binding.etDeliveryCharge
-        override val etMinimumOrder = binding.etMinimumOrder
-        override val etFreeDelivery = binding.etFreeDelivery
-        override val deliveryTime = binding.deliveryTime
-        override val etAvgPrepTime = binding.etAvgPrepTime
+        override val etDeliveryTravelTime = binding.etDeliveryTravelTime
+
+        override val etQuiet = binding.etQuiet
+        override val etNormal = binding.etNormal
+        override val etBusy = binding.etBusy
+
+        override val rbQuiet = binding.rbQuiet
+        override val rbNormal = binding.rbNormal
+        override val rbBusy = binding.rbBusy
+
         override fun setData(data: DataPageDeliverySettingsAndPostcodes, lifecycle: LifecycleSafe) {
             binding.data = data
             lifecycle.unbindOnDestroy(::binding)
@@ -35,13 +42,17 @@ sealed class UIVariationDeliverySettingsAndPostcode<T : ViewDataBinding> {
     }
 
     class Tablet(override val binding: PageDeliverySettingsAndPostcodesBinding): UIVariationDeliverySettingsAndPostcode<PageDeliverySettingsAndPostcodesBinding>() {
-        override val distance: TextView = binding.distance
         override val recyclerTimeList = binding.recyclerTimeList
-        override val etDeliveryCharge = binding.etDeliveryCharge
-        override val etMinimumOrder = binding.etMinimumOrder
-        override val etFreeDelivery = binding.etFreeDelivery
-        override val deliveryTime = binding.deliveryTime
-        override val etAvgPrepTime = binding.etAvgPrepTime
+        override val etDeliveryTravelTime = binding.etDeliveryTravelTime
+
+        override val etQuiet = binding.etQuiet
+        override val etNormal = binding.etNormal
+        override val etBusy = binding.etBusy
+
+        override val rbQuiet = binding.rbQuiet
+        override val rbNormal = binding.rbNormal
+        override val rbBusy = binding.rbBusy
+
         override fun setData(data: DataPageDeliverySettingsAndPostcodes, lifecycle: LifecycleSafe) {
             binding.data = data
             lifecycle.unbindOnDestroy(::binding)

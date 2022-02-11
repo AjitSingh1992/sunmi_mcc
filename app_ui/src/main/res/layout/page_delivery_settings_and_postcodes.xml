@@ -31,268 +31,267 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="32dp"
-                android:paddingBottom="32dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:contentDescription="@string/delivery_settings_content_desc_location_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_location"/>
 
                     <TextView
                         style="@style/Text_XLarge_Bold_Black"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="@string/delivery_settings_miles_title"
-                        android:layout_marginStart="16dp"/>
+                        android:text="@string/food_prepration_time"
+                        />
 
-                    <EditText
-                        android:id="@+id/distance"
-                        style="@style/Text_XLarge_Bold_Orange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="6"
-                        android:minWidth="52dp"
-                        android:gravity="center"
-                        android:background="@drawable/rectangle_variant_border"
-                        android:padding="8dp"
-                        android:layout_marginStart="16dp"
-                        android:autofillHints=""
-                        android:inputType="number"
-                        android:text="@={data.inputMiles}"
-                        tools:ignore="LabelFor" />
 
-                    <TextView
-                        style="@style/Text_Large_Regular_Grey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delivery_settings_miles_1_6_suffix"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_marginStart="16dp"/>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:ignore="UseCompoundDrawables"
-                    android:gravity="center"
-                    android:layout_marginTop="24dp">
 
-                    <ImageView
-                        android:contentDescription="@string/delivery_settings_content_desc_location_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_clock"/>
-
-                    <TextView
-                        style="@style/Text_XLarge_Bold_Black"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delivery_settings_average_delivery_time_title"
-                        android:layout_marginStart="16dp"/>
-
-                    <EditText
-                        android:id="@+id/deliveryTime"
-                        style="@style/Text_XLarge_Bold_Orange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="30"
-                        android:gravity="center"
-                        android:minWidth="52dp"
-                        android:background="@drawable/rectangle_variant_border"
-                        android:padding="8dp"
-                        android:text="@={data.inputDeliveryTime}"
-                        android:layout_marginStart="16dp"
-                        android:autofillHints=""
-                        android:inputType="number"
-                        tools:ignore="LabelFor" />
-
-                    <TextView
-                        style="@style/Text_Large_Regular_Grey"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delivery_settings_avg_delivery_time_minutes_suffix"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginStart="16dp"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
-                    android:layout_marginTop="16dp">
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:layout_marginTop="@dimen/_16sdp">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:minWidth="72dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="left"
+                            android:checked="@={data.rbQuiteChecked}"
+
+                            android:id="@+id/rbQuiet"/>
+
+                        <TextView
+                            style="@style/Phone_Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center"
+                            android:text="@string/quiet" />
+
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="0.9"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            style="@style/Text_Large_Regular_Black"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/delivery_settings_delivery_charge"
-                            android:layout_marginStart="16dp"/>
+
 
                         <EditText
                             style="@style/Text_XLarge_Bold_Orange"
-                            android:id="@+id/etDeliveryCharge"
+                            android:id="@+id/etQuiet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:text="10.00"
                             android:gravity="center"
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="16dp"
-                            android:text="@={data.inputDeliveryCharge}"
-                            android:autofillHints=""
+                            android:text="@={data.inputQuiteTime}"
+
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="0.9"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:minWidth="72dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="left"
+                            android:checked="@={data.rbNormalChecked}"
+
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:id="@+id/rbNormal"/>
+
+                        <TextView
+                            style="@style/Phone_Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center"
+                            android:text="@string/normal" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            style="@style/Text_Large_Regular_Black"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/delivery_settings_min_order_value"
-                            android:layout_marginStart="16dp"/>
+
 
 
                         <EditText
                             style="@style/Text_XLarge_Bold_Orange"
-                            android:id="@+id/etMinimumOrder"
+                            android:id="@+id/etNormal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:text="10.00"
                             android:gravity="center"
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="16dp"
-                            android:text="@={data.inputMinOrder}"
-                            android:autofillHints=""
+                            android:text="@={data.inputNormalTime}"
+
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor"/>
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_weight="0.9"
+                        android:minWidth="72dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="left"
+                            android:checked="@={data.rbBusyChecked}"
+
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:id="@+id/rbBusy"/>
+
+                        <TextView
+                            style="@style/Phone_Text_XLarge_Bold_Black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left"
+                            android:layout_marginStart="8dp"
+                            android:gravity="center"
+                            android:text="@string/busy" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            style="@style/Text_Large_Regular_Black"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/delivery_settings_free_delivery"
-                            android:layout_marginStart="16dp"/>
+
 
                         <EditText
-                            android:id="@+id/etFreeDelivery"
+                            android:id="@+id/etBusy"
                             style="@style/Text_XLarge_Bold_Orange"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:text="10.00"
                             android:gravity="center"
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="16dp"
-                            android:text="@={data.inputFreeDelivery}"
-                            android:autofillHints=""
+                            android:text="@={data.inputBusyTime}"
+
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor"/>
                     </LinearLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/Text_Large_Regular_Black"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:text="@string/delivery_settings_average_preparation_time"
-                            android:layout_marginStart="16dp"/>
-
-                        <EditText
-                            android:id="@+id/etAvgPrepTime"
-                            style="@style/Text_XLarge_Bold_Orange"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            tools:text="10.00"
-                            android:gravity="center"
-                            android:background="@drawable/rectangle_variant_border"
-                            android:padding="8dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="16dp"
-                            android:text="@={data.inputAvgPrepTime}"
-                            android:autofillHints=""
-                            android:inputType="numberDecimal"
-                            tools:ignore="LabelFor"/>
-                    </LinearLayout>
                 </LinearLayout>
 
-                <Button
-                    style="@style/Button_Orange_Bold"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:onClick="@{() -> data.outputEvents.onClickUpdate()}"
-                    android:text="@string/delivery_settings_button_update"/>
+                    tools:ignore="UseCompoundDrawables"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:layout_marginTop="@dimen/_16sdp">
+
+
+
+                    <TextView
+                        style="@style/Text_XLarge_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delivery_travel_time"
+                        />
+
+                    <EditText
+                        android:id="@+id/etDeliveryTravelTime"
+                        style="@style/Text_XLarge_Bold_Orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minWidth="150dp"
+                        android:background="@drawable/rectangle_variant_border"
+                        android:padding="8dp"
+                        android:text="@={data.inputDeliveryTravelTime}"
+                        android:layout_marginStart="16dp"
+                        
+                        android:inputType="number"
+                        tools:ignore="LabelFor" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:background="@color/bg_grey"
+
+                    >
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:onClick="@{() -> data.outputEvents.onClickUpdate()}"
+                        android:text="@string/delivery_settings_button_update"/>
+
+                </LinearLayout>
+
 
                 <TextView
                     style="@style/Text_XLarge_Bold_Orange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+
+
                     android:text="@string/delivery_settings_postcodes_within_3_miles"
-                    android:layout_marginStart="16dp"/>
+                   />
 
                 <CheckBox
                     android:id="@+id/chechbox_set_for_all"
@@ -300,15 +299,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginLeft="32dp"
                     android:paddingStart="16dp"
+                    android:paddingEnd="32dp"
                     android:checked="@={data.allPostcodesChecked}"
-                    android:text="@string/delivery_settings_checkbox_all_postcodes"
-                    android:layout_marginStart="16dp"/>
+                    android:text="@string/delivery_settings_checkbox_all_postcodes"/>
 
                 <LinearLayout
                     android:background="@color/bg_grey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
                     android:layout_marginTop="16dp">
 
                     <TextView
@@ -362,7 +364,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
                     android:overScrollMode="never"
+                    android:layout_marginTop="@dimen/_5sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/row_delivery_settings_postcode_list"/>
             </LinearLayout>

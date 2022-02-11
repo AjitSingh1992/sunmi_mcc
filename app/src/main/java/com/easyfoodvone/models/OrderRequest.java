@@ -7,6 +7,6 @@ public class OrderRequest {
 
     public OrderRequest(String position, String category_id) {
         this.position = position;
-        Category_id = category_id;
+        this.Category_id = category_id;
     }
 }

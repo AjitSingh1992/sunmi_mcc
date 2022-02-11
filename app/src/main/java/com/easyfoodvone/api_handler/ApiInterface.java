@@ -7,6 +7,8 @@ import com.easyfoodvone.app_common.ws.OrdersListResponse;
 import com.easyfoodvone.charity.webservice.responsebean.CharityInfoBean;
 import com.easyfoodvone.charity.webservice.responsebean.CommonResponseBean;
 import com.easyfoodvone.models.menu_response.CategorySwipeModel;
+import com.easyfoodvone.models.menu_response.ItemSwipeModel;
+import com.easyfoodvone.models.menu_response.OnOffRequest;
 import com.google.gson.JsonObject;
 import com.easyfoodvone.contact_support.models.SupportRequest;
 import com.easyfoodvone.contact_support.models.SupportResponse;
@@ -254,6 +256,11 @@ public interface ApiInterface {
 
     //APi by Ajit
     @POST(ApiConstants.CHANGE_MENU_POSITION)
-    Single<MenuCategoryItemsResponse> changeCategoryPosition(@Header("Authorization") String Authorization,@Body CategorySwipeModel request);
+    Call<MenuCategoryItemsResponse> changeCategoryPosition(@Header("Authorization") String Authorization,@Body CategorySwipeModel request);
+    //APi by Ajit
+    @POST(ApiConstants.CHANGE_ITEM_POSITION)
+    Call<MenuCategoryItemsResponse> changeCategoryItemPosition(@Header("Authorization") String Authorization,@Body ItemSwipeModel request);
+    @POST(ApiConstants.ONOFFDAY)
+    Call<MenuCategoryItemsResponse> onOffTheDay(@Header("Authorization") String Authorization,@Body OnOffRequest request);
 
 }

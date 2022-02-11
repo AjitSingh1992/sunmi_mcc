@@ -1,6 +1,9 @@
 package com.easyfoodvone.controller.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +36,17 @@ import com.easyfoodvone.models.CommonRequest;
 import com.easyfoodvone.models.MenuProductDetails;
 import com.easyfoodvone.menu_details.ViewMenuPopupEditCategory;
 import com.easyfoodvone.menu_details.ViewMenuPopupEditItemPinCheck;
+import com.easyfoodvone.models.OrderRequest;
+import com.easyfoodvone.models.OrderRequestForItem;
+import com.easyfoodvone.models.menu_response.CategorySwipeModel;
+import com.easyfoodvone.models.menu_response.ItemSwipeModel;
 import com.easyfoodvone.utility.Helper;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -45,6 +54,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
 
@@ -61,6 +73,9 @@ public class ControllerMenuDetails extends Fragment {
     private @Nullable ViewMenuPopupDisableItemTimeChooser viewMenuPopupDisableItemTimeChooser;
 
     private @Nullable DataPageRestaurantMenuDetails data;
+    private Call<MenuCategoryItemsResponse> callforCategoryItems;
+    private ApiInterface apiServiceForCategoryItems;
+    private LoadingDialog dialogforCategoryIems;
 
     public ControllerMenuDetails(
             @NonNull MenuCategoryList.MenuCategories menuCategories,
@@ -90,6 +105,8 @@ public class ControllerMenuDetails extends Fragment {
                 new ObservableField<>(false),
                 viewEventHandler);
 
+        dialogforCategoryIems = new LoadingDialog(getActivity(), "");
+        dialogforCategoryIems.setCancelable(false);
         ViewRestaurantMenuDetail view = new ViewRestaurantMenuDetail(new LifecycleSafe(this), isPhone, data);
         view.onCreateView(inflater, container);
 
@@ -133,9 +150,34 @@ public class ControllerMenuDetails extends Fragment {
         public void onItemMove(int fromPosition, int toPosition) {
             MenuCategoryItemsResponse.Items movedItem = data.getMenuItems().get(fromPosition);
             MenuCategoryItemsResponse.Items replacedItem = ControllerMenuDetails.this.data.getMenuItems().get(toPosition);
-            saveItemOrderingMoved(movedItem, replacedItem);
+           // saveItemOrderingMoved(movedItem, replacedItem);
+
 
             data.getMenuItems().moveItem(fromPosition, toPosition);
+
+            ArrayList<OrderRequestForItem> orderRequests = new ArrayList<>();
+            for(int i=0;i<data.getMenuItems().size();i++){
+                OrderRequestForItem orderRequest = new OrderRequestForItem(""+i,""+data.getMenuItems().get(i).getMenu_product_id());
+                orderRequests.add(orderRequest);
+
+            }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                }
+            }, 1000);
+
+            if(callforCategoryItems!=null) {
+                callforCategoryItems.cancel();
+                callforCategoryItems=null;
+                dialogforCategoryIems.hide();
+                changeItemPosition(orderRequests);
+
+
+            }else{
+                changeItemPosition(orderRequests);
+
+            }
         }
 
         /*@Override
@@ -205,7 +247,8 @@ public class ControllerMenuDetails extends Fragment {
             CommonRequest request = new CommonRequest();
             request.setRestaurant_id(baseDetails.getRestaurant_id());
             request.setMenu_category_id(menuCategoryId);
-
+            Gson gson = new Gson();
+            gson.toJson(request);
             CompositeDisposable disposable = new CompositeDisposable();
             disposable.add(apiService.getMenuCategoryItems(authToken, request)
                     .subscribeOn(Schedulers.io())
@@ -364,6 +407,51 @@ public class ControllerMenuDetails extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void changeItemPosition(ArrayList<OrderRequestForItem> order) {
+
+        dialogforCategoryIems.show();
+        try {
+            apiServiceForCategoryItems = ApiClient.getClient().create(ApiInterface.class);
+            LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(getActivity());
+
+            // TODO fix this - it doesn't work at all
+            ItemSwipeModel request = new ItemSwipeModel();
+            request.setRestaurant_id(freshLoginData.getRestaurant_id());
+            request.setOrder(order);
+
+            Log.e("prinToken", "" + freshLoginData.getToken());
+            callforCategoryItems = apiServiceForCategoryItems.changeCategoryItemPosition(freshLoginData.getToken(), request);
+            callforCategoryItems.enqueue(new Callback<MenuCategoryItemsResponse>() {
+                @Override
+                public void onResponse(Call<MenuCategoryItemsResponse> call, Response<MenuCategoryItemsResponse> response) {
+                    dialogforCategoryIems.dismiss();
+                    Toast.makeText(getActivity(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    getMenuDetails(menuCategories.getMenu_category_id());
+                }
+
+                @Override
+                public void onFailure(Call<MenuCategoryItemsResponse> call, Throwable t) {
+                    dialogforCategoryIems.dismiss();
+                    Log.e("onError", "onError: " + t.getMessage());
+                   // Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+        } catch (Exception e) {
+            dialogforCategoryIems.dismiss();
+
+            Log.e("Exception ", e.toString());
+        }
+
+
+
+
+
+
     }
 
     private void saveProductActive(MenuCategoryItemsResponse.Items item, final boolean isActive, final boolean isPermanent) {

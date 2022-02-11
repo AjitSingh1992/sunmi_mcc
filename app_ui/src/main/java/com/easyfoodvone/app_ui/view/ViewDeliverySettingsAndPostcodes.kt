@@ -48,23 +48,48 @@ class ViewDeliverySettingsAndPostcodes(
         }.apply {
             setData(data, lifecycle)
 
-            etDeliveryCharge.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(2)))
+          /*  etDeliveryCharge.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(2)))
             etMinimumOrder.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(2)))
-            etFreeDelivery.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(2)))
+            etFreeDelivery.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(2)))*/
 
-            distance.addTextChangedListener(object : TextWatcher {
+           etQuiet.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (s.length != 0 && (s.toString().toInt() > 6 || s.toString().toInt() == 0)) {
-                        distance.setText("")
-                        distance.setError("Please Enter Distance between 1-6")
-                    }
+                    rbQuiet.setChecked(true)
+                    rbNormal.setChecked(false)
+                    rbBusy.setChecked(false)
                 }
 
                 override fun afterTextChanged(s: Editable) {}
             })
+
+            etNormal.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    rbQuiet.setChecked(false)
+                    rbNormal.setChecked(true)
+                    rbBusy.setChecked(false)
+                }
+
+                override fun afterTextChanged(s: Editable) {}
+            })
+          etBusy.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    rbQuiet.setChecked(false)
+                    rbNormal.setChecked(false)
+                    rbBusy.setChecked(true)
+                }
+
+                override fun afterTextChanged(s: Editable) {}
+            })
+            /*
             deliveryTime.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 }
@@ -90,7 +115,7 @@ class ViewDeliverySettingsAndPostcodes(
                 }
 
                 override fun afterTextChanged(s: Editable) {}
-            })
+            })*/
 
             val adapter = AdapterDeliveryCharges(inflater, data.outputEvents, data.postcodesList, isPhone)
             lifecycle.addObserverOnceUntilDestroy(data.postcodesList, adapter, callNow=false)
@@ -106,15 +131,15 @@ class ViewDeliverySettingsAndPostcodes(
 
     private val inputEventHandler = object : DataPageDeliverySettingsAndPostcodes.InputEvents {
         override fun setErrorEtDeliveryCharge(msg: String) {
-            ui!!.etDeliveryCharge.setError(msg)
+            ui!!.etQuiet.setError(msg)
         }
 
         override fun setErrorEtMinimumOrder(msg: String) {
-            ui!!.etMinimumOrder.setError(msg)
+            ui!!.etNormal.setError(msg)
         }
 
         override fun setErrorEtFreeDelivery(msg: String) {
-            ui!!.etFreeDelivery.setError(msg)
+            ui!!.etBusy.setError(msg)
         }
 
         override fun alertDialog(

@@ -10,6 +10,7 @@ class DataDialogRestaurantTime(
         val collectionTimeTo: ObservableField<String>,
         val deliveryTimeFrom: ObservableField<String>,
         val deliveryTimeTo: ObservableField<String>,
+        val dayName: ObservableField<String>,
         val outputEvents: OutputEvents) {
 
     interface OutputEvents {

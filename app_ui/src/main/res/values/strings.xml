@@ -153,6 +153,11 @@
     <string name="offers_days_of_the_week">Days of the Week</string>
     <string name="offers_start_amp_end_date"><![CDATA[Start & End Date]]></string>
     <string name="offer_title_amp_type"><![CDATA[Offer Title & Type]]></string>
+    <string name="food_prepration_time">Food Preparation Time</string>
+    <string name="quiet">Quiet</string>
+    <string name="normal">Normal</string>
+    <string name="busy">Busy</string>
+    <string name="delivery_travel_time">Delivery travel time</string>
     <!-- End Offers -->
 
 </resources>

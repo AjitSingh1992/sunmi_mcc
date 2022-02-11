@@ -9,28 +9,50 @@ public class DeliverySettingRequest {
     String restaurant_id;
 
     @Expose
-    @SerializedName("Average_delivery_time")
-    String Average_delivery_time;
+    @SerializedName("delivery_travel_time")
+    String delivery_travel_time;
+
+    public String getDelivery_travel_time() {
+        return delivery_travel_time;
+    }
+
+    public void setDelivery_travel_time(String delivery_travel_time) {
+        this.delivery_travel_time = delivery_travel_time;
+    }
 
     @Expose
-    @SerializedName("distance")
-    String distance;
+    @SerializedName("type")
+    String type;
 
     @Expose
-    @SerializedName("delivery_charges")
-    String delivery_charges;
+    @SerializedName("prepration_time_quite")
+    String prepration_time_quite;
+
+    public String getPrepration_time_quite() {
+        return prepration_time_quite;
+    }
+
+    public void setPrepration_time_quite(String prepration_time_quite) {
+        this.prepration_time_quite = prepration_time_quite;
+    }
+
+    public String getPrepration_time_busy() {
+        return prepration_time_busy;
+    }
+
+    public void setPrepration_time_busy(String prepration_time_busy) {
+        this.prepration_time_busy = prepration_time_busy;
+    }
 
     @Expose
-    @SerializedName("min_order_value")
-    String min_order_value;
+    @SerializedName("prepration_time_normal")
+    String prepration_time_normal;
 
-    @Expose
-    @SerializedName("free_delivery")
-    String free_delivery;
+   @Expose
+    @SerializedName("prepration_time_busy")
+    String prepration_time_busy;
 
-    @Expose
-    @SerializedName("avg_preparation_time")
-    String avg_preparation_time;
+
 
     public String getRestaurant_id() {
         return restaurant_id;
@@ -40,64 +62,28 @@ public class DeliverySettingRequest {
         this.restaurant_id = restaurant_id;
     }
 
-    public String getAverage_delivery_time() {
-        return Average_delivery_time;
+
+
+    public String getType() {
+        return type;
     }
 
-    public void setAverage_delivery_time(String average_delivery_time) {
-        Average_delivery_time = average_delivery_time;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getDistance() {
-        return distance;
+    public String getPrepration_time_normal() {
+        return prepration_time_normal;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public void setPrepration_time_normal(String prepration_time_normal) {
+        this.prepration_time_normal = prepration_time_normal;
     }
 
-    public String getDelivery_charges() {
-        return delivery_charges;
-    }
 
-    public void setDelivery_charges(String delivery_charges) {
-        this.delivery_charges = delivery_charges;
-    }
-
-    public String getMin_order_value() {
-        return min_order_value;
-    }
-
-    public void setMin_order_value(String min_order_value) {
-        this.min_order_value = min_order_value;
-    }
-
-    public String getFree_delivery() {
-        return free_delivery;
-    }
-
-    public void setFree_delivery(String free_delivery) {
-        this.free_delivery = free_delivery;
-    }
-
-    public String getAvg_preparation_time() {
-        return avg_preparation_time;
-    }
-
-    public void setAvg_preparation_time(String avg_preparation_time) {
-        this.avg_preparation_time = avg_preparation_time;
-    }
 
     @Override
     public String toString() {
-        return "DeliverySettingRequest{" +
-                "restaurant_id='" + restaurant_id + '\'' +
-                ", Average_delivery_time='" + Average_delivery_time + '\'' +
-                ", distance='" + distance + '\'' +
-                ", delivery_charges='" + delivery_charges + '\'' +
-                ", min_order_value='" + min_order_value + '\'' +
-                ", free_delivery='" + free_delivery + '\'' +
-                ", avg_preparation_time='" + avg_preparation_time + '\'' +
-                '}';
+        return "";
     }
 }

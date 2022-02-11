@@ -1,6 +1,7 @@
 package com.easyfoodvone.controller.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,28 +19,26 @@ import com.easyfoodvone.app_common.separation.ObservableArrayListMoveable;
 import com.easyfoodvone.app_common.viewdata.DataPageRestaurantMenu;
 import com.easyfoodvone.app_common.ws.MenuCategoryItemsResponse;
 import com.easyfoodvone.app_common.ws.MenuCategoryList;
-import com.easyfoodvone.app_common.ws.OrdersListResponse;
 import com.easyfoodvone.app_ui.view.ViewRestaurantMenu;
 import com.easyfoodvone.models.LoginResponse;
 import com.easyfoodvone.models.CommonRequest;
 import com.easyfoodvone.models.OrderRequest;
-import com.easyfoodvone.models.OrdersRequest;
 import com.easyfoodvone.models.menu_response.CategorySwipeModel;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
 
@@ -55,6 +54,9 @@ public class ControllerMenu extends Fragment {
     private DataPageRestaurantMenu data;
     private @Nullable LoadingDialog loadingDialog = null;
     private @Nullable Disposable disposableWSGetMenu = null;
+    private Call<MenuCategoryItemsResponse> callForCategoryChange;
+    private ApiInterface apiServiceForCategory;
+    private LoadingDialog dialogforCategory;
 
     public ControllerMenu(ParentInterface parentInterface, PrefManager prefManager, boolean isPhone) {
         this.parentInterface = parentInterface;
@@ -67,6 +69,8 @@ public class ControllerMenu extends Fragment {
         super.onCreate(savedInstanceState);
 
         data = new DataPageRestaurantMenu(new ObservableArrayListMoveable<>(), viewEventHandler);
+        dialogforCategory = new LoadingDialog(getActivity(), "");
+        dialogforCategory.setCancelable(false);
     }
 
     @Override
@@ -91,13 +95,24 @@ public class ControllerMenu extends Fragment {
             // @NonNull MenuCategoryList.MenuCategories movedItem = data.getMenuItems().get(toPosition)
             ArrayList<OrderRequest> orderRequests = new ArrayList<>();
             for(int i=0;i<data.getMenuItems().size();i++){
-                JSONObject orderData = new JSONObject();
                 OrderRequest orderRequest = new OrderRequest(""+i,""+data.getMenuItems().get(i).getMenu_category_id());
                 orderRequests.add(orderRequest);
 
             }
-            //Completed by ajit
-            changeCategoryPosition(orderRequests);
+                       //Completed by ajit
+
+                        if(callForCategoryChange!=null) {
+                            callForCategoryChange.cancel();
+                            callForCategoryChange=null;
+                            dialogforCategory.hide();
+                            changeCategoryPosition(orderRequests);
+
+
+                        }else{
+                            changeCategoryPosition(orderRequests);
+
+                        }
+
         }
 
         /*@Override
@@ -197,11 +212,10 @@ public class ControllerMenu extends Fragment {
     }
     private void changeCategoryPosition(ArrayList<OrderRequest> order) {
 
-        final LoadingDialog dialog = new LoadingDialog(getActivity(), "");
-        dialog.setCancelable(false);
-        dialog.show();
+
+        dialogforCategory.show();
         try {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            apiServiceForCategory = ApiClient.getClient().create(ApiInterface.class);
             LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(getActivity());
 
             // TODO fix this - it doesn't work at all
@@ -211,30 +225,29 @@ public class ControllerMenu extends Fragment {
 
             Log.e("prinToken", "" + freshLoginData.getToken());
 
-            CompositeDisposable disposable = new CompositeDisposable();
-            disposable.add(apiService.changeCategoryPosition(freshLoginData.getToken(), request)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSingleObserver<MenuCategoryItemsResponse>() {
-                        @Override
-                        public void onSuccess(MenuCategoryItemsResponse data) {
-                            dialog.dismiss();
-                            Toast.makeText(getActivity(), ""+data.getMessage(), Toast.LENGTH_SHORT).show();
+           // CompositeDisposable disposable = new CompositeDisposable();
+            callForCategoryChange = apiServiceForCategory.changeCategoryPosition(freshLoginData.getToken(), request);
+            callForCategoryChange.enqueue(new Callback<MenuCategoryItemsResponse>() {
+                @Override
+                public void onResponse(Call<MenuCategoryItemsResponse> call, Response<MenuCategoryItemsResponse> response) {
+                    dialogforCategory.dismiss();
+                    Toast.makeText(getActivity(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    fetchAllMenuCategories(freshLoginData.getRestaurant_id());
 
-                        }
+                }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            dialog.dismiss();
-                            Log.e("onError", "onError: " + e.getMessage());
-                            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<MenuCategoryItemsResponse> call, Throwable t) {
+                    dialogforCategory.dismiss();
+                    Log.e("onError", "onError: " + t.getMessage());
+                    //Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                        }
-                    }));
 
 
         } catch (Exception e) {
-            dialog.dismiss();
+            dialogforCategory.dismiss();
 
             Log.e("Exception ", e.toString());
         }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ObservableArrayList;
@@ -31,6 +32,7 @@ import com.easyfoodvone.new_order.models.UpdatePostCodeDeliveryTimeResponse;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -42,6 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static com.easyfoodvone.utility.Helper.isInternetOn;
 import static com.easyfoodvone.utility.Helper.showSnackBar;
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
@@ -52,9 +55,13 @@ public class ControllerDeliverySetting extends Fragment {
     private final UserPreferences userPreferences;
     private final PrefManager prefManager;
     private final boolean isPhone;
-
+    private String typeOfFoodPreprationTime = "";
+    private String deliveryTravelTime = "";
     private DataPageDeliverySettingsAndPostcodes viewData;
     private boolean checkboxEnabled = true;
+    private boolean rbQuietcheckboxEnabled = true;
+    private boolean rbNormalcheckboxEnabled = true;
+    private boolean rbBusycheckboxEnabled = true;
 
     public ControllerDeliverySetting(Activity activity, PrefManager prefManager, UserPreferences userPreferences, boolean isPhone) {
         this.mActivity = activity;
@@ -67,7 +74,7 @@ public class ControllerDeliverySetting extends Fragment {
         @Override
         public void onChanged(@NonNull Boolean checked) {
             if (checkboxEnabled && checked) {
-                String msg = "Enter the delivery charges for all the postcodes within " +
+               /* String msg = "Enter the delivery charges for all the postcodes within " +
                         viewData.getInputMiles().get() +
                         " miles of radius for deliveries";
 
@@ -76,7 +83,42 @@ public class ControllerDeliverySetting extends Fragment {
                             msg,
                             null,
                             (@NonNull DataPageDeliverySettingsAndPostcodes.DialogCharges charges) -> updateAllPostCode(charges));
-                }
+                }*/
+            }
+        }
+    };
+
+    private final Observer<Boolean> onQuietCheckboxChange = new Observer<Boolean>() {
+        @Override
+        public void onChanged(@NonNull Boolean checked) {
+            if (checked) {
+                viewData.getInputNormalTime().set("");
+                viewData.getInputBusyTime().set("");
+                viewData.getRbNormalChecked().set(false);
+                viewData.getRbBusyChecked().set(false);
+            }
+        }
+    };
+    private final Observer<Boolean> onNormalCheckboxChange = new Observer<Boolean>() {
+        @Override
+        public void onChanged(@NonNull Boolean checked) {
+            if (checked) {
+                viewData.getInputQuiteTime().set("");
+                viewData.getInputBusyTime().set("");
+                viewData.getRbQuiteChecked().set(false);
+                viewData.getRbBusyChecked().set(false);
+            }
+        }
+    };
+    private final Observer<Boolean> onBusyCheckboxChange = new Observer<Boolean>() {
+        @Override
+        public void onChanged(@NonNull Boolean checked) {
+            if (checked) {
+                viewData.getInputQuiteTime().set("");
+                viewData.getInputNormalTime().set("");
+                viewData.getRbQuiteChecked().set(false);
+                viewData.getRbNormalChecked().set(false);
+
             }
         }
     };
@@ -90,8 +132,9 @@ public class ControllerDeliverySetting extends Fragment {
                 new ObservableField<>(""),
                 new ObservableField<>(""),
                 new ObservableField<>(""),
-                new ObservableField<>(""),
-                new ObservableField<>(""),
+                new ObservableField<>(false),
+                new ObservableField<>(false),
+                new ObservableField<>(false),
                 new ObservableField<>(false),
                 new ObservableArrayList<>());
 
@@ -99,6 +142,12 @@ public class ControllerDeliverySetting extends Fragment {
 
         // Listen to Checkbox change with ObservableBoolean
         checkboxEnabled = true;
+        rbQuietcheckboxEnabled = true;
+        rbNormalcheckboxEnabled = true;
+        rbBusycheckboxEnabled = true;
+        lifecycle.addObserverOnceUntilDestroy(viewData.getRbQuiteChecked(), onQuietCheckboxChange, false);
+        lifecycle.addObserverOnceUntilDestroy(viewData.getRbNormalChecked(), onNormalCheckboxChange, false);
+        lifecycle.addObserverOnceUntilDestroy(viewData.getRbBusyChecked(), onBusyCheckboxChange, false);
         lifecycle.addObserverOnceUntilDestroy(viewData.getAllPostcodesChecked(), onCheckboxChange, false);
 
         ViewDeliverySettingsAndPostcodes view = new ViewDeliverySettingsAndPostcodes(
@@ -117,12 +166,9 @@ public class ControllerDeliverySetting extends Fragment {
     }
 
     private void deliverySetting(
-            String deliveryTime,
-            String distance,
-            String deliveryCharge,
-            String minimumOrder,
-            String freeDelivery,
-            String avgPreparationTime) {
+            String deliveryTravelTime,
+            String type,
+            String preprationTime) {
 
         String restaurant_id = userPreferences.getLoggedInResponse(getActivity()).getRestaurant_id();
 
@@ -132,13 +178,20 @@ public class ControllerDeliverySetting extends Fragment {
 
         try {
             DeliverySettingRequest request = new DeliverySettingRequest();
+
             request.setRestaurant_id(restaurant_id);
-            request.setAverage_delivery_time(deliveryTime);
-            request.setDistance(distance);
-            request.setDelivery_charges(deliveryCharge);
-            request.setMin_order_value(minimumOrder);
-            request.setFree_delivery(freeDelivery);
-            request.setAvg_preparation_time(avgPreparationTime);
+            request.setDelivery_travel_time(deliveryTravelTime);
+
+            request.setType(type);
+            if(type.equals("quite"))
+            request.setPrepration_time_quite(preprationTime);
+            if(type.equals("normal"))
+            request.setPrepration_time_normal(preprationTime);
+            if(type.equals("busy"))
+            request.setPrepration_time_busy(preprationTime);
+
+            Gson gson = new Gson();
+            gson.toJson(request);
 
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             final CompositeDisposable disposable = new CompositeDisposable();
@@ -152,7 +205,8 @@ public class ControllerDeliverySetting extends Fragment {
 
                             if (data.isSuccess()) {
                                 if (getInputEventsOrNull() != null) {
-                                    getInputEventsOrNull().alertDialog(data.getMessage(), () -> { });
+                                    getInputEventsOrNull().alertDialog(data.getMessage(), () -> {
+                                    });
                                 }
                             }
                         }
@@ -187,7 +241,7 @@ public class ControllerDeliverySetting extends Fragment {
 
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             final CompositeDisposable disposable = new CompositeDisposable();
-            disposable.add(apiService.getDeleverySetting(prefManager.getPreference(AUTH_TOKEN,""),request)
+            disposable.add(apiService.getDeleverySetting(prefManager.getPreference(AUTH_TOKEN, ""), request)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableSingleObserver<DeleverySettingResponse>() {
@@ -196,12 +250,24 @@ public class ControllerDeliverySetting extends Fragment {
                             dialog.dismiss();
 
                             if (data.isSuccess()) {
-                                viewData.getInputMiles().set(String.valueOf(data.getDistance()));
-                                viewData.getInputDeliveryTime().set(String.valueOf(data.getAverage_delivery_time()));
-                                viewData.getInputFreeDelivery().set(String.valueOf(data.getFree_delivery()));
-                                viewData.getInputDeliveryCharge().set(String.valueOf(data.getDelivery_charges()));
-                                viewData.getInputMinOrder().set(String.valueOf(data.getMin_order_value()));
-                                viewData.getInputAvgPrepTime().set(String.valueOf(data.getAvg_preparation_time()));
+                                viewData.getInputDeliveryTravelTime().set(String.valueOf(data.getAverage_delivery_time()));
+                                if (data.getType().equals("1")) {
+                                    viewData.getInputQuiteTime().set(String.valueOf(data.getAvg_preparation_time()));
+                                    viewData.getRbQuiteChecked().set(data.isSet_one_amount());
+
+
+                                } else if (data.getType().equals("2")) {
+                                    viewData.getInputNormalTime().set(String.valueOf(data.getAvg_preparation_time()));
+                                    viewData.getRbNormalChecked().set(data.isSet_one_amount());
+
+
+                                } else if (data.getType().equals("3")) {
+                                    viewData.getInputBusyTime().set(String.valueOf(data.getAvg_preparation_time()));
+                                    viewData.getRbBusyChecked().set(data.isSet_one_amount());
+
+
+
+                                }
 
                                 checkboxEnabled = false;
                                 viewData.getAllPostcodesChecked().set(data.isSet_one_amount());
@@ -238,7 +304,7 @@ public class ControllerDeliverySetting extends Fragment {
             jsonObject.addProperty("restaurant_id", restaurentId);
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<DeliveryPostCodeBean> call = apiInterface.getDeliveryPostCode(prefManager.getPreference(AUTH_TOKEN,""),jsonObject);
+            Call<DeliveryPostCodeBean> call = apiInterface.getDeliveryPostCode(prefManager.getPreference(AUTH_TOKEN, ""), jsonObject);
 
             call.enqueue(new Callback<DeliveryPostCodeBean>() {
                 @Override
@@ -281,20 +347,31 @@ public class ControllerDeliverySetting extends Fragment {
             = new DataPageDeliverySettingsAndPostcodes.OutputEvents() {
         @Override
         public void onClickUpdate() {
-            if (TextUtils.isEmpty(viewData.getInputDeliveryCharge().get())) {
-                viewData.getInputEvents().get().setErrorEtDeliveryCharge("Enter delivery charge");
-            } else if (TextUtils.isEmpty(viewData.getInputMinOrder().get())) {
-                viewData.getInputEvents().get().setErrorEtMinimumOrder("Enter minimum order value");
-            } else if (TextUtils.isEmpty(viewData.getInputFreeDelivery().get())) {
-                viewData.getInputEvents().get().setErrorEtFreeDelivery("Enter amount");
+            if (viewData.getRbQuiteChecked().get()) {
+                typeOfFoodPreprationTime = "quite";
+                deliveryTravelTime = viewData.getInputQuiteTime().get();
+
+            } else if (viewData.getRbNormalChecked().get()) {
+                typeOfFoodPreprationTime = "normal";
+                deliveryTravelTime = viewData.getInputNormalTime().get();
+
+            } else if (viewData.getRbBusyChecked().get()) {
+                typeOfFoodPreprationTime = "busy";
+                deliveryTravelTime = viewData.getInputBusyTime().get();
+
+                //viewData.getInputEvents().get().setErrorEtMinimumOrder("Enter minimum order value");
+            }
+
+            if (typeOfFoodPreprationTime.equals("")) {
+                Toast.makeText(getActivity(), "Please select type", Toast.LENGTH_SHORT).show();
+            } else if (deliveryTravelTime.equals("")) {
+                Toast.makeText(getActivity(), "Please enter delivery time", Toast.LENGTH_SHORT).show();
+
             } else {
                 deliverySetting(
-                        viewData.getInputDeliveryTime().get(),
-                        viewData.getInputMiles().get(),
-                        viewData.getInputDeliveryCharge().get(),
-                        viewData.getInputMinOrder().get(),
-                        viewData.getInputFreeDelivery().get(),
-                        viewData.getInputAvgPrepTime().get());
+                        viewData.getInputDeliveryTravelTime().get(),
+                        typeOfFoodPreprationTime,
+                        deliveryTravelTime);
             }
         }
 
@@ -307,22 +384,23 @@ public class ControllerDeliverySetting extends Fragment {
             DataPageDeliverySettingsAndPostcodes.DialogChargesOkAction okAction =
                     (@NonNull DataPageDeliverySettingsAndPostcodes.DialogCharges charges) -> {
                         updatePostCode(
-                            data.getPostcode(),
-                            charges,
-                            (@Nullable String responseMessage) -> {
-                                data.setDelivery_min_value(charges.getMinOrder());
-                                data.setShip_cost(charges.getDeliveryCharge());
-                                data.setFree_delivery_over(charges.getFreeDelivery());
+                                data.getPostcode(),
+                                charges,
+                                (@Nullable String responseMessage) -> {
+                                    data.setDelivery_min_value(charges.getMinOrder());
+                                    data.setShip_cost(charges.getDeliveryCharge());
+                                    data.setFree_delivery_over(charges.getFreeDelivery());
 
-                                if (viewData.getPostcodesList().indexOf(data) == position) {
-                                    // Trigger ObservableList update on this one item
-                                    viewData.getPostcodesList().set(position, data);
-                                }
+                                    if (viewData.getPostcodesList().indexOf(data) == position) {
+                                        // Trigger ObservableList update on this one item
+                                        viewData.getPostcodesList().set(position, data);
+                                    }
 
-                                if (getInputEventsOrNull() != null) {
-                                    getInputEventsOrNull().alertDialog(responseMessage, () -> {});
-                                }
-                            });
+                                    if (getInputEventsOrNull() != null) {
+                                        getInputEventsOrNull().alertDialog(responseMessage, () -> {
+                                        });
+                                    }
+                                });
                     };
 
             if (getInputEventsOrNull() != null) {
@@ -353,7 +431,8 @@ public class ControllerDeliverySetting extends Fragment {
                                 }
 
                                 if (getInputEventsOrNull() != null) {
-                                    getInputEventsOrNull().alertDialog(responseMessage, () -> {});
+                                    getInputEventsOrNull().alertDialog(responseMessage, () -> {
+                                    });
                                 }
                             });
                 }
@@ -378,7 +457,7 @@ public class ControllerDeliverySetting extends Fragment {
             jsonObject.addProperty("postcode", post_code);
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<CommonResponse> call = apiInterface.deletDeliveryPostCode(prefManager.getPreference(AUTH_TOKEN,""),jsonObject);
+            Call<CommonResponse> call = apiInterface.deletDeliveryPostCode(prefManager.getPreference(AUTH_TOKEN, ""), jsonObject);
 
             call.enqueue(new Callback<CommonResponse>() {
                 @Override
@@ -439,7 +518,7 @@ public class ControllerDeliverySetting extends Fragment {
             jsonObject.addProperty("postcode", post_code);
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<CommonResponse> call = apiInterface.updatePostCodeDelivery(prefManager.getPreference(AUTH_TOKEN,""),jsonObject);
+            Call<CommonResponse> call = apiInterface.updatePostCodeDelivery(prefManager.getPreference(AUTH_TOKEN, ""), jsonObject);
 
             call.enqueue(new Callback<CommonResponse>() {
                 @Override
@@ -494,7 +573,7 @@ public class ControllerDeliverySetting extends Fragment {
 
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             CompositeDisposable disposable = new CompositeDisposable();
-            disposable.add(apiService.updatAllPostCodeDelivery(prefManager.getPreference(AUTH_TOKEN,""),request)
+            disposable.add(apiService.updatAllPostCodeDelivery(prefManager.getPreference(AUTH_TOKEN, ""), request)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(new DisposableSingleObserver<UpdatePostCodeDeliveryTimeResponse>() {

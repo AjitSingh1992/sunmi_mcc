@@ -1,10 +1,13 @@
 package com.easyfoodvone.controller.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,21 +22,30 @@ import com.easyfoodvone.app_common.viewdata.DataDialogRestaurantTime;
 import com.easyfoodvone.app_common.viewdata.DataPageRestaurantTimings;
 import com.easyfoodvone.app_common.ws.AllDaysRestaurantTiming;
 import com.easyfoodvone.app_common.ws.CommonResponse;
+import com.easyfoodvone.app_common.ws.MenuCategoryItemsResponse;
 import com.easyfoodvone.app_ui.view.ViewRestaurantTimings;
 import com.easyfoodvone.models.AddNewTimingRequest;
 import com.easyfoodvone.models.CommonRequest;
 import com.easyfoodvone.models.LoginResponse;
+import com.easyfoodvone.models.OrderRequestForItem;
+import com.easyfoodvone.models.menu_response.ItemSwipeModel;
+import com.easyfoodvone.models.menu_response.OnOffRequest;
+import com.easyfoodvone.utility.ApplicationContext;
 import com.easyfoodvone.utility.Constants;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
 
@@ -87,7 +99,7 @@ public class ControllerRestaurantTimings extends Fragment {
 
             TimingPresenter presenter = new TimingPresenter(
                     new TimingInterfaceAddNew(timings), true,
-                    timeNow, timeNow, timeNow, timeNow, timeNow, timeNow);
+                    timeNow, timeNow, timeNow, timeNow, timeNow, timeNow,timings.getDay());
 
             viewData.getShowingPopupAdd().set(presenter.data);
         }
@@ -102,7 +114,9 @@ public class ControllerRestaurantTimings extends Fragment {
                     timings.getCollection_start_time(),
                     timings.getCollection_end_time(),
                     timings.getDelivery_start_time(),
-                    timings.getDelivery_end_time());
+                    timings.getDelivery_end_time(),
+                    timings.getDay()
+            );
 
             viewData.getShowingPopupEdit().set(presenter.data);
         }
@@ -279,7 +293,7 @@ public class ControllerRestaurantTimings extends Fragment {
         final LoadingDialog dialog = new LoadingDialog(getActivity(), "Deleting timing...");
         dialog.setCancelable(false);
         dialog.show();
-
+//
         try {
             CommonRequest request = new CommonRequest();
             request.setRestaurant_id(userPreferences.getLoggedInResponse(getActivity()).getRestaurant_id());
@@ -404,7 +418,9 @@ public class ControllerRestaurantTimings extends Fragment {
                 String initialCollectionTimeFrom,
                 String initialCollectionTimeTo,
                 String initialDeliveryTimeFrom,
-                String initialDeliveryTimeTo) {
+                String initialDeliveryTimeTo,
+                String dayName
+        ) {
 
             this.parentInterface = parentInterface;
             this.data = new DataDialogRestaurantTime(
@@ -415,6 +431,7 @@ public class ControllerRestaurantTimings extends Fragment {
                     new ObservableField<>(initialCollectionTimeTo),
                     new ObservableField<>(initialDeliveryTimeFrom),
                     new ObservableField<>(initialDeliveryTimeTo),
+                    new ObservableField<>(dayName),
                     viewEventHandler);
         }
 
@@ -422,6 +439,12 @@ public class ControllerRestaurantTimings extends Fragment {
             @Override
             public void onClickIsOpen() {
                 data.isOpen().set( ! data.isOpen().get());
+
+               /* if(data.isOpen().get()){
+                    onOffFay(data.getDayName().toString(),"open");
+                }else{
+                    onOffFay(data.getDayName().toString(),"closed");
+                }*/
             }
 
             @Override
@@ -460,4 +483,52 @@ public class ControllerRestaurantTimings extends Fragment {
             }
         };
     }
+
+    public static void onOffFay(String dayName, String Status) {
+        Call<MenuCategoryItemsResponse> callforDayOnOff;
+        ApiInterface apiServiceForDayOnOff;
+        ProgressBar dialogforDayOnOff;
+        dialogforDayOnOff = new ProgressBar(ApplicationContext.getAppContext());
+        dialogforDayOnOff.setVisibility(View.VISIBLE);
+        try {
+            apiServiceForDayOnOff = ApiClient.getClient().create(ApiInterface.class);
+            LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(ApplicationContext.getAppContext());
+
+            OnOffRequest request = new OnOffRequest();
+            request.setRestaurant_id(freshLoginData.getRestaurant_id());
+            request.setDayname(dayName);
+            request.setStatus(Status);
+
+            Log.e("prinToken", "" + freshLoginData.getToken());
+            callforDayOnOff = apiServiceForDayOnOff.onOffTheDay(freshLoginData.getToken(), request);
+            callforDayOnOff.enqueue(new Callback<MenuCategoryItemsResponse>() {
+                @Override
+                public void onResponse(Call<MenuCategoryItemsResponse> call, Response<MenuCategoryItemsResponse> response) {
+                    dialogforDayOnOff.setVisibility(View.GONE);
+                    Toast.makeText(ApplicationContext.getAppContext(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<MenuCategoryItemsResponse> call, Throwable t) {
+                    dialogforDayOnOff.setVisibility(View.GONE);
+                    Log.e("onError", "onError: " + t.getMessage());
+                    // Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+        } catch (Exception e) {
+            dialogforDayOnOff.setVisibility(View.GONE);
+
+            Log.e("Exception ", e.toString());
+        }
+
+
+
+
+
+
+    }
+
 }

@@ -8,11 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
@@ -38,6 +40,7 @@ public class NotificationUtils {
         this.mContext = mContext;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void showNotificationMessage(
             @NonNull String title,
             @NonNull String message,
@@ -46,6 +49,7 @@ public class NotificationUtils {
         showNotificationMessage(title, message, timeStamp, intent, null);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void showNotificationMessage(
             @NonNull final String title,
             @NonNull final String message,
@@ -68,15 +72,16 @@ public class NotificationUtils {
             showSmallNotification(icon, title, message, timeStamp, resultPendingIntent, null);
 
         } else if (imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
-            Bitmap bitmap = getBitmapFromURL(imageUrl);
-            if (bitmap != null) {
-                showBigNotification(bitmap, icon, title, message, timeStamp, resultPendingIntent, null);
+            Bitmap bitmap2 = getBitmapFromURL(imageUrl);
+            if (bitmap2 != null) {
+                showBigNotification(bitmap2, icon, title, message, timeStamp, resultPendingIntent, null);
             } else {
                 showSmallNotification(icon, title, message, timeStamp, resultPendingIntent, null);
             }
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showSmallNotification(
             int icon,
             @NonNull String title,
@@ -88,6 +93,13 @@ public class NotificationUtils {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.addLine(message);
         String id = mContext.getString(R.string.app_name); // default_channel_id
+        boolean useNewMethod = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+
+        Bitmap bitmap = null;
+        if (useNewMethod)
+            bitmap = ((BitmapDrawable) mContext.getDrawable(R.drawable.ic_launcher)).getBitmap();
+        else
+            bitmap = ((BitmapDrawable) mContext.getResources().getDrawable(R.drawable.ic_launcher)).getBitmap();
 
         final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -111,8 +123,8 @@ public class NotificationUtils {
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                     //.setSound(alarmSound)
                     .setWhen(getTimeMilliSec(timeStamp, System.currentTimeMillis()))
-                    .setSmallIcon(R.drawable.logo_notification)
-                    .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                    .setSmallIcon(getNotificationIcon())
+                    .setLargeIcon(bitmap)
                     .setContentText(message)
                     .build();
 
@@ -130,17 +142,21 @@ public class NotificationUtils {
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                     //.setSound(alarmSound)
                     .setWhen(getTimeMilliSec(timeStamp, System.currentTimeMillis()))
-                    .setSmallIcon(R.drawable.logo_notification)
-                    .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                    .setSmallIcon(getNotificationIcon())
+                    .setLargeIcon(bitmap)
                     .setContentText(message)
                     .build();
 
             notificationManager.notify(Constants.NOTIFICATION_ID, notification);
         }
     }
-
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.mipmap.ic_launcher : R.mipmap.ic_launcher;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showBigNotification(
-            @NonNull Bitmap bitmap,
+            @NonNull Bitmap bitmap2,
             int icon,
             @NonNull String title,
             @NonNull String message,
@@ -152,7 +168,16 @@ public class NotificationUtils {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
-        bigPictureStyle.bigPicture(bitmap);
+        bigPictureStyle.bigPicture(bitmap2);
+
+        boolean useNewMethod = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+
+        Bitmap bitmap = null;
+        if (useNewMethod)
+            bitmap = ((BitmapDrawable) mContext.getDrawable(R.drawable.ic_launcher)).getBitmap();
+        else
+            bitmap = ((BitmapDrawable) mContext.getResources().getDrawable(R.drawable.ic_launcher)).getBitmap();
+
 
         final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -167,7 +192,7 @@ public class NotificationUtils {
             }
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext, id);
             Notification notification;
-            notification = mBuilder.setSmallIcon(icon).setTicker(title)
+            notification = mBuilder.setSmallIcon(getNotificationIcon()).setTicker(title)
                     .setAutoCancel(true)
                     .setContentTitle(title)
                     .setContentIntent(resultPendingIntent)

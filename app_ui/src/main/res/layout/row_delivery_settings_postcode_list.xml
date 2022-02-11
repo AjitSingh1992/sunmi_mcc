@@ -3,9 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:minHeight="@dimen/_20sdp"
     xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:background="@drawable/rectangle_variant_border_black"
     android:layout_height="wrap_content">
 
+    <View
+        android:layout_width="@dimen/_5sdp"
+        android:layout_height="match_parent"
+        android:background="@color/bg_orange"/>
     <TextView
         android:id="@+id/post_code"
         style="@style/Text_Large_Regular_Grey"
