@@ -315,13 +315,13 @@ public class ControllerNewOfferFlat extends Fragment {
             data.getInputEvents().get().showPerCustomerUsageError("Enter usage per customer");
         } else if (TextUtils.isEmpty(data.getTxtTotalUsage().get())) {
             data.getInputEvents().get().showTotalUsageError("Enter total usage");
-        } else if (TextUtils.isEmpty(data.getTxtShareEasyfood().get())) {
+        } /*else if (TextUtils.isEmpty(data.getTxtShareEasyfood().get())) {
             data.getInputEvents().get().showShareEasyfoodError("Enter easyfood share");
         } else if (TextUtils.isEmpty(data.getTxtShareRestaurant().get())) {
             data.getInputEvents().get().showShareRestaurantError("Enter restaurant share");
         } else if (TextUtils.isEmpty(data.getTxtShareFranchise().get())) {
             data.getInputEvents().get().showShareFranchiseError("Enter franchise share");
-        } else if (data.getTxtStartDate().get().equalsIgnoreCase("Start Date") || data.getTxtStartDate().get().equalsIgnoreCase("")) {
+        } */else if (data.getTxtStartDate().get().equalsIgnoreCase("Start Date") || data.getTxtStartDate().get().equalsIgnoreCase("")) {
             data.getErrorHighlightStartDate().set(true);
         } else if (data.getTxtEndDate().get().equalsIgnoreCase("End Date") || data.getTxtEndDate().get().equalsIgnoreCase("")) {
             data.getErrorHighlightEndDate().set(true);
@@ -361,9 +361,13 @@ public class ControllerNewOfferFlat extends Fragment {
             request.setMax_discount_amount(data.getTxtMaxDiscount().get().trim());
             request.setUsage_total_usage(data.getTxtTotalUsage().get().trim());
             request.setUsage_per_customer(data.getTxtPerCustomerUsage().get().trim());
-            request.setEasyfood_share(data.getTxtShareEasyfood().get().trim());
+            /*request.setEasyfood_share(data.getTxtShareEasyfood().get().trim());
             request.setRestaurant_share(data.getTxtShareRestaurant().get().trim());
             request.setFranchise_share(data.getTxtShareFranchise().get().trim());
+            */
+            request.setEasyfood_share("0");
+            request.setRestaurant_share("100");
+            request.setFranchise_share("0");
             request.setUser_app("1");
             request.setDays_available(controllerDays.getWSStringSelectedDays());
             request.setOffer_image(controllerSelectImage.base64EncodeImage());
