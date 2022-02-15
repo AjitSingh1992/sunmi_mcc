@@ -12,7 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="32dp"
+        android:paddingTop="32dp"
         android:background="@color/bg_white">
 
         <androidx.core.widget.NestedScrollView

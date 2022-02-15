@@ -111,7 +111,7 @@
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
                             android:text="@={data.inputQuiteTime}"
-
+                            android:maxLength="3"
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor" />
                     </LinearLayout>
@@ -163,6 +163,7 @@
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
                             android:text="@={data.inputNormalTime}"
+                            android:maxLength="3"
 
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor"/>
@@ -214,6 +215,7 @@
                             android:background="@drawable/rectangle_variant_border"
                             android:padding="8dp"
                             android:text="@={data.inputBusyTime}"
+                            android:maxLength="3"
 
                             android:inputType="numberDecimal"
                             tools:ignore="LabelFor"/>
@@ -251,7 +253,8 @@
                         android:padding="8dp"
                         android:text="@={data.inputDeliveryTravelTime}"
                         android:layout_marginStart="16dp"
-                        
+                        android:maxLength="3"
+
                         android:inputType="number"
                         tools:ignore="LabelFor" />
 
@@ -280,18 +283,14 @@
 
                 </LinearLayout>
 
-
                 <TextView
-                    style="@style/Text_XLarge_Bold_Orange"
+                    style="@style/Text_XLarge_Bold_Black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:layout_marginLeft="32dp"
 
-
-                    android:text="@string/delivery_settings_postcodes_within_3_miles"
-                   />
+                    android:text="Postcodes"
+                    />
 
                 <CheckBox
                     android:id="@+id/chechbox_set_for_all"

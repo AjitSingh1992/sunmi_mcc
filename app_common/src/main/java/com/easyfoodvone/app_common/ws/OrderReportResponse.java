@@ -59,8 +59,26 @@ public class OrderReportResponse implements Serializable {
         String total_orders_accepted_amount;
         String total_orders_declined_amount;
         String total_orders_by_cash_amount;
+        String total_taxes;
+        String restaurant_wallet;
         List<OrdersList> order_list;
 
+
+        public String getTotal_taxes() {
+            return total_taxes;
+        }
+
+        public void setTotal_taxes(String total_taxes) {
+            this.total_taxes = total_taxes;
+        }
+
+        public String getRestaurant_wallet() {
+            return restaurant_wallet;
+        }
+
+        public void setRestaurant_wallet(String restaurant_wallet) {
+            this.restaurant_wallet = restaurant_wallet;
+        }
         public String getTotal_orders_accepted_amount() {
             return total_orders_accepted_amount;
         }

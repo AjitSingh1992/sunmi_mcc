@@ -18,6 +18,8 @@ class DataPageOrderReport(
         val declinedCount: ObservableField<String>,
         val declinedPercent: ObservableField<String>,
         val declinedAmount: ObservableField<String>,
+        val totaltaxes: ObservableField<String>,
+        val restaurantwallet: ObservableField<String>,
         val ordersList: ObservableField<List<OrderReportResponse.OrdersList>?>,
         val outputEvents: OutputEvents) {
 

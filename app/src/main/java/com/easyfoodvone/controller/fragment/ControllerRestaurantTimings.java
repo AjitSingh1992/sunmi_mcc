@@ -35,6 +35,7 @@ import com.easyfoodvone.utility.Constants;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -248,12 +249,13 @@ public class ControllerRestaurantTimings extends Fragment {
             request.setId(id);
             request.setCollection_time(collectionTiming);
             request.setDelivery_time(deliveryTime);
-            request.setOpen_close(isOpen ? "open" : "close");
+            request.setOpen_close(isOpen ? "open" : "closed");
             request.setOpen_close_time(openingTime);
 
             String s1 = String.valueOf(day.charAt(0));
             request.setDay(s1.toUpperCase() + day.substring(1, 3));
-
+            Gson gson = new Gson();
+            gson.toJson(request);
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             CompositeDisposable disposable = new CompositeDisposable();
             disposable.add(apiService.updateTiming(prefManager.getPreference(AUTH_TOKEN,""),request)

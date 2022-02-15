@@ -160,7 +160,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/boxBottomRight"
                         app:layout_constraintTop_toBottomOf="@+id/boxMiddleLeft"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintVertical_bias="0.75"
+                        app:layout_constraintVertical_bias="0.12"
                         android:id="@+id/boxBottomLeft"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/accepted_amt"
                             android:layout_width="match_parent"
@@ -196,14 +196,13 @@
                             android:text="@{data.acceptedAmount}" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toEndOf="@+id/boxBottomLeft"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/boxMiddleRight"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintVertical_bias="0.75"
+                        app:layout_constraintVertical_bias="0.12"
                         android:id="@+id/boxBottomRight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -229,7 +228,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/declined_amt"
                             android:layout_width="match_parent"
@@ -238,14 +237,13 @@
                             android:text="@{data.declinedAmount}" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/boxMiddleRight"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintVertical_bias="0.445"
+                        app:layout_constraintVertical_bias="0.30"
                         android:id="@+id/boxMiddleLeft"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -262,7 +260,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/total_revenue"
                             android:layout_width="match_parent"
@@ -271,14 +269,13 @@
                             android:text="@{data.totalRevenue}" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toEndOf="@+id/boxMiddleLeft"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintVertical_bias="0.445"
+                        app:layout_constraintVertical_bias="0.30"
                         android:id="@+id/boxMiddleRight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -294,7 +291,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/total_discount"
                             android:layout_width="match_parent"
@@ -303,7 +300,6 @@
                             android:text="@{data.totalDiscount}" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
@@ -327,7 +323,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/total_orders"
                             android:layout_width="match_parent"
@@ -336,7 +332,6 @@
                             android:text="@{data.totalOrders}" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toEndOf="@+id/boxTopLeft"
@@ -359,7 +354,7 @@
 
                         <TextView
                             style="@style/__Text_Bold"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:textColor="@color/txt_orange"
                             android:id="@+id/total_items"
                             android:layout_width="match_parent"
@@ -368,6 +363,79 @@
                             android:text="@{data.totalItems}" />
 
                     </LinearLayout>
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/boxBottomRight"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.75"
+                        android:id="@+id/boxBottomNewLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="TOTAL TAXES"
+                            android:text="TOTAL TAXES" />
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text=""
+                            android:text="" />
+
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="30sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/total_taxes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 55.25"
+                            android:text="@{data.totaltaxes}" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/boxBottomNewLeft"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.25"
+                        android:id="@+id/boxBottomNewRight"
+                        android:layout_marginLeft="25dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:background="@drawable/rectangle_left_bar_border_grey_bg">
+
+                        <TextView
+                            style="@style/Text_Large_Bold_Black"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="RESTAURANT WALLET"
+                            android:text="RESTAURANT WALLET" />
+
+                        <TextView
+                            style="@style/__Text_Bold"
+                            android:textSize="30sp"
+                            android:textColor="@color/txt_orange"
+                            android:id="@+id/restaurant_wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="£ 15.25"
+                            android:text="@{data.restaurantwallet}" />
+
+                    </LinearLayout>
+
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
