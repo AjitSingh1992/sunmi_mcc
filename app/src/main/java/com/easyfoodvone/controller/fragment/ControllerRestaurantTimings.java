@@ -193,7 +193,7 @@ public class ControllerRestaurantTimings extends Fragment {
             request.setUser_id(loginData.getUser_id());
             request.setCollection_time(collectionTiming);
             request.setDelivery_time(deliveryTime);
-            request.setOpen_close(isOpen ? "open" : "close");
+            request.setOpen_close(isOpen ? "open" : "closed");
             request.setOpen_close_time(openingTime);
             request.setDay(day);
 

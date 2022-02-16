@@ -495,6 +495,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
                     android:text="EasyFood Share*" />
 
                 <EditText
@@ -508,6 +509,7 @@
                     android:inputType="number"
                     android:lines="1"
                     android:maxLength="4"
+                    android:visibility="gone"
                     android:text="@={data.txtShareEasyfood}" />
 
                 <TextView
@@ -515,6 +517,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
                     android:text="Restaurant Share*" />
 
                 <EditText
@@ -525,6 +528,8 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rectangle_left_bar_border_grey_hint_phone"
                     android:hint=""
+                    android:visibility="gone"
+
                     android:inputType="number"
                     android:lines="1"
                     android:maxLength="4"
@@ -535,6 +540,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:visibility="gone"
+
                     android:text="Franchise Share*" />
 
                 <EditText
@@ -545,6 +552,8 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rectangle_left_bar_border_grey_hint_phone"
                     android:hint=""
+                    android:visibility="gone"
+
                     android:inputType="number"
                     android:lines="1"
                     android:maxLength="4"

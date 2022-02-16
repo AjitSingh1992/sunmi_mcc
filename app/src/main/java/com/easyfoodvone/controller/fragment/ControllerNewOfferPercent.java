@@ -328,9 +328,12 @@ public class ControllerNewOfferPercent extends Fragment {
             request.setOffer_description(data.getTxtOfferDescription().get());
             request.setUsage_total_usage(data.getTxtTotalUsage().get().trim());
             request.setUsage_per_customer(data.getTxtPerCustomerUsage().get().trim());
-            request.setEasyfood_share(data.getTxtShareEasyfood().get().trim());
+         /*   request.setEasyfood_share(data.getTxtShareEasyfood().get().trim());
             request.setRestaurant_share(data.getTxtShareRestaurant().get().trim());
-            request.setFranchise_share(data.getTxtShareFranchise().get().trim());
+            request.setFranchise_share(data.getTxtShareFranchise().get().trim());*/
+            request.setEasyfood_share("0");
+            request.setRestaurant_share("100");
+            request.setFranchise_share("0");
             request.setUser_app("1");
             request.setEnd_date(data.getTxtEndDate().get());
             request.setStart_date(data.getTxtStartDate().get());
@@ -412,13 +415,13 @@ public class ControllerNewOfferPercent extends Fragment {
             data.getInputEvents().get().showTotalUsageError("Enter total usage");
         } else if (TextUtils.isEmpty(data.getTxtHowMuchCustomer().get())) {
             data.getInputEvents().get().showHowMuchCustomerError("Enter minimum Order amount");
-        } else if (TextUtils.isEmpty(data.getTxtShareEasyfood().get())) {
+        }/* else if (TextUtils.isEmpty(data.getTxtShareEasyfood().get())) {
             data.getInputEvents().get().showShareEasyfoodError("Enter easyfood share");
         } else if (TextUtils.isEmpty(data.getTxtShareRestaurant().get())) {
             data.getInputEvents().get().showShareRestaurantError("Enter restaurant share");
         } else if (TextUtils.isEmpty(data.getTxtShareFranchise().get())) {
             data.getInputEvents().get().showShareFranchiseError("Enter franchise share");
-        } else if (data.getTxtStartDate().get().equalsIgnoreCase("Start Date") || data.getTxtStartDate().get().equalsIgnoreCase("")) {
+        } */else if (data.getTxtStartDate().get().equalsIgnoreCase("Start Date") || data.getTxtStartDate().get().equalsIgnoreCase("")) {
             data.getErrorHighlightStartDate().set(true);
         } else if (data.getTxtEndDate().get().equalsIgnoreCase("End Date") || data.getTxtEndDate().get().equalsIgnoreCase("")) {
             data.getErrorHighlightEndDate().set(true);

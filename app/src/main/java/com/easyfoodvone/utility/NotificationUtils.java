@@ -4,11 +4,14 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 
@@ -47,6 +50,17 @@ public class NotificationUtils {
             @Nullable String timeStamp,
             @NonNull Intent intent) {
         showNotificationMessage(title, message, timeStamp, intent, null);
+    }
+
+    public void playNotificationSound() {
+        try {
+            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                    + "://" + mContext.getPackageName() + "/raw/notification");
+            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

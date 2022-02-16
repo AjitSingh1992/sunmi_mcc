@@ -71,11 +71,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             userPreferences = UserPreferences.get();
             notificationUtils = new NotificationUtils(getApplicationContext());
+            String timestamp = "",order_number="";
 
             @Nullable String message = remoteMessage.getData().get("message");
-            @Nullable String timestamp = remoteMessage.getData().get("timestamp");
+            if(remoteMessage.getData().get("timestamp")!=null)
+            timestamp = remoteMessage.getData().get("timestamp");
             @Nullable String notif_type = remoteMessage.getData().get("type");
-            @Nullable String order_number = remoteMessage.getData().get("order_number");
+            if(remoteMessage.getData().get("order_number")!=null)
+            order_number = remoteMessage.getData().get("order_number");
             @Nullable String res_status = remoteMessage.getData().get("res_status");
 
             if (notif_type == null) {
@@ -129,7 +132,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String CHANNEL_ID = "easyFood_01";// The id of the channel.
         CharSequence name = getString(R.string.app_name);// The user-visible name of the channel.
         boolean useNewMethod = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
@@ -179,6 +185,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void showNewOrderNotification(@NonNull String message, @Nullable String timestamp) {
         final Intent resultIntent = new Intent(this, OrdersActivity.class);
         resultIntent.putExtra(Constants.NOTIFICATION_TYPE_ACCEPTED, Constants.NOTIFICATION_TYPE_ACCEPTED);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         resultIntent.putExtra("message", message);
         showNotificationMessage("New Orders!", message, timestamp, resultIntent);
     }
@@ -186,6 +194,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showOpenCloseNotification(@NonNull String message, boolean isNowOpen) {
         final Intent resultIntent = new Intent(this, OrdersActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         if (isNowOpen) {
             showNotificationMessage("Hey! It's Restaurant Opening Time", message, null, resultIntent);
         } else {
@@ -210,7 +220,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void showNotificationMessage(@NonNull String title, @NonNull String message, @Nullable String timeStamp, @NonNull Intent intent) {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
        // notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+
         generateJobNotification(message,title,intent);
+        NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+        notificationUtils.playNotificationSound();
     }
 
     private void printOrderDetails(@NonNull String orderNumber) {
@@ -277,13 +290,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.handleIntent(intent);
         removeFirebaseOrigianlNotificaitons();
         try {
+            String timestamp = "",order_number="";
             Bundle bundle = intent.getExtras();
             //Data retrieved from notification payload send
             String title = bundle.getString("title");
             String message = bundle.getString("message");
-            String timestamp = bundle.getString("timestamp");
+            if(bundle.getString("timestamp")!=null) {
+                timestamp = bundle.getString("timestamp");
+            }
             String type = bundle.getString("type");
-            String order_number = bundle.getString("order_number");
+            if(bundle.getString("order_number")!=null) {
+                order_number = bundle.getString("order_number");
+            }
             String res_status = bundle.getString("res_status");
 
 
@@ -309,13 +327,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 } else if (res_status.equalsIgnoreCase("open")) {
                     // timestamp AND order_number will be null
-                    persistIsOpen(userPreferences, true);
+                    if(userPreferences!=null) {
+                        persistIsOpen(userPreferences, true);
+                    }
                     broadcastOpenClose(res_status);
                     showOpenCloseNotification(message == null ? "" : message, true);
 
                 } else if (res_status.equalsIgnoreCase("closed")) {
                     // timestamp AND order_number will be null
-                    persistIsOpen(userPreferences, false);
+                    if(userPreferences!=null) {
+                        persistIsOpen(userPreferences, false);
+                    }
                     broadcastOpenClose(res_status);
                     showOpenCloseNotification(message == null ? "" : message, false);
                 }

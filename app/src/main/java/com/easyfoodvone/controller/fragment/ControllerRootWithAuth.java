@@ -134,6 +134,8 @@ public class ControllerRootWithAuth extends Fragment {
         setRestaurantDetails();
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -195,6 +197,10 @@ public class ControllerRootWithAuth extends Fragment {
             getServeStyle();
 
         } else if (item == DataIncludeSideMenu.SideMenuItem.ORDERS) {
+            isDashBoard = true;
+            data.getShowRestaurantHeader().set(true);
+            data.getDataHeader().getPageTitle().set("");
+            data.getDataOrdersHeader().getPageTitle().set("Orders");
             clearAllPreviousFragments();
             //loadHomeFragment();
 

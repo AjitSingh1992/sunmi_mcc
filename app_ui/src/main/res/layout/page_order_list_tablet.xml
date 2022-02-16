@@ -32,7 +32,7 @@
                 android:drawablePadding="10dp"
                 android:checked="@{data.activeTab == ActiveTab.NEW, default=true}"
                 android:onClick="@{() -> data.activeTab != ActiveTab.NEW ? data.outputEvents.onClickTabSelector(ActiveTab.NEW) : void}"
-                android:text="@{data.tabNewCount == null ? `New` : (`New (` + data.tabNewCount + `)`), default=`New (5)`}"
+                android:text="@{data.tabNewCount == null ? `New` : (`New (` + data.tabNewCount + `)`), default=`New ()`}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -46,7 +46,7 @@
                 android:drawablePadding="10dp"
                 android:checked="@{data.activeTab == ActiveTab.ACCEPTED}"
                 android:onClick="@{() -> data.activeTab != ActiveTab.ACCEPTED ? data.outputEvents.onClickTabSelector(ActiveTab.ACCEPTED) : void}"
-                android:text="@{data.tabAcceptedCount == null ? `Accepted` : (`Accepted (` + data.tabAcceptedCount + `)`), default=`Accepted (500)`}"
+                android:text="@{data.tabAcceptedCount == null ? `Accepted` : (`Accepted (` + data.tabAcceptedCount + `)`), default=`Accepted ()`}"
                 app:layout_constraintStart_toEndOf="@+id/tabNew"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -60,7 +60,7 @@
                 android:drawablePadding="10dp"
                 android:checked="@{data.activeTab == ActiveTab.REJECTED}"
                 android:onClick="@{() -> data.activeTab != ActiveTab.REJECTED ? data.outputEvents.onClickTabSelector(ActiveTab.REJECTED) : void}"
-                android:text="@{data.tabRejectedCount == null ? `Rejected` : (`Rejected (` + data.tabRejectedCount + `)`), default=`Rejected (50)`}"
+                android:text="@{data.tabRejectedCount == null ? `Rejected` : (`Rejected (` + data.tabRejectedCount + `)`), default=`Rejected ()`}"
                 app:layout_constraintStart_toEndOf="@+id/tabAccepted"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -73,7 +73,7 @@
                 android:drawablePadding="10dp"
                 android:checked="@{data.activeTab == ActiveTab.REFUNDED}"
                 android:onClick="@{() -> data.activeTab != ActiveTab.REFUNDED ? data.outputEvents.onClickTabSelector(ActiveTab.REFUNDED) : void}"
-                android:text="@{data.tabRefundedCount == null ? `Refunded` : (`Refunded (` + data.tabRefundedCount + `)`), default=`Refunded (50)`}"
+                android:text="@{data.tabRefundedCount == null ? `Refunded` : (`Refunded (` + data.tabRefundedCount + `)`), default=`Refunded ()`}"
                 app:layout_constraintStart_toEndOf="@+id/tabRejected"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
