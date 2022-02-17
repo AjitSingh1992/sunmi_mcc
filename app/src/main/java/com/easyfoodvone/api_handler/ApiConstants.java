@@ -78,5 +78,6 @@ public class ApiConstants {
     public static final String CHANGE_MENU_POSITION = "menu_category_position_update";
     public static final String CHANGE_ITEM_POSITION = "menu_product_position_updated";
     public static final String ONOFFDAY = "closeOpenDay";
+    public static final String SAME_POSTCODE_FOR_ALL = "copy_delivery_setting";
 
 }

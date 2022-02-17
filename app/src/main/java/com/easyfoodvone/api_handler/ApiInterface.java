@@ -262,5 +262,7 @@ public interface ApiInterface {
     Call<MenuCategoryItemsResponse> changeCategoryItemPosition(@Header("Authorization") String Authorization,@Body ItemSwipeModel request);
     @POST(ApiConstants.ONOFFDAY)
     Call<MenuCategoryItemsResponse> onOffTheDay(@Header("Authorization") String Authorization,@Body OnOffRequest request);
+    @POST(ApiConstants.SAME_POSTCODE_FOR_ALL)
+    Call<MenuCategoryItemsResponse> samePostCodeForAll(@Header("Authorization") String Authorization,@Body OnOffRequest request);
 
 }

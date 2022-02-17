@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
@@ -210,6 +211,7 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Menu");
+            MySingleTon.getInstance().setFragmentName("Menu");
             ControllerMenu fragment  =  new ControllerMenu(restaurantMenuParentInterface, prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -307,6 +309,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("List of Offers");
+            MySingleTon.getInstance().setFragmentName("List of Offers");
+
             ControllerOffersList fragment  =  new ControllerOffersList(listOfOffersInterface, prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -1044,6 +1048,7 @@ public class ControllerRootWithAuth extends Fragment {
 
             if (count == 0) {
 
+
                 View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
                 RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
 
@@ -1073,7 +1078,24 @@ public class ControllerRootWithAuth extends Fragment {
                 //additional code
             } else {
                 getFragmentManager().popBackStack();
-            }
+                if(count==2){
+                    if(MySingleTon.getInstance().getFragmentName().equals("List of Offers")){
+                        isDashBoard = false;
+                        data.getShowRestaurantHeader().set(true);
+                        data.getDataHeader().getPageTitle().set("");
+                        data.getDataOrdersHeader().getPageTitle().set("List of Offers");
+                    }else {
+                        isDashBoard = false;
+                        data.getShowRestaurantHeader().set(true);
+                        data.getDataHeader().getPageTitle().set("");
+                        data.getDataOrdersHeader().getPageTitle().set("Menu");
+                    }
+                }else{
+                isDashBoard = true;
+                data.getShowRestaurantHeader().set(true);
+                data.getDataHeader().getPageTitle().set("");
+                data.getDataOrdersHeader().getPageTitle().set("Orders");
+            }}
 
 
     }

@@ -119,44 +119,6 @@ public class OrdersActivity extends AppCompatActivity {
 
 
 
-            int count = getSupportFragmentManager().getBackStackEntryCount();
-
-            if (count == 0) {
-                View layoutView = LayoutInflater.from(OrdersActivity.this).inflate(R.layout.popup_confirmation, null, false);
-               RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
-
-            TextView yes = layoutView.findViewById(R.id.btn_yes);
-            TextView no = layoutView.findViewById(R.id.btn_no);
-            TextView messge = layoutView.findViewById(R.id.txt_message);
-
-            messge.setText("Do you want to exit?");
-            yes.setText("YES");
-            yes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                    finish();
-                }
-            });
-            no.setText("NO");
-            no.setTextColor(getResources().getColor(R.color.black));
-            no.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.showNow(getSupportFragmentManager(), null);
-
-
-
-
-
-
-            } else {
-                getSupportFragmentManager().popBackStack();
-            }
 
 
 
@@ -164,7 +126,6 @@ public class OrdersActivity extends AppCompatActivity {
 
 
 
-/*
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.root);
 
         if (fragment instanceof ControllerRootNoAuth) {
@@ -175,7 +136,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         } else {
             throw new IllegalArgumentException("Never happen case");
-        }*/
+        }
     }
 
     @Override

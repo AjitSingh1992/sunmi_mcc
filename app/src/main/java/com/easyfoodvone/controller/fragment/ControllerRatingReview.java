@@ -49,11 +49,11 @@ public class ControllerRatingReview extends Fragment implements AdapterRatingRev
     private DataPageRatings viewData;
     private AdapterRatingReview mAdapter;
     private final List<RatingResponse.Data.UserRatingsList> userReviews = new ArrayList<>();
-
+    private String searchNumber ="";
     private final DataPageRatings.OutputEvents viewEventHandler = new DataPageRatings.OutputEvents() {
         @Override
         public void onClickSearch() {
-            getRatingReview("");
+            getRatingReview(searchNumber);
         }
     };
 
@@ -79,21 +79,33 @@ public class ControllerRatingReview extends Fragment implements AdapterRatingRev
                 switch (position) {
                     case 0:
                         getRatingReview("");
+                        searchNumber ="";
+
                         break;
                     case 1:
                         getRatingReview("0");
+                        searchNumber="0";
+
                         break;
                     case 2:
                         getRatingReview("1");
+                        searchNumber="1";
+
                         break;
                     case 3:
                         getRatingReview("2");
+                        searchNumber="2";
+
                         break;
                     case 4:
                         getRatingReview("3");
+                        searchNumber="3";
+
                         break;
                     case 5:
                         getRatingReview("4");
+                        searchNumber="4";
+
                         break;
                 }
             }

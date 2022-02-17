@@ -3,9 +3,12 @@ package com.easyfoodvone.controller.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,15 +23,20 @@ import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
 import com.easyfoodvone.app_common.separation.ObservableField;
 import com.easyfoodvone.app_common.ws.CommonResponse;
+import com.easyfoodvone.app_common.ws.MenuCategoryItemsResponse;
+import com.easyfoodvone.app_ui.fragment.RoundedDialogFragment;
 import com.easyfoodvone.app_ui.view.ViewDeliverySettingsAndPostcodes;
 import com.easyfoodvone.app_common.viewdata.DataPageDeliverySettingsAndPostcodes;
 import com.easyfoodvone.models.DeleverySetting;
 import com.easyfoodvone.models.DeliverySettingRequest;
+import com.easyfoodvone.models.LoginResponse;
 import com.easyfoodvone.models.UpdatePostCodeDeliveryTimeRequest;
+import com.easyfoodvone.models.menu_response.OnOffRequest;
 import com.easyfoodvone.new_order.models.DeleverySettingResponse;
 import com.easyfoodvone.app_common.ws.DeliveryPostCodeBean;
 import com.easyfoodvone.new_order.models.DeliverySettingResponse;
 import com.easyfoodvone.new_order.models.UpdatePostCodeDeliveryTimeResponse;
+import com.easyfoodvone.utility.ApplicationContext;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
@@ -58,7 +66,7 @@ public class ControllerDeliverySetting extends Fragment {
     private String typeOfFoodPreprationTime = "";
     private String deliveryTravelTime = "";
     private DataPageDeliverySettingsAndPostcodes viewData;
-    private boolean checkboxEnabled = true;
+    private boolean checkboxEnabled = false;
     private boolean rbQuietcheckboxEnabled = true;
     private boolean rbNormalcheckboxEnabled = true;
     private boolean rbBusycheckboxEnabled = true;
@@ -74,19 +82,84 @@ public class ControllerDeliverySetting extends Fragment {
         @Override
         public void onChanged(@NonNull Boolean checked) {
             if (checkboxEnabled && checked) {
-               /* String msg = "Enter the delivery charges for all the postcodes within " +
-                        viewData.getInputMiles().get() +
-                        " miles of radius for deliveries";
 
-                if (getInputEventsOrNull() != null) {
-                    getInputEventsOrNull().alertDialog(
-                            msg,
-                            null,
-                            (@NonNull DataPageDeliverySettingsAndPostcodes.DialogCharges charges) -> updateAllPostCode(charges));
-                }*/
+                View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
+                RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
+
+                TextView yes = layoutView.findViewById(R.id.btn_yes);
+                TextView no = layoutView.findViewById(R.id.btn_no);
+                TextView messge = layoutView.findViewById(R.id.txt_message);
+
+                messge.setText("Are you sure you want to set one amount for all postcodes?");
+                yes.setText("YES");
+                yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        setSamePostCodeForALl();
+                    }
+                });
+                no.setText("NO");
+                no.setTextColor(getResources().getColor(R.color.black));
+                no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        viewData.getAllPostcodesChecked().set(false);
+                    }
+                });
+
+                dialog.showNow(getChildFragmentManager(), null);
             }
         }
     };
+    public void setSamePostCodeForALl() {
+        Call<MenuCategoryItemsResponse> callforDayOnOff;
+        ApiInterface apiServiceForDayOnOff;
+        final LoadingDialog dialog = new LoadingDialog(getActivity(), "Loading Delivery Settings...");
+        dialog.setCancelable(false);
+        dialog.show();
+        try {
+            apiServiceForDayOnOff = ApiClient.getClient().create(ApiInterface.class);
+            LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(ApplicationContext.getAppContext());
+
+            OnOffRequest request = new OnOffRequest();
+            request.setRestaurant_id(freshLoginData.getRestaurant_id());
+
+
+            Log.e("prinToken", "" + freshLoginData.getToken());
+            callforDayOnOff = apiServiceForDayOnOff.samePostCodeForAll(freshLoginData.getToken(), request);
+            callforDayOnOff.enqueue(new Callback<MenuCategoryItemsResponse>() {
+                @Override
+                public void onResponse(Call<MenuCategoryItemsResponse> call, Response<MenuCategoryItemsResponse> response) {
+                    dialog.dismiss();
+                    getPostCodeInfo(freshLoginData.getRestaurant_id());
+
+                    Toast.makeText(ApplicationContext.getAppContext(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<MenuCategoryItemsResponse> call, Throwable t) {
+                    dialog.dismiss();
+                    Log.e("onError", "onError: " + t.getMessage());
+                    // Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+        } catch (Exception e) {
+            dialog.dismiss();
+
+            Log.e("Exception ", e.toString());
+        }
+
+
+
+
+
+
+    }
 
     private final Observer<Boolean> onQuietCheckboxChange = new Observer<Boolean>() {
         @Override
@@ -269,9 +342,10 @@ public class ControllerDeliverySetting extends Fragment {
 
                                 }
 
-                                checkboxEnabled = false;
-                                viewData.getAllPostcodesChecked().set(data.isSet_one_amount());
                                 checkboxEnabled = true;
+                                //Comment by ajit
+                                //viewData.getAllPostcodesChecked().set(data.isSet_one_amount());
+                                //checkboxEnabled = true;
                             }
                         }
 
