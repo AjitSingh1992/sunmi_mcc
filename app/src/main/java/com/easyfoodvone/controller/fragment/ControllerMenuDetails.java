@@ -148,12 +148,15 @@ public class ControllerMenuDetails extends Fragment {
 
         @Override
         public void onItemMove(int fromPosition, int toPosition) {
-            MenuCategoryItemsResponse.Items movedItem = data.getMenuItems().get(fromPosition);
-            MenuCategoryItemsResponse.Items replacedItem = ControllerMenuDetails.this.data.getMenuItems().get(toPosition);
+           // MenuCategoryItemsResponse.Items movedItem = data.getMenuItems().get(fromPosition);
+           // MenuCategoryItemsResponse.Items replacedItem = ControllerMenuDetails.this.data.getMenuItems().get(toPosition);
            // saveItemOrderingMoved(movedItem, replacedItem);
+            try {
+                data.getMenuItems().moveItem(fromPosition, toPosition);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
-
-            data.getMenuItems().moveItem(fromPosition, toPosition);
 
             ArrayList<OrderRequestForItem> orderRequests = new ArrayList<>();
             for(int i=0;i<data.getMenuItems().size();i++){
@@ -167,17 +170,28 @@ public class ControllerMenuDetails extends Fragment {
                 }
             }, 1000);
 
-            if(callforCategoryItems!=null) {
-                callforCategoryItems.cancel();
-                callforCategoryItems=null;
-                dialogforCategoryIems.hide();
-                changeItemPosition(orderRequests);
 
 
-            }else{
-                changeItemPosition(orderRequests);
 
+
+
+
+            try {
+                if(callforCategoryItems!=null) {
+                    callforCategoryItems.cancel();
+                    callforCategoryItems=null;
+                    dialogforCategoryIems.hide();
+                    changeItemPosition(orderRequests);
+
+
+                }else{
+                    changeItemPosition(orderRequests);
+
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
 
         /*@Override

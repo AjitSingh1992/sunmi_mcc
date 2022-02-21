@@ -23,7 +23,9 @@ class ObservableArrayListMoveable<T> : ObservableArrayList<T>() {
     override fun removeOnListChangedCallback(listener: OnListChangedCallback<out ObservableList<*>>?) {
         cachedListeners.remove(listener)
         cachedRegistry.remove(listener)
+
         super.removeOnListChangedCallback(listener)
+
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
@@ -41,5 +43,10 @@ class ObservableArrayListMoveable<T> : ObservableArrayList<T>() {
         }
 
         cachedRegistry.notifyMoved(this, fromPosition, toPosition, 1)
+    }
+
+    fun moveItemDone(fromPosition: Int, toPosition: Int) {
+        // Remove all the underlying listeners so that we can manipulate the list without firing them
+
     }
 }

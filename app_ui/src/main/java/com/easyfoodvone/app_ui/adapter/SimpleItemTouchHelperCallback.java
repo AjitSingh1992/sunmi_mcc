@@ -35,6 +35,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
             final int swipeFlags = 0;
+
             return makeMovementFlags(dragFlags, swipeFlags);
         } else {
             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
@@ -54,6 +55,12 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         return true;
     }
 
+/*    @Override
+    public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+        mAdapter.onItemMoveDone(source.getAdapterPosition(), target.getAdapterPosition());
+        return true;
+
+    }*/
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
         // Notify the adapter of the dismissal
@@ -91,7 +98,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
         super.clearView(recyclerView, viewHolder);
 
         viewHolder.itemView.setAlpha(ALPHA_FULL);
-
+        mAdapter.onItemMoveDone();
         if (viewHolder instanceof ItemTouchHelperViewHolder) {
             // Tell the view holder it's time to restore the idle state
             ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;

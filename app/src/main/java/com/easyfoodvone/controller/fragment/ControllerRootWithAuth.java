@@ -200,8 +200,8 @@ public class ControllerRootWithAuth extends Fragment {
         } else if (item == DataIncludeSideMenu.SideMenuItem.ORDERS) {
             isDashBoard = true;
             data.getShowRestaurantHeader().set(true);
-            data.getDataHeader().getPageTitle().set("");
-            data.getDataOrdersHeader().getPageTitle().set("Orders");
+            data.getDataHeader().getPageTitle().set("Orders");
+            data.getDataOrdersHeader().getPageTitle().set("");
             clearAllPreviousFragments();
             //loadHomeFragment();
 
@@ -957,8 +957,9 @@ public class ControllerRootWithAuth extends Fragment {
 
         isDashBoard = true;
         data.getShowRestaurantHeader().set(true);
-        data.getDataHeader().getPageTitle().set("");
-        data.getDataOrdersHeader().getPageTitle().set("Orders");
+        data.getDataHeader().getPageTitle().set("Orders");
+        data.getDataOrdersHeader().getPageTitle().set("");
+
         String backStateName = fragment.getClass().getName();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -1091,11 +1092,12 @@ public class ControllerRootWithAuth extends Fragment {
                         data.getDataOrdersHeader().getPageTitle().set("Menu");
                     }
                 }else{
-                isDashBoard = true;
-                data.getShowRestaurantHeader().set(true);
-                data.getDataHeader().getPageTitle().set("");
-                data.getDataOrdersHeader().getPageTitle().set("Orders");
-            }}
+                    isDashBoard = true;
+                    data.getShowRestaurantHeader().set(true);
+                    data.getDataHeader().getPageTitle().set("Orders");
+                    data.getDataOrdersHeader().getPageTitle().set("");
+
+                }}
 
 
     }

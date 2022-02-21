@@ -10,6 +10,7 @@ public interface ItemTouchHelperAdapter {
      * an item is shifted, and <strong>not</strong> at the end of a "drop" event.<br/>
      */
     boolean onItemMove(int fromPosition, int toPosition);
+    boolean onItemMoveDone();
 
 
     /**

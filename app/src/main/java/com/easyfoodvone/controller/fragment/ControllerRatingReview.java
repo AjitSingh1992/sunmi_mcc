@@ -78,33 +78,33 @@ public class ControllerRatingReview extends Fragment implements AdapterRatingRev
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        getRatingReview("");
-                        searchNumber ="";
+                        getRatingReview("0");
+                        searchNumber ="0";
 
                         break;
                     case 1:
-                        getRatingReview("0");
-                        searchNumber="0";
-
-                        break;
-                    case 2:
                         getRatingReview("1");
                         searchNumber="1";
 
                         break;
-                    case 3:
+                    case 2:
                         getRatingReview("2");
                         searchNumber="2";
 
                         break;
-                    case 4:
+                    case 3:
                         getRatingReview("3");
                         searchNumber="3";
 
                         break;
-                    case 5:
+                    case 4:
                         getRatingReview("4");
                         searchNumber="4";
+
+                        break;
+                    case 5:
+                        getRatingReview("5");
+                        searchNumber="5";
 
                         break;
                 }

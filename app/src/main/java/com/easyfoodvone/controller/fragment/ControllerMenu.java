@@ -57,6 +57,7 @@ public class ControllerMenu extends Fragment {
     private Call<MenuCategoryItemsResponse> callForCategoryChange;
     private ApiInterface apiServiceForCategory;
     private LoadingDialog dialogforCategory;
+    ArrayList<OrderRequest> orderRequests = new ArrayList<>();
 
     public ControllerMenu(ParentInterface parentInterface, PrefManager prefManager, boolean isPhone) {
         this.parentInterface = parentInterface;
@@ -82,36 +83,45 @@ public class ControllerMenu extends Fragment {
 
     private final DataPageRestaurantMenu.OutputEvents viewEventHandler = new DataPageRestaurantMenu.OutputEvents() {
         @Override
+        public void onItemMoveDone() {
+            LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(getActivity());
+            // I commented this out because the WS to move an item doesn't work for categories
+            // @NonNull MenuCategoryList.MenuCategories movedItem = data.getMenuItems().get(toPosition)
+            for(int i=0;i<data.getMenuItems().size();i++){
+                OrderRequest orderRequest = new OrderRequest(""+i,""+data.getMenuItems().get(i).getMenu_category_id());
+                orderRequests.add(orderRequest);
+
+            }
+            try {
+                if(callForCategoryChange!=null) {
+                    callForCategoryChange.cancel();
+                    callForCategoryChange=null;
+                    dialogforCategory.hide();
+                    changeCategoryPosition(orderRequests);
+                }else{
+                    changeCategoryPosition(orderRequests);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        @Override
         public void openMenuDetails(@NonNull MenuCategoryList.MenuCategories item) {
             parentInterface.openMenuDetails(item);
         }
 
         @Override
         public void onItemMove(int fromPosition, int toPosition) {
-            data.getMenuItems().moveItem(fromPosition, toPosition);
-
-            LoginResponse.Data freshLoginData = UserPreferences.get().getLoggedInResponse(getActivity());
-            // I commented this out because the WS to move an item doesn't work for categories
-            // @NonNull MenuCategoryList.MenuCategories movedItem = data.getMenuItems().get(toPosition)
-            ArrayList<OrderRequest> orderRequests = new ArrayList<>();
-            for(int i=0;i<data.getMenuItems().size();i++){
-                OrderRequest orderRequest = new OrderRequest(""+i,""+data.getMenuItems().get(i).getMenu_category_id());
-                orderRequests.add(orderRequest);
-
+            //Completed by ajit
+            try {
+                data.getMenuItems().moveItem(fromPosition, toPosition);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-                       //Completed by ajit
-
-                        if(callForCategoryChange!=null) {
-                            callForCategoryChange.cancel();
-                            callForCategoryChange=null;
-                            dialogforCategory.hide();
-                            changeCategoryPosition(orderRequests);
 
 
-                        }else{
-                            changeCategoryPosition(orderRequests);
 
-                        }
 
         }
 

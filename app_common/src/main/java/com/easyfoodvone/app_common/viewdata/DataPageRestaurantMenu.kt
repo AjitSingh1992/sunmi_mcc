@@ -10,5 +10,6 @@ class DataPageRestaurantMenu(
     interface OutputEvents {
         fun openMenuDetails(item: MenuCategoryList.MenuCategories)
         fun onItemMove(fromPosition: Int, toPosition: Int)
+        fun onItemMoveDone()
     }
 }
