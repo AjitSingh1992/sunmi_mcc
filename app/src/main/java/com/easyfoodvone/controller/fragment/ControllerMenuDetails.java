@@ -76,6 +76,7 @@ public class ControllerMenuDetails extends Fragment {
     private Call<MenuCategoryItemsResponse> callforCategoryItems;
     private ApiInterface apiServiceForCategoryItems;
     private LoadingDialog dialogforCategoryIems;
+    ArrayList<OrderRequestForItem> orderRequests = new ArrayList<>();
 
     public ControllerMenuDetails(
             @NonNull MenuCategoryList.MenuCategories menuCategories,
@@ -124,6 +125,28 @@ public class ControllerMenuDetails extends Fragment {
 
     private final DataPageRestaurantMenuDetails.OutputEvents viewEventHandler = new DataPageRestaurantMenuDetails.OutputEvents() {
         @Override
+        public void onItemMoveDone() {
+            for(int i=0;i<data.getMenuItems().size();i++){
+                OrderRequestForItem orderRequest = new OrderRequestForItem(""+i,""+data.getMenuItems().get(i).getMenu_product_id());
+                orderRequests.add(orderRequest);
+            }
+            try {
+                if(callforCategoryItems!=null) {
+                    callforCategoryItems.cancel();
+                    callforCategoryItems=null;
+                    dialogforCategoryIems.hide();
+                    changeItemPosition(orderRequests);
+                }else{
+                    changeItemPosition(orderRequests);
+
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
         public void onSetProductActive(@NonNull MenuCategoryItemsResponse.Items item, boolean isActive) {
             if (isActive) {
                 saveProductActive(item, isActive, true);
@@ -153,41 +176,6 @@ public class ControllerMenuDetails extends Fragment {
            // saveItemOrderingMoved(movedItem, replacedItem);
             try {
                 data.getMenuItems().moveItem(fromPosition, toPosition);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-
-            ArrayList<OrderRequestForItem> orderRequests = new ArrayList<>();
-            for(int i=0;i<data.getMenuItems().size();i++){
-                OrderRequestForItem orderRequest = new OrderRequestForItem(""+i,""+data.getMenuItems().get(i).getMenu_product_id());
-                orderRequests.add(orderRequest);
-
-            }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                }
-            }, 1000);
-
-
-
-
-
-
-
-            try {
-                if(callforCategoryItems!=null) {
-                    callforCategoryItems.cancel();
-                    callforCategoryItems=null;
-                    dialogforCategoryIems.hide();
-                    changeItemPosition(orderRequests);
-
-
-                }else{
-                    changeItemPosition(orderRequests);
-
-                }
             }catch (Exception e){
                 e.printStackTrace();
             }

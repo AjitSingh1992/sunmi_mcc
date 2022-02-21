@@ -74,6 +74,11 @@ class ViewRestaurantMenuDetail(val lifecycle: LifecycleSafe, val isPhone: Boolea
             return true
         }
 
+        override fun onItemMoveDone(): Boolean {
+            data.outputEvents.onItemMoveDone()
+            return true;
+        }
+
         override fun onItemDismiss(position: Int) { }
     }
 

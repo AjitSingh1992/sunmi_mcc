@@ -14,5 +14,6 @@ class DataPageRestaurantMenuDetails(
         fun onSetProductActive(item: MenuCategoryItemsResponse.Items, isActive: Boolean)
         fun onEditClicked(items: MenuCategoryItemsResponse.Items)
         fun onItemMove(fromPosition: Int, toPosition: Int)
+        fun onItemMoveDone()
     }
 }
