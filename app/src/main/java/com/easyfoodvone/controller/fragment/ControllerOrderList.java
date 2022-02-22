@@ -281,8 +281,8 @@ public class ControllerOrderList extends Fragment {
 
                             ControllerOrderList.this.data.isSwipeRefreshing().set(false);
                             if (data.isSuccess()) {
-                                if (com.easyfoodvone.BuildConfig.FORCE_UPDATE_TO_GOOGLE_PLAY_VERSION
-                                        && ! data.getData().getAndroid_version().equals(appVersionName)) {
+                                if (/*com.easyfoodvone.BuildConfig.FORCE_UPDATE_TO_GOOGLE_PLAY_VERSION
+                                        &&*/ ! data.getData().getAndroid_version().equals(appVersionName)) {
                                     updateDialog();
                                 } else {
                                 }
