@@ -312,7 +312,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else if (type.equals(Constants.NOTIFICATION_TYPE_ACCEPTED)) {
                 ApplicationContext.getInstance().playNotificationSound();
                 showNewOrderNotification(message == null ? "" : message, timestamp);
-                broadcastNewOrder(message == null ? "" : message, order_number == null ? "" : order_number);
+                //broadcastNewOrder(message == null ? "" : message, order_number == null ? "" : order_number);
                 if ( ! TextUtils.isEmpty(order_number)) {
                     printOrderDetails(order_number);
                 }

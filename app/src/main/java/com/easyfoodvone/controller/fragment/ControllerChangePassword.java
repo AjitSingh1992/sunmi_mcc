@@ -7,18 +7,21 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
 import com.easyfoodvone.app_common.separation.ObservableField;
 import com.easyfoodvone.app_common.viewdata.DataPageChangePassword;
 import com.easyfoodvone.app_common.ws.CommonResponse;
+import com.easyfoodvone.app_ui.fragment.RoundedDialogFragment;
 import com.easyfoodvone.app_ui.view.ViewChangePassword;
 import com.easyfoodvone.models.ChangePasswordRequest;
 import com.easyfoodvone.utility.LoadingDialog;
@@ -115,10 +118,42 @@ public class ControllerChangePassword extends Fragment {
                             dialog.dismiss();
 
                             if (data.isSuccess()) {
-                                Toast.makeText(getActivity(), data.getMessage(), Toast.LENGTH_SHORT).show();
                                 viewData.getInputCurrentPassword().set("");
                                 viewData.getInputNewPassword().set("");
                                 viewData.getInputConfirmNewPassword().set("");
+                                View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
+                                RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
+
+                                TextView yes = layoutView.findViewById(R.id.btn_yes);
+                                TextView no = layoutView.findViewById(R.id.btn_no);
+                                TextView messge = layoutView.findViewById(R.id.txt_message);
+
+                                no.setVisibility(View.GONE);
+                                messge.setText(data.getMessage());
+                                yes.setText("Got it!");
+                                yes.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+                                        Fragment fragment = getFragmentManager().findFragmentById(R.id.root);
+
+                                        ((ControllerRootWithAuth) fragment).onBackPressed();
+                                    }
+                                });
+                                no.setText("NO");
+                                no.setTextColor(getResources().getColor(R.color.black));
+                                no.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+
+                                    }
+                                });
+
+                                dialog.showNow(getChildFragmentManager(), null);
+
+
+
                             } else {
                                 Toast.makeText(getActivity(), data.getMessage(), Toast.LENGTH_SHORT).show();
                             }

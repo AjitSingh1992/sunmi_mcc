@@ -14,6 +14,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,8 +24,11 @@ import androidx.fragment.app.Fragment;
 
 import com.easyfoodvone.R;
 import com.easyfoodvone.app_ui.databinding.PageRegisterBinding;
+import com.easyfoodvone.app_ui.fragment.RoundedDialogFragment;
+import com.easyfoodvone.controller.fragment.ControllerRootWithAuth;
 
 import static android.app.Activity.RESULT_OK;
+import static com.easyfoodvone.utility.Helper.isInternetOn;
 
 public class RegisterFragment extends Fragment {
     public ValueCallback<Uri[]> uploadMessage;
@@ -49,7 +53,39 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.page_register, container, false);
-        init();
+        if (isInternetOn(getActivity())) {
+            init();
+        }else{
+            View layoutView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_confirmation, null, false);
+            RoundedDialogFragment dialog = new RoundedDialogFragment(layoutView, false);
+
+            TextView yes = layoutView.findViewById(R.id.btn_yes);
+            TextView no = layoutView.findViewById(R.id.btn_no);
+            TextView messge = layoutView.findViewById(R.id.txt_message);
+
+            no.setVisibility(View.GONE);
+            messge.setText(getString(R.string.no_internet_available_msg));
+            yes.setText("Got it!");
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    getActivity().onBackPressed();
+
+                }
+            });
+            no.setText("NO");
+            no.setTextColor(getResources().getColor(R.color.black));
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+
+                }
+            });
+
+            dialog.showNow(getChildFragmentManager(), null);
+        }
 
         return binding.getRoot();
     }

@@ -455,10 +455,7 @@
                             android:layout_height="wrap_content"
                             android:background="@null">
 
-                            <com.google.android.material.appbar.CollapsingToolbarLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -519,7 +516,6 @@
 
                                 </LinearLayout>
 
-                            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
                         </com.google.android.material.appbar.AppBarLayout>
 
@@ -527,6 +523,7 @@
                             android:id="@+id/total_orders_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:scrollbars="vertical"
                             android:paddingTop="15dp"
                             android:paddingBottom="15dp"
                             android:background="@drawable/rectangle_border_thick_grey"
