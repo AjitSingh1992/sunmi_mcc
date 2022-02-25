@@ -314,7 +314,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 showNewOrderNotification(message == null ? "" : message, timestamp);
                 //broadcastNewOrder(message == null ? "" : message, order_number == null ? "" : order_number);
                 if ( ! TextUtils.isEmpty(order_number)) {
-                    printOrderDetails(order_number);
+                    //printOrderDetails(order_number);
                 }
 
             } else if (type.equals(Constants.NOTIFICATION_CHARITY_STATUS)) {

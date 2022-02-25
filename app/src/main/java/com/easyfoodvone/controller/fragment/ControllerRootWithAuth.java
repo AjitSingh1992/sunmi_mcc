@@ -202,6 +202,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("Orders");
             data.getDataOrdersHeader().getPageTitle().set("");
+            MySingleTon.getInstance().setFragmentName("");
+
             clearAllPreviousFragments();
             //loadHomeFragment();
 
@@ -230,6 +232,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Set Delivery Charges");
             data.getDataOrdersHeader().getPageTitle().set("");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerDeliverySetting fragment  =  new ControllerDeliverySetting(getActivity(), prefManager, userPreferences, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -250,6 +254,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Restaurant Timings");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerRestaurantTimings fragment  =  new ControllerRestaurantTimings(prefManager, userPreferences, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -269,6 +275,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Order Report");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerOrderReport fragment  =  new ControllerOrderReport(orderReportParentInterface, prefManager, userPreferences, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -289,6 +297,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Revenue Report");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerRevenueReport fragment  =  new ControllerRevenueReport(revenueReportParentInterface, prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -330,6 +340,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Ratings & Reviews");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerRatingReview fragment  =  new ControllerRatingReview(getActivity(), prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -351,6 +363,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Charity");
             data.getDataOrdersHeader().getPageTitle().set("");
+            MySingleTon.getInstance().setFragmentName("Charity");
+
             ControllerCharityHome fragment = new ControllerCharityHome(
                     charityPageParentInterface,
                     prefManager,
@@ -375,6 +389,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(true);
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Profile");
+            MySingleTon.getInstance().setFragmentName("");
+
             ProfileFragment fragment =  new ProfileFragment(isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -395,6 +411,8 @@ public class ControllerRootWithAuth extends Fragment {
             data.getShowRestaurantHeader().set(false);
             data.getDataHeader().getPageTitle().set("Change Password");
             data.getDataOrdersHeader().getPageTitle().set("");
+            MySingleTon.getInstance().setFragmentName("");
+
             ControllerChangePassword fragment =  new ControllerChangePassword(changePasswordParentInterface, prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -634,30 +652,69 @@ public class ControllerRootWithAuth extends Fragment {
     private final ControllerCharityHome.ParentInterface charityPageParentInterface = new ControllerCharityHome.ParentInterface() {
         @Override
         public void goToDonatePage() {
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, new ControllerCharityDonate(donateParentInterface, prefManager, isPhone));
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+
+            isDashBoard = false;
+            data.getShowRestaurantHeader().set(true);
+            data.getDataHeader().getPageTitle().set("");
+            data.getDataOrdersHeader().getPageTitle().set("Charity");
+
+
+            ControllerCharityDonate fragment = new ControllerCharityDonate(donateParentInterface, prefManager, isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
+
         }
 
         @Override
         public void goToCharityCancelPage(String charityId) {
-            ControllerCharityCancel cancelFragment = new ControllerCharityCancel(charityCancelParentInterface, prefManager, isPhone, charityId);
+            isDashBoard = false;
+            data.getShowRestaurantHeader().set(true);
+            data.getDataHeader().getPageTitle().set("");
+            data.getDataOrdersHeader().getPageTitle().set("Charity");
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, cancelFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+
+            ControllerCharityCancel fragment = new ControllerCharityCancel(charityCancelParentInterface, prefManager, isPhone, charityId);
+
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
         }
 
         @Override
         public void goToCharitySuccessPage() {
-            ControllerCharitySuccess successFragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, true);
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, successFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+            ControllerCharitySuccess fragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, true);
+
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
         }
 
         @Override
@@ -669,26 +726,47 @@ public class ControllerRootWithAuth extends Fragment {
     private final ControllerCharityCancel.ParentInterface charityCancelParentInterface = new ControllerCharityCancel.ParentInterface() {
         @Override
         public void goToCharitySuccessPage() {
-            ControllerCharitySuccess successFragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, true);
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, successFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+
+
+            ControllerCharitySuccess fragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, true);
+
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
         }
 
         @Override
         public void goToCharityPage() {
-            ControllerCharityHome charityFragment = new ControllerCharityHome(
+
+            ControllerCharityHome fragment = new ControllerCharityHome(
                     charityPageParentInterface,
                     prefManager,
                     LocalBroadcastManager.getInstance(requireActivity()),
                     isPhone);
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, charityFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
+
+
+
+
         }
 
         @Override
@@ -700,16 +778,24 @@ public class ControllerRootWithAuth extends Fragment {
     private final ControllerCharitySuccess.ParentInterface charitySuccessParentInterface = new ControllerCharitySuccess.ParentInterface() {
         @Override
         public void goToCharityPage() {
-            ControllerCharityHome successFragment = new ControllerCharityHome(
+            ControllerCharityHome fragment = new ControllerCharityHome(
                     charityPageParentInterface,
                     prefManager,
                     LocalBroadcastManager.getInstance(requireActivity()),
                     isPhone);
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, successFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
+
+
         }
 
         @Override
@@ -721,12 +807,21 @@ public class ControllerRootWithAuth extends Fragment {
     private final ControllerCharityDonate.ParentInterface donateParentInterface = new ControllerCharityDonate.ParentInterface() {
         @Override
         public void goToCharitySuccessPage() {
-            ControllerCharitySuccess successFragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, false);
 
-            FragmentTransaction ftTransaction = getChildFragmentManager().beginTransaction();
-            ftTransaction.replace(R.id.framePageContent, successFragment);
-            ftTransaction.addToBackStack(null);
-            ftTransaction.commit();
+
+
+            ControllerCharitySuccess fragment = new ControllerCharitySuccess(charitySuccessParentInterface, isPhone, false);
+
+            String backStateName = fragment.getClass().getName();
+            FragmentManager manager = getFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+            if (!fragmentPopped){ //fragment not in back stack, create it.
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.framePageContent, fragment);
+                ft.addToBackStack(backStateName);
+                ft.commit();
+            }
         }
 
         @Override
@@ -1079,12 +1174,17 @@ public class ControllerRootWithAuth extends Fragment {
                 //additional code
             } else {
                 getFragmentManager().popBackStack();
-                if(count==2){
+                if(count>=2){
                     if(MySingleTon.getInstance().getFragmentName().equals("List of Offers")){
                         isDashBoard = false;
                         data.getShowRestaurantHeader().set(true);
                         data.getDataHeader().getPageTitle().set("");
                         data.getDataOrdersHeader().getPageTitle().set("List of Offers");
+                    }else if(MySingleTon.getInstance().getFragmentName().equals("Charity")) {
+                        isDashBoard = false;
+                        data.getShowRestaurantHeader().set(false);
+                        data.getDataHeader().getPageTitle().set("Charity");
+                        data.getDataOrdersHeader().getPageTitle().set("");
                     }else {
                         isDashBoard = false;
                         data.getShowRestaurantHeader().set(true);

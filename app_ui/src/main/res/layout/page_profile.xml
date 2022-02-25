@@ -11,7 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="32dp"
+        android:padding="32dp"
         android:background="@color/bg_white">
 
         <androidx.core.widget.NestedScrollView
@@ -26,9 +26,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginEnd="45dp"
+
                     android:orientation="horizontal">
 
                     <LinearLayout

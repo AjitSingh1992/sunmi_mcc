@@ -117,10 +117,10 @@ public class ControllerOrderReport extends Fragment {
             cal.clear(Calendar.SECOND);
             cal.clear(Calendar.MILLISECOND);
             cal.set(Calendar.DAY_OF_MONTH, 1);
-            data.getStartDate().set(DateFormat.format("dd-MMM-yyyy", cal.getTimeInMillis()).toString());
+            //data.getStartDate().set(DateFormat.format("dd-MMM-yyyy", cal.getTimeInMillis()).toString());
 
             cal.add(Calendar.MONTH, 1);
-            data.getEndDate().set(DateFormat.format("dd-MMM-yyyy", cal.getTimeInMillis()).toString());
+            //data.getEndDate().set(DateFormat.format("dd-MMM-yyyy", cal.getTimeInMillis()).toString());
 
             getOrderReport(false, false, true);
         }

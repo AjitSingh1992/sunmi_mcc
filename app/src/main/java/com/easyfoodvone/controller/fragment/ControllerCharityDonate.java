@@ -67,6 +67,7 @@ public class ControllerCharityDonate extends Fragment implements DonationTimeAda
         @Override
         public void onClickDonate() {
             if (isValid()) {
+
                 donateMeal();
             }
         }
