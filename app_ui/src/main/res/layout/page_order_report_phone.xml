@@ -176,6 +176,7 @@
                         android:layout_marginEnd="32dp"
                         android:layout_marginTop="15dp"
                         android:gravity="center_vertical"
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
 

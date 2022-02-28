@@ -232,7 +232,9 @@ public class Constants {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-
+        final Calendar calendar2 = Calendar.getInstance();
+        //Set Minimum date of calendar
+        calendar2.set(2020, 7, 5);
         DatePickerDialog.OnDateSetListener dpd = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -247,6 +249,7 @@ public class Constants {
 
         DatePickerDialog d = new DatePickerDialog(activity, dpd, mYear, mMonth, mDay);
         d.getDatePicker().setMaxDate(System.currentTimeMillis());
+        d.getDatePicker().setMinDate(calendar2.getTimeInMillis());
         d.show();
     }
 

@@ -31,6 +31,7 @@ import com.easyfoodvone.utility.Constants;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 
@@ -186,7 +187,8 @@ public class ControllerOrderReport extends Fragment {
     private @NonNull Single<OrderReportResponse> getAPIFor(@NonNull OrderReportRequest request) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         String authToken = prefManager.getPreference(AUTH_TOKEN,"");
-
+        Gson gson = new Gson();
+        gson.toJson(request);
         if ( ! TextUtils.isEmpty(request.getDate())) {
             return apiService.getOrderReportByDate(authToken, request);
 
@@ -195,8 +197,11 @@ public class ControllerOrderReport extends Fragment {
 
         } else {
             // TODO this web service doesn't actually work...
+
             return apiService.getOrderReport(authToken, request);
         }
+
+
     }
 
     private void sentReport() {

@@ -310,7 +310,6 @@
                         android:id="@+id/boxTopLeft"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="25dp"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
                         android:background="@drawable/rectangle_left_bar_border_grey_bg">
@@ -342,6 +341,7 @@
                         android:id="@+id/boxTopRight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:gravity="center_vertical"
                         android:orientation="vertical"
                         android:background="@drawable/rectangle_left_bar_border_grey_bg">

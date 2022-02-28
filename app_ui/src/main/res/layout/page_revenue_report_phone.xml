@@ -188,6 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:background="@drawable/rectangle_left_bar_border_grey_bg_phone">
 
                         <TextView
