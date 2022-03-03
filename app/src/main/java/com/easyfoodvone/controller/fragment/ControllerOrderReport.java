@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
@@ -152,11 +153,14 @@ public class ControllerOrderReport extends Fragment {
         @Override
         public void onClickStartDate() {
             Constants.showDateSelectorForPastDate(getActivity(), date -> data.getStartDate().set(date));
+
         }
 
         @Override
         public void onClickEndDate() {
-            Constants.showDateSelectorForPastDate(getActivity(), date -> data.getEndDate().set(date));
+          // Constants.showDateSelectorForPastDate(getActivity(), date -> data.getEndDate().set(date));
+            Constants.showDateSelectorEndDate(getActivity(), date -> data.getEndDate().set(date));
+
         }
 
         @Override
@@ -320,8 +324,8 @@ public class ControllerOrderReport extends Fragment {
                                 ControllerOrderReport.this.data.getDeclinedAmount().set(NewConstants.POUND + (TextUtils.isEmpty(declinedAmount) ? "0" : declinedAmount));
                                 ControllerOrderReport.this.data.getDeclinedCount().set(TextUtils.isEmpty(declinedCount) ? "0" : declinedCount);
                                 ControllerOrderReport.this.data.getDeclinedPercent().set(TextUtils.isEmpty(declinedPercent) ? "0%" : declinedPercent + "%");
-                                ControllerOrderReport.this.data.getTotaltaxes().set(TextUtils.isEmpty(total_taxes) ? "0" : total_taxes + "");
-                                ControllerOrderReport.this.data.getRestaurantwallet().set(TextUtils.isEmpty(restaurant_wallet) ? "0" : restaurant_wallet + "");
+                                ControllerOrderReport.this.data.getTotaltaxes().set(NewConstants.POUND + (TextUtils.isEmpty(total_taxes) ? "0" : total_taxes + ""));
+                                ControllerOrderReport.this.data.getRestaurantwallet().set(NewConstants.POUND + (TextUtils.isEmpty(restaurant_wallet) ? "0" : restaurant_wallet + ""));
 
                                 // cash_per.setText(data.getData().getTotal_orders_by_cash_per() == null || data.getData().getTotal_orders_by_cash_per().equalsIgnoreCase("") ? "0%" : data.getData().getTotal_orders_by_cash_per() + "%");
                                 // cash_amt.setText(data.getData().getTotal_orders_by_cash_amount() == null || data.getData().getTotal_orders_by_cash_amount().equalsIgnoreCase("") ? NewConstants.POUND + "0" : NewConstants.POUND + data.getData().getTotal_orders_by_cash_amount());

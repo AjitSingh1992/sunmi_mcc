@@ -276,7 +276,9 @@ public class ControllerRootWithAuth extends Fragment {
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Order Report");
             MySingleTon.getInstance().setFragmentName("");
-
+            MySingleTon.getInstance().setYear(0);
+            MySingleTon.getInstance().setDay(0);
+            MySingleTon.getInstance().setMonth(0);
             ControllerOrderReport fragment  =  new ControllerOrderReport(orderReportParentInterface, prefManager, userPreferences, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();
@@ -298,7 +300,9 @@ public class ControllerRootWithAuth extends Fragment {
             data.getDataHeader().getPageTitle().set("");
             data.getDataOrdersHeader().getPageTitle().set("Revenue Report");
             MySingleTon.getInstance().setFragmentName("");
-
+            MySingleTon.getInstance().setYear(0);
+            MySingleTon.getInstance().setDay(0);
+            MySingleTon.getInstance().setMonth(0);
             ControllerRevenueReport fragment  =  new ControllerRevenueReport(revenueReportParentInterface, prefManager, isPhone);
             String backStateName = fragment.getClass().getName();
             FragmentManager manager = getFragmentManager();

@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.R;
 import com.easyfoodvone.app_common.separation.ObservableField;
 
@@ -28,6 +29,7 @@ public class Constants {
 
     public interface DialogClickedListener {
         void onDialogClicked();
+
         void onDialogRejectClicked();
     }
 
@@ -232,9 +234,10 @@ public class Constants {
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
-        final Calendar calendar2 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
         //Set Minimum date of calendar
         calendar2.set(2020, 7, 5);
+        String strDateToSaveYear = "", strDateToSaveMonth = "", strDateToSaveDay = "";
         DatePickerDialog.OnDateSetListener dpd = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -243,6 +246,9 @@ public class Constants {
                 long dtDob = chosenDate.toMillis(true);
 
                 @NonNull String strDate = DateFormat.format("dd-MMM-yyyy", dtDob).toString();
+                MySingleTon.getInstance().setYear(year);
+                MySingleTon.getInstance().setDay(dayOfMonth + 1);
+                MySingleTon.getInstance().setMonth(monthOfYear);
                 dateSetCallback.onDateSet(strDate);
             }
         };
@@ -250,8 +256,51 @@ public class Constants {
         DatePickerDialog d = new DatePickerDialog(activity, dpd, mYear, mMonth, mDay);
         d.getDatePicker().setMaxDate(System.currentTimeMillis());
         d.getDatePicker().setMinDate(calendar2.getTimeInMillis());
+
+
         d.show();
     }
+
+    public static void showDateSelectorEndDate(Activity activity, final DateSetListener dateSetCallback) {
+        Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar2 = Calendar.getInstance();
+        //Set Minimum date of calendar
+
+        String strDateToSaveYear = "", strDateToSaveMonth = "", strDateToSaveDay = "";
+
+        DatePickerDialog.OnDateSetListener dpd = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Time chosenDate = new Time();
+                chosenDate.set(dayOfMonth, monthOfYear, year);
+                long dtDob = chosenDate.toMillis(true);
+
+                @NonNull String strDate = DateFormat.format("dd-MMM-yyyy", dtDob).toString();
+
+
+                dateSetCallback.onDateSet(strDate);
+            }
+
+
+        };
+
+        DatePickerDialog d = new DatePickerDialog(activity, dpd, mYear, mMonth, mDay);
+        if(MySingleTon.getInstance().getYear()==0){
+            calendar2.set(2020, 7, 5);
+
+        }else {
+            calendar2.set(MySingleTon.getInstance().getYear(), MySingleTon.getInstance().getMonth(), MySingleTon.getInstance().getDay());
+        }
+        d.getDatePicker().setMinDate(calendar2.getTimeInMillis());
+        d.getDatePicker().setMaxDate(System.currentTimeMillis());
+
+
+        d.show();
+    }
+
 
     public static String getDateFromDateTime(String input, String formatFrom, String formatTo) {
         String strDate = null;

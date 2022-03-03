@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
@@ -142,7 +143,9 @@ public class ControllerRevenueReport extends Fragment {
 
         @Override
         public void onClickEndDate() {
-            Constants.showDateSelectorForPastDate(getActivity(), date -> data.getEndDate().set(date));
+         //   Constants.showDateSelectorForPastDate(getActivity(), date -> data.getEndDate().set(date));
+            Constants.showDateSelectorEndDate(getActivity(), date -> data.getEndDate().set(date));
+
         }
     };
 
