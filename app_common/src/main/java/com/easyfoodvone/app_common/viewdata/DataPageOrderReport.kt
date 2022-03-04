@@ -24,6 +24,7 @@ class DataPageOrderReport(
         val outputEvents: OutputEvents) {
 
     interface OutputEvents {
+        fun onClickAll()
         fun onClickYesterday()
         fun onClickToday()
         fun onClickStartDate()

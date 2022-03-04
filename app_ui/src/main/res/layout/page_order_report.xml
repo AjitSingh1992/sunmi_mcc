@@ -43,6 +43,20 @@
                         android:layout_height="match_parent"
                         android:gravity="left|center_vertical"
                         android:text="QUICK FILTER:" />
+                    <Button
+                        style="@style/Button_Orange_Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="30dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="All"
+                        android:onClick="@{(v) -> data.outputEvents.onClickAll()}"/>
+
 
                     <Button
                         style="@style/Button_Orange_Bold"

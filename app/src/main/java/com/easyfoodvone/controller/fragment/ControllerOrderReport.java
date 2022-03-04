@@ -135,6 +135,11 @@ public class ControllerOrderReport extends Fragment {
 
     private final DataPageOrderReport.OutputEvents viewEventHandler = new DataPageOrderReport.OutputEvents() {
         @Override
+        public void onClickAll() {
+            getOrderReport(false, false, true);
+        }
+
+        @Override
         public void onClickYesterday() {
             data.getEndDate().set("");
             data.getStartDate().set("");
