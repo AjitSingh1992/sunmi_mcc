@@ -247,7 +247,7 @@ public class Constants {
 
                 @NonNull String strDate = DateFormat.format("dd-MMM-yyyy", dtDob).toString();
                 MySingleTon.getInstance().setYear(year);
-                MySingleTon.getInstance().setDay(dayOfMonth + 1);
+                MySingleTon.getInstance().setDay(dayOfMonth);
                 MySingleTon.getInstance().setMonth(monthOfYear);
                 dateSetCallback.onDateSet(strDate);
             }

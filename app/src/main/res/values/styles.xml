@@ -7,6 +7,8 @@
     <style name="FullscreenThemeWithSplash" parent="FullscreenTheme">
         <item name="android:windowBackground">@drawable/native_splash2</item>
     </style>
+  <style name="FullscreenThemeWithSplash2" parent="FullscreenTheme">
+    </style>
 
     <!--
     Main application theme.
