@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".DeviceList"
+            android:exported="true" />
         <activity
             android:name=".BluetoothActivity"
             android:configChanges="${allConfigChanges}"
@@ -55,8 +57,8 @@
                 <action android:name="com.sunmi.hcservice.status" />
             </intent-filter>
         </receiver>
-        <service android:name=".adapters.PrintJobMonitorService" />
 
+        <service android:name=".adapters.PrintJobMonitorService" />
         <service
             android:name=".firebase.MyFirebaseMessagingService"
             android:exported="true">
@@ -65,18 +67,19 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!--
 <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

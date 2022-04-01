@@ -1,13 +1,18 @@
 package com.easyfoodvone.controller.fragment;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +29,7 @@ import androidx.databinding.ObservableArrayList;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.easyfoodvone.DeviceList;
 import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
@@ -35,12 +41,14 @@ import com.easyfoodvone.app_common.viewdata.DataRowOrderDetail;
 import com.easyfoodvone.app_common.viewdata.DataRowOrderOverview;
 import com.easyfoodvone.app_common.ws.CommonResponse;
 import com.easyfoodvone.app_common.ws.NewDetailBean;
+import com.easyfoodvone.app_common.ws.OrderReportResponse;
 import com.easyfoodvone.app_common.ws.OrdersListResponse;
 import com.easyfoodvone.app_ui.databinding.PopupOrderAcceptDeliveryTimeBinding;
 import com.easyfoodvone.app_ui.fragment.RoundedDialogFragment;
 import com.easyfoodvone.app_ui.view.ViewOrderList;
 import com.easyfoodvone.controller.child.ControllerOrderDetail;
 import com.easyfoodvone.controller.child.ControllerRowOrderOverview;
+import com.easyfoodvone.utility.PrinterCommands;
 import com.easyfoodvone.utility.printerutil.PrintEsayFood;
 import com.easyfoodvone.models.LoginResponse;
 import com.easyfoodvone.models.RestaurantClosingTimeByDataModel;
@@ -52,12 +60,23 @@ import com.easyfoodvone.utility.Helper;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.easyfoodvone.utility.printerutil.Utils;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -71,7 +90,22 @@ import static com.easyfoodvone.utility.Constants.NOTIFICATION_TYPE_ACCEPTED;
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
 
 public class ControllerOrderList extends Fragment {
+    BluetoothAdapter mBluetoothAdapter;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+    byte FONT_TYPE;
+    private UserPreferences userPreferences;
+    String line20 = "--------------------------------------";//38 char
+    String line20Bold = "--------------------------------------";//38 char
+    String line22 = "----------------------------------";//34 char
+    String line22Bold = "----------------------------------";//34 char
+    String line24 = "--------------------------------";//32 char
+    String line24Bold = "--------------------------------";//32 char
+    String line26 = "-----------------------------";//29 char
+    String line26Bold = "-----------------------------";//29 char
 
+    // needed for communication to bluetooth device / network
+    static OutputStream mmOutputStream;
     public interface ParentInterface {
         // TODO move this into an ObservableField from the parent
         LoginResponse.Data getLoginData();
@@ -130,6 +164,7 @@ public class ControllerOrderList extends Fragment {
 
         IntentFilter intentFilter = new IntentFilter(NOTIFICATION_TYPE_ACCEPTED);
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+        userPreferences = UserPreferences.get();
 
         return view.getUi().getBinding().getRoot();
     }
@@ -228,10 +263,20 @@ public class ControllerOrderList extends Fragment {
 
             LoginResponse.Data loginData = parentInterface.getLoginData();
             if (loginData != null) {
-                boolean serviceReady = PrintEsayFood.printOrderDetails(getActivity(), logo, loginData, orderDetail);
-                if ( ! serviceReady) {
-                    parentInterface.showToastLong("The print service is not connected");
+
+
+                if (Helper.getDeviceName().contains("Sunmi")) {
+                    boolean serviceReady = PrintEsayFood.printOrderDetails(getActivity(), logo, loginData, orderDetail);
+                    if (!serviceReady) {
+                        parentInterface.showToastLong("The print service is not connected");
+                    }
+                } else {
+                        /*findBT(logo);
+                        openBT();*/
+                       printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()),orderDetail);
                 }
+
+
             }
         }
     };
@@ -796,5 +841,1165 @@ public class ControllerOrderList extends Fragment {
         });
 
         dialog.showNow(getChildFragmentManager(), null);
+    }
+
+    protected void printBill(@NonNull Context context, @Nullable Bitmap logo, @NonNull LoginResponse.Data restaurantData,@NonNull NewDetailBean.OrdersDetailsBean orderDetail) {
+
+        if(mmSocket == null){
+            Intent BTIntent = new Intent(getActivity(), DeviceList.class);
+            this.startActivityForResult(BTIntent, DeviceList.REQUEST_CONNECT_BT);
+        }
+        else{
+            OutputStream opstream = null;
+            try {
+                opstream = mmSocket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mmOutputStream = opstream;
+
+            //print command
+            try {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mmOutputStream = mmSocket.getOutputStream();
+                byte[] printformat = new byte[]{0x1B,0x21,0x03};
+                mmOutputStream.write(printformat);
+
+                Date date = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+                DateFormat timeFormat = new SimpleDateFormat("HH:mma");
+
+
+                String _date = dateFormat.format(date);
+                String _time = timeFormat.format(date);
+                new MakeData(context, logo, orderDetail, restaurantData).execute();
+              /*  if (logo != null)
+                    printPhoto(getActivity(),logo);
+
+
+
+
+                printCustom("Fair Group BD",2,1);
+                printCustom("Pepperoni Foods Ltd.",0,1);
+                // printPhoto(logo);
+                printCustom("H-123, R-123, Dhanmondi, Dhaka-1212",0,1);
+                printCustom("Hot Line: +88000 000000",0,1);
+                printCustom("Vat Reg : 0000000000,Mushak : 11",0,1);
+                String dateTime[] = getDateTime();
+                printText(leftRightAlign(dateTime[0], dateTime[1]));
+                printText(leftRightAlign("Qty: Name" , "Price "));
+                printCustom(new String(new char[32]).replace("\0", "."),0,1);
+                printText(leftRightAlign("Total" , "2,0000/="));
+                printNewLine();
+                printCustom("Thank you for coming & we look",0,1);
+                printCustom("forward to serve you again",0,1);
+                printNewLine();
+                printNewLine();
+
+                mmOutputStream.flush();*/
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+
+
+    }
+    private static class MakeData extends AsyncTask<Void, Void, String> {
+        @NonNull final Context context;
+        @Nullable final Bitmap logo;
+        @NonNull final NewDetailBean.OrdersDetailsBean orderDetail;
+        @NonNull final LoginResponse.Data restaurantData;
+        int charCount = 43;
+        Bitmap bitmap1 = null;
+        String addressFormatToPrint = "";
+        String getAddress_1 = "", address_2 = "", city = "", post_code = "", country = "", AddressToPrint = "";
+
+        String line24Bold = "--------------------------------";//32 char
+
+
+        public MakeData(@NonNull Context context, @Nullable Bitmap logo, @NonNull NewDetailBean.OrdersDetailsBean orderDetail, @NonNull LoginResponse.Data restaurantData) {
+            this.context = context;
+            this.logo = logo;
+            this.orderDetail = orderDetail;
+            this.restaurantData = restaurantData;
+            Log.e("1111111111111", "1111111111111111");
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Log.e("222222222222", "222222222222222");
+
+            return makeCartData(context, charCount, orderDetail.getCart());
+        }
+
+        @Override
+        protected void onPostExecute(String cartData) {
+            super.onPostExecute(cartData);
+            Log.e("cccccccccccc", "cccccccccccc");
+
+            Log.e("Cart DATA\n", cartData);
+            String customerName = orderDetail.getDelivery_address().getCustomer_name();
+            String customerPhone;
+            if (orderDetail.getOrder_phone_number() != null && !orderDetail.getOrder_phone_number().isEmpty()) {
+                customerPhone = orderDetail.getOrder_phone_number();
+            } else {
+                customerPhone = orderDetail.getDelivery_address().getPhone_number();
+            }
+
+            String customerAddress = orderDetail.getDelivery_address().getCustomer_location();
+
+            try {
+                if (orderDetail.getDelivery_address().getAddress_1() != null && !orderDetail.getDelivery_address().getAddress_1().isEmpty())
+                    getAddress_1 = orderDetail.getDelivery_address().getAddress_1() + "\n";
+                else
+                    getAddress_1 = "";
+                if (orderDetail.getDelivery_address().getAddress_2() != null && !orderDetail.getDelivery_address().getAddress_2().isEmpty())
+                    address_2 = orderDetail.getDelivery_address().getAddress_2() + "\n";
+                else
+                    address_2 = "";
+                city = orderDetail.getDelivery_address().getCity();
+                post_code = orderDetail.getDelivery_address().getPost_code();
+                country = orderDetail.getDelivery_address().getCountry();
+
+                AddressToPrint = getAddress_1 + address_2 + city + " " + post_code;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            String orderPhone;
+            if (orderDetail.getOrder_phone_number() != null && !orderDetail.getOrder_phone_number().isEmpty()) {
+                orderPhone = orderDetail.getOrder_phone_number();
+            } else {
+                orderPhone = orderDetail.getDelivery_address().getPhone_number();
+            }
+            String footer = String.format("%s", "        Delivery Details        ") + "\n"
+                    + String.format("%s", "--------------------------------") + "\n"
+                    + String.format("%s", orderDetail.getDelivery_address().getCustomer_name()) + "\n"
+                    + String.format("%s", orderPhone) + "\n"
+                    + String.format("%s", orderDetail.getDelivery_address().getCustomer_location()) + "\n"
+                    + String.format("Delivery Time:%s", orderDetail.getDelivery_date_time()) + "\n";
+            Log.e("FOOTER >>\n", footer);
+
+            if (true) {
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.receipt_bmp_easyfood_name);
+
+
+                printPhoto(context,icon);
+                if (logo != null) {
+                    printPhoto(context,logo);
+                }else {
+                    try {
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
+
+                        URL url = new URL(UserPreferences.get().getLoggedInResponse(context).getLogo());
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                        printPhoto(context,myBitmap);
+
+                    } catch (IOException e) {
+                        // Log exception
+                        Log.e("IOException", e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+                printNewLine();
+
+
+
+
+                if (restaurantData != null) {
+                    printCustom(restaurantData.getRestaurant_name().toUpperCase(),1,1);
+                    printCustom("",2,1);
+                    printCustom("ORDER NUMBER",0,1);
+                    printCustom(orderDetail.getOrder_num(),2,1);
+                    printCustom("",2,1);
+
+                    String checkPayStatus = orderDetail.getPayment_mode();
+                    try {
+                        Log.e("PRINT>>\n", "UNPAID" + "\t" + orderDetail.getDelivery_option().toUpperCase());
+                        if (checkPayStatus.equalsIgnoreCase("Cash")) {
+                            printCustom("UNPAID " + " - " + orderDetail.getDelivery_option().toUpperCase(),1,1);
+                        } else {
+                            printCustom("PAID "+" - " + orderDetail.getDelivery_option().toUpperCase(),1,1);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    String timeDate = orderDetail.getOrder_date_time();
+                    String dddate = Constants.getDateFromDateTime(orderDetail.getOrder_date_time(), "dd MMM yyyy hh:mm:ss", "dd-MMM") + " ";
+                    String OrderTime = "", hr = "", min = "";
+                    for (int i = 0; i < timeDate.length(); i++) {
+                        char c = timeDate.charAt(i);
+                        if (c == ' ') {
+                            hr = timeDate.substring(i + 1, i + 3);
+                        }
+                        if (c == ':') {
+                            min = timeDate.substring(i + 1, i + 3);
+                            break;
+                        }
+                    }
+
+                    OrderTime = dddate + hr + ":" + min;
+                    printCustom("",2,1);
+                    printCustom("ORDER TIME - " + OrderTime,1,1);
+
+
+                    String DeliveryTime1 = orderDetail.getDelivery_date_time();
+                    String DeliveryTime = "", hr1 = "", min1 = "";
+                    String dtime2 = Constants.getDateFromDateTime(orderDetail.getDelivery_date_time(), "dd MMM yyyy hh:mm:ss", "dd-MMM") + " ";
+
+                    for (int j = 0; j < DeliveryTime1.length(); j++) {
+                        char d = DeliveryTime1.charAt(j);
+                        if (d == ' ') {
+                            hr1 = DeliveryTime1.substring(j + 1, j + 3);
+                        }
+                        if (d == ':') {
+                            min1 = DeliveryTime1.substring(j + 1, j + 3);
+                            break;
+                        }
+                    }
+                    DeliveryTime = dtime2 + hr1 + ":" + min1;
+                    printCustom("",2,1);
+                    printCustom("DELIVERY TIME",0,1);
+                    printCustom(DeliveryTime,1,1);
+                    printCustom(line24Bold,1,1);
+                    printCustom(customerName.toUpperCase(),1,1);
+
+
+                    if (orderDetail.getDelivery_option().toUpperCase().equals("DELIVERY"))
+                        addressFormatToPrint = AddressNameCorrect(customerAddress);
+                    printCustom(AddressToPrint,1,1);
+                    printCustom("",2,1);
+                    printCustom(customerPhone,1,1);
+                    printCustom(line24Bold,1,1);
+
+
+
+
+                    makeCartDataNew(context, charCount, orderDetail.getCart());
+                    printCustom(line24Bold,1,1);
+                    printCustom(printSpaceBetweenTwoString("DISCOUNT",context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(orderDetail.getDiscount_amount())),29),1,1);
+
+                    if (orderDetail.getDelivery_option().toUpperCase().equals("DELIVERY")) {
+                        printCustom(printSpaceBetweenTwoString("DELIVERY FEE",context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(orderDetail.getDelivery_charge())), 29),0,1);
+                    }
+                    printCustom("",2,1);
+
+
+                    printCustom("TOTAL    " + "£" + Constants.decimalFormat(Double.parseDouble(orderDetail.getOrder_total())),2,1);
+
+                    if (orderDetail.getOrder_notes() != null && !orderDetail.getOrder_notes().trim().isEmpty()) {
+                        printCustom("NOTES",3,1);
+                        printCustom(orderDetail.getOrder_notes(),3,1);
+
+                    }
+                    printCustom(line24Bold,2,1);
+                    printCustom("PAYMENT BY "+ orderDetail.getPayment_mode().toUpperCase(),2,1);
+
+                    printCustom(line24Bold,2,1);
+
+                }
+            }
+            try {
+                mmOutputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Log.e("ddddddddddddd", "ddddddddddddd");
+        }
+    }
+    private static void makeCartDataNew(Context context, int paperRowCharCount, NewDetailBean.OrdersDetailsBean.Cart data) {
+        StringBuilder orderItemData = new StringBuilder();
+        int charCount = paperRowCharCount;
+        int serialNoCount = 0;
+        int qtyCharCount = 0;
+        int priceCharCount = 8;
+        int charCountNew = (charCount - serialNoCount) - qtyCharCount;
+        charCountNew = (charCountNew - priceCharCount) - priceCharCount;
+        int slNo = 0;
+
+
+        for (int i = 0; i < data.getMenu().size(); i++) {
+            String productFirstLine = null;
+            String productSecondLine = null;
+
+
+            if (data.getMenu().get(i) != null)
+            printCustom(data.getMenu().get(i).getQty() + "x " + data.getMenu().get(i).getName(),1,1);
+
+            /*--------------Menu Product Modifiers----------------------------------------*/
+
+            StringBuilder menuOrderItemData = new StringBuilder();
+            if (data.getMenu().get(i).getOptions().getProductModifiers() != null) {
+                //  List<ProductModifier> productModifiers = data.getMenu().get(i).getOptions().getProductModifiers();
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getProductModifiers().size(); j++) {
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().size(); k++) {
+
+                        if (data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k) != null) {
+                            String productModiProductName = data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getQuantity() + "x " + data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getProductName();
+                            if (productModiProductName.length() > (charCountNew * 2)) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                            } else {
+                                if (productModiProductName.length() > charCountNew) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                } else {
+                                    productFirstLine = productModiProductName;
+                                    for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                        productFirstLine += " ";
+                                    }
+                                }
+                            }
+                            if (productSecondLine == null) {
+                                String amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice()));
+
+                                menuOrderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                                + "\n"
+                                );
+                            } else {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                menuOrderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                        + "\n"
+                                );
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            /*  --------------Menu Meal Products----------------------------------------*/
+            if (data.getMenu().get(i).getOptions().getMealProducts() != null) {
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getMealProducts().size(); j++) {
+
+                    if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getProductNameAPP() != null) {
+                        String productModiProductName = data.getMenu().get(i).getOptions().getMealProducts().get(j).getQuantity() + "x " + data.getMenu().get(i).getOptions().getMealProducts().get(j).getProductNameAPP();
+                        if (productModiProductName.length() > (charCountNew * 2)) {
+                            productFirstLine = productModiProductName.substring(0, (charCountNew));
+                            productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                        } else {
+                            if (productModiProductName.length() > charCountNew) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                            } else {
+                                productFirstLine = productModiProductName;
+                                for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                    productFirstLine += " ";
+                                }
+                            }
+                        }
+                        if (productSecondLine == null) {
+                            String amountSpace;
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null)
+                                amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()));
+                            else
+                                amountSpace = createPriceSpace(priceCharCount, Double.parseDouble("0"));
+
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
+                                menuOrderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                                + "\n"
+                                );
+                            } else {
+                                menuOrderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                                + "\n"
+                                );
+                            }
+                        } else {
+
+                            String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
+                                menuOrderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                        + "\n"
+                                );
+                            } else {
+                                menuOrderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                        + "\n"
+                                );
+                            }
+                        }
+                    }
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().size(); k++) {
+
+                        for (int l = 0; l < data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().size(); l++) {
+
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k) != null) {
+                                String productModiProductName = data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getQuantity() + "x " + data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getProductName();
+                                if (productModiProductName.length() > (charCountNew * 2)) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                                } else {
+                                    if (productModiProductName.length() > charCountNew) {
+                                        productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                        productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                    } else {
+                                        productFirstLine = productModiProductName;
+                                        for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                            productFirstLine += " ";
+                                        }
+                                    }
+                                }
+                                if (productSecondLine == null) {
+                                    String amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()));
+
+                                    menuOrderItemData.append(
+                                            productFirstLine
+                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                                    + "\n"
+                                    );
+                                } else {
+                                    String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                    menuOrderItemData.append(productFirstLine
+
+                                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                            + "\n"
+                                    );
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            /* --------------Menu Size----------------------------------------*/
+
+            if (data.getMenu().get(i).getOptions().getSize() != null && data.getMenu().get(i).getOptions().getSize().getProductSizeName() != null) {
+
+                if (data.getMenu().get(i).getOptions().getSize() != null) {
+                    String productModiProductName = data.getMenu().get(i).getOptions().getSize().getQuantity() + "x " + data.getMenu().get(i).getOptions().getSize().getProductSizeName();
+                    if (productModiProductName.length() > (charCountNew * 2)) {
+                        productFirstLine = productModiProductName.substring(0, (charCountNew));
+                        productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                    } else {
+                        if (productModiProductName.length() > charCountNew) {
+                            productFirstLine = productModiProductName.substring(0, (charCountNew));
+                            productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                        } else {
+                            productFirstLine = productModiProductName;
+                            for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                productFirstLine += " ";
+                            }
+                        }
+                    }
+                    if (productSecondLine == null) {
+                        String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getOptions().getSize().getProductSizePrice());
+
+                        menuOrderItemData.append(
+                                productFirstLine
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                        + "\n"
+                        );
+                    } else {
+                        String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                        menuOrderItemData.append(productFirstLine
+
+                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                + "\n"
+                        );
+                    }
+                }
+
+
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getSize().getSizemodifiers().size(); j++) {
+                    // List<SizeModifierProduct> sizeModifierProducts = data.getMenu().get(i).getOptions().getSizeBeans().getSizemodifiers().get(j).getSizeModifierProducts();
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().size(); k++) {
+
+                        if (data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k) != null) {
+                            String productModiProductName = data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getQuantity() + "x " + data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getProductName();
+                            if (productModiProductName.length() > (charCountNew * 2)) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                            } else {
+                                if (productModiProductName.length() > charCountNew) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                } else {
+                                    productFirstLine = productModiProductName;
+                                    for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                        productFirstLine += " ";
+                                    }
+                                }
+                            }
+                            if (productSecondLine == null) {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount());
+
+                                menuOrderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                                + "\n"
+                                );
+                            } else {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                menuOrderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                        + "\n"
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            printCustom(menuOrderItemData.toString(),0,1);
+            printCustom(String.format(context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice()),0,1);
+
+        }
+    }
+
+    private static String makeCartData(Context context, int paperRowCharCount, NewDetailBean.OrdersDetailsBean.Cart data) {
+        StringBuilder orderItemData = new StringBuilder();
+        int charCount = paperRowCharCount;
+        int serialNoCount = 0;
+        int qtyCharCount = 0;
+        int priceCharCount = 8;
+        int charCountNew = (charCount - serialNoCount) - qtyCharCount;
+        charCountNew = (charCountNew - priceCharCount) - priceCharCount;
+        int slNo = 0;
+
+        for (int i = 0; i < data.getMenu().size(); i++) {
+            String productFirstLine = null;
+            String productSecondLine = null;
+
+            if (data.getMenu().get(i) != null) {
+                String productName = data.getMenu().get(i).getQty() + "x " + data.getMenu().get(i).getName();
+                if (productName.length() > (charCountNew * 2)) {
+                    productFirstLine = productName.substring(0, (charCountNew));
+                    productSecondLine = productName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                } else {
+                    if (productName.length() > charCountNew) {
+                        productFirstLine = productName.substring(0, (charCountNew));
+                        productSecondLine = productName.substring((charCountNew), productName.length());
+                    } else {
+                        productFirstLine = productName;
+                        for (int j = 0; j < (charCountNew - productName.length()); j++) {
+                            productFirstLine += " ";
+                        }
+                    }
+                }
+                if (productSecondLine == null) {
+                    String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+                    orderItemData.append(
+                            productFirstLine
+                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice())
+                                    + "\n"
+                    );
+                } else {
+                    String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+                    orderItemData.append(productFirstLine
+
+                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice())
+                            + "\n"
+                    );
+                    orderItemData.append("    " + productSecondLine + "\n");
+                }
+            }
+
+            /*--------------Menu Product Modifiers----------------------------------------*/
+
+            if (data.getMenu().get(i).getOptions().getProductModifiers() != null) {
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getProductModifiers().size(); j++) {
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().size(); k++) {
+
+                        if (data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k) != null) {
+                            String productModiProductName = data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getQuantity() + "x " + data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getProductName();
+                            if (productModiProductName.length() > (charCountNew * 2)) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                            } else {
+                                if (productModiProductName.length() > charCountNew) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                } else {
+                                    productFirstLine = productModiProductName;
+                                    for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                        productFirstLine += " ";
+                                    }
+                                }
+                            }
+                            if (productSecondLine == null) {
+                                String amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice()));
+
+                                orderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                                + "\n"
+                                );
+                            } else {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                orderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                        + "\n"
+                                );
+                                orderItemData.append("    " + productSecondLine + "\n");
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*  --------------Menu Meal Products----------------------------------------*/
+            if (data.getMenu().get(i).getOptions().getMealProducts() != null) {
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getMealProducts().size(); j++) {
+
+                    if (data.getMenu().get(i).getOptions().getMealProducts().get(j) != null) {
+                        if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getProductNameAPP() != null) {
+                            String productModiProductName = data.getMenu().get(i).getOptions().getMealProducts().get(j).getQuantity() + "x " + data.getMenu().get(i).getOptions().getMealProducts().get(j).getProductNameAPP();
+
+                            if (productModiProductName.length() > (charCountNew * 2)) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                            } else {
+                                if (productModiProductName.length() > charCountNew) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                } else {
+                                    productFirstLine = productModiProductName;
+                                    for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                        productFirstLine += " ";
+                                    }
+                                }
+                            }
+                        }
+                        if (productSecondLine == null) {
+                            String amountSpace;
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null)
+                                amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()));
+                            else
+                                amountSpace = createPriceSpace(priceCharCount, Double.parseDouble("0"));
+
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
+                                orderItemData.append(
+
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                                + "\n"
+                                );
+                            } else {
+                                orderItemData.append(
+
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                                + "\n"
+                                );
+                            }
+                        } else {
+
+                            String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
+                                orderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                        + "\n"
+                                );
+                            } else {
+                                orderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                        + "\n"
+                                );
+                            }
+                            orderItemData.append("    " + productSecondLine + "\n");
+                        }
+                    }
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().size(); k++) {
+
+                        for (int l = 0; l < data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().size(); l++) {
+
+                            if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k) != null) {
+                                String productModiProductName = data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getQuantity() + "x " + data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getProductName();
+                                if (productModiProductName.length() > (charCountNew * 2)) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                                } else {
+                                    if (productModiProductName.length() > charCountNew) {
+                                        productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                        productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                    } else {
+                                        productFirstLine = productModiProductName;
+                                        for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                            productFirstLine += " ";
+                                        }
+                                    }
+                                }
+                                if (productSecondLine == null) {
+                                    String amountSpace = createPriceSpace(priceCharCount, Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()));
+
+                                    orderItemData.append(
+                                            productFirstLine
+                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                                    + "\n"
+                                    );
+                                } else {
+                                    String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                    orderItemData.append(productFirstLine
+
+                                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                            + "\n"
+                                    );
+                                    orderItemData.append("    " + productSecondLine + "\n");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            /* --------------Menu Size----------------------------------------*/
+
+            if (data.getMenu().get(i).getOptions().getSize() != null && data.getMenu().get(i).getOptions().getSize().getProductSizeName() != null) {
+
+                if (data.getMenu().get(i).getOptions().getSize() != null) {
+                    String productModiProductName = data.getMenu().get(i).getOptions().getSize().getQuantity() + "x " + data.getMenu().get(i).getOptions().getSize().getProductSizeName();
+                    if (productModiProductName.length() > (charCountNew * 2)) {
+                        productFirstLine = productModiProductName.substring(0, (charCountNew));
+                        productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                    } else {
+                        if (productModiProductName.length() > charCountNew) {
+                            productFirstLine = productModiProductName.substring(0, (charCountNew));
+                            productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                        } else {
+                            productFirstLine = productModiProductName;
+                            for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                productFirstLine += " ";
+                            }
+                        }
+                    }
+                    if (productSecondLine == null) {
+                        String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getOptions().getSize().getProductSizePrice());
+
+                        orderItemData.append(
+                                productFirstLine
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                        + "\n"
+                        );
+                    } else {
+                        String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                        orderItemData.append(productFirstLine
+
+                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                + "\n"
+                        );
+                        orderItemData.append("    " + productSecondLine + "\n");
+                    }
+                }
+
+                for (int j = 0; j < data.getMenu().get(i).getOptions().getSize().getSizemodifiers().size(); j++) {
+                    // List<SizeModifierProduct> sizeModifierProducts = data.getMenu().get(i).getOptions().getSizeBeans().getSizemodifiers().get(j).getSizeModifierProducts();
+                    for (int k = 0; k < data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().size(); k++) {
+
+                        if (data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k) != null) {
+                            String productModiProductName = data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getQuantity() + "x " + data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getProductName();
+                            if (productModiProductName.length() > (charCountNew * 2)) {
+                                productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                productSecondLine = productModiProductName.substring(charCountNew, ((charCountNew * 2) - 3)) + "... ";
+                            } else {
+                                if (productModiProductName.length() > charCountNew) {
+                                    productFirstLine = productModiProductName.substring(0, (charCountNew));
+                                    productSecondLine = productModiProductName.substring((charCountNew), productModiProductName.length());
+                                } else {
+                                    productFirstLine = productModiProductName;
+                                    for (int b = 0; b < (charCountNew - productModiProductName.length()); b++) {
+                                        productFirstLine += " ";
+                                    }
+                                }
+                            }
+                            if (productSecondLine == null) {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount());
+
+                                orderItemData.append(
+                                        productFirstLine
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                                + "\n"
+                                );
+                            } else {
+                                String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
+
+                                orderItemData.append(productFirstLine
+
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                        + "\n"
+                                );
+                                orderItemData.append("    " + productSecondLine + "\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return orderItemData.toString();
+    }
+    private static String AddressNameCorrect(String Address) {
+        String AddressToPrint = "", FirstAdd = "", SecondAdd = "", ThirdAdd = "", FourthAdd = "";
+        int charCountAddress = 19;
+
+        ArrayList<String> addressStrings = new ArrayList<>();
+        addressStrings.clear();
+        int pickChar = 0;
+
+        try {
+            Address = Address + " ";
+            for (int j = 0; j < Address.length(); j++) {
+                char spaceS = Address.charAt(j);
+                if (spaceS == ' ' || spaceS == ',') {
+                    String aadd = Address.substring(pickChar, j);
+                    addressStrings.add(aadd.trim());
+                    pickChar = j + 1;
+                }
+
+            }
+
+            String AddressToPrintCheck = "";
+            for (int k = 0; k < addressStrings.size(); k++) {
+
+                try {
+                    if (FirstAdd.length() > charCountAddress) {
+
+                        try {
+                            if (SecondAdd.length() > charCountAddress) {
+                                try {
+                                    if (ThirdAdd.length() > charCountAddress) {
+                                        FourthAdd = FourthAdd + " " + addressStrings.get(k);
+                                    } else {
+                                        ThirdAdd = ThirdAdd + " " + addressStrings.get(k);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                SecondAdd = SecondAdd + " " + addressStrings.get(k);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        FirstAdd = FirstAdd + " " + addressStrings.get(k);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //58 Wake Green Road, B13 9PG, Birmingham, England   B13 9PG
+        try {
+            if (FirstAdd != null && FirstAdd.length() > 0) {
+                AddressToPrint = FirstAdd.trim();
+
+                if (SecondAdd != null && SecondAdd.length() > 0) {
+                    AddressToPrint = AddressToPrint + "\n   " + SecondAdd.trim();
+
+                    if (ThirdAdd != null && ThirdAdd.length() > 0) {
+                        AddressToPrint = AddressToPrint + "\n   " + ThirdAdd.trim();
+
+                        if (FourthAdd != null && FourthAdd.length() > 0) {
+                            AddressToPrint = AddressToPrint + "\n   " + FourthAdd.trim();
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return AddressToPrint + " ";
+    }
+
+    private static String createPriceSpace(int priceCharCount, Double price) {
+        String priceSpace = "";
+        if (Constants.decimalFormat(price).length() < (priceCharCount - 1)) {
+            for (int j = 0; j < ((priceCharCount - 1) - String.valueOf(Constants.decimalFormat(price)).length()); j++) {
+                priceSpace += " ";
+            }
+        }
+
+        try {
+            priceSpace = priceSpace.substring(0, priceSpace.length() - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return priceSpace;
+    }
+
+
+
+    private static String reportData(Context context, List<OrderReportResponse.OrdersList> item, int charCount) {
+        StringBuilder data = new StringBuilder();
+        int orderNoShowCount = 8;
+        int postCodeCount = 7;
+        int dateCount = 11;
+        int itemQtyCount = 2;
+        int amountCount = 6;
+        for (int i = 0; i < item.size(); i++) {
+            String orderId = item.get(i).getOrder_id();
+            if (orderId.length() > 10) {
+                data.append(orderId.substring((orderId.length() - orderNoShowCount), orderId.length()));
+            } else {
+                data.append(orderId);
+            }
+            if (item.get(i).getCustomer_post_code().length() == 0) {
+                data.append("         ");
+
+            } else {
+                data.append("  " + item.get(i).getCustomer_post_code());
+            }
+            String[] date = item.get(i).getOrder_date().split(" ");
+            data.append(" ");
+            for (int j = 0; j < date.length; j++) {
+                data.append(date[j]);
+            }
+
+            data.append("  " + item.get(i).getTotal_items());
+            if (item.get(i).getOrder_total().length() < amountCount) {
+                int spacePrint = amountCount - item.get(i).getOrder_total().length();
+                data.append(" ");
+                for (int j = 0; j < spacePrint; j++) {
+                    data.append(" ");
+                }
+                data.append(context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+            } else {
+                data.append(" " + context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+            }
+        }
+
+        return data.toString();
+    }
+
+    private static String printSpaceBetweenTwoString(String str1, String str2, int charCount) {
+        String data = "";
+        int stringLength = (str1.length() + str2.length());
+
+        int spaceCount = charCount - stringLength;
+        String space = "";
+        for (int i = 0; i < (spaceCount - 1); i++) {
+            space += " ";
+        }
+        data = str1 + space + str2;
+        return data;
+    }
+    private void print_image(Bitmap bmp) throws IOException {
+        try {
+
+            if(bmp!=null){
+                byte[] command = Utils.decodeBitmap(bmp);
+                printText(command);
+            }else{
+                Log.e("Print Photo error", "the file isn't exists");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PrintTools", "the file isn't exists");
+        }
+    }
+    private void printText(String msg) {
+        try {
+            // Print normal text
+            mmOutputStream.write(msg.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    //print byte[]
+    private static void printText(byte[] msg) {
+        try {
+            // Print normal text
+            mmOutputStream.write(msg);
+            printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //print new line
+    private static void printNewLine() {
+        try {
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void resetPrint() {
+        try{
+            mmOutputStream.write(PrinterCommands.ESC_FONT_COLOR_DEFAULT);
+            mmOutputStream.write(PrinterCommands.FS_FONT_ALIGN);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mmOutputStream.write(PrinterCommands.ESC_CANCEL_BOLD);
+            mmOutputStream.write(PrinterCommands.LF);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //print custom
+    private static void printCustom(String msg, int size, int align) {
+        //Print config "mode"
+        byte[] cc = new byte[]{0x1B,0x21,0x03};  // 0- normal size text
+        //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
+        byte[] bb = new byte[]{0x1B,0x21,0x08};  // 1- only bold text
+        byte[] bb2 = new byte[]{0x1B,0x21,0x20}; // 2- bold with medium text
+        byte[] bb3 = new byte[]{0x1B,0x21,0x10}; // 3- bold with large text
+        try {
+            switch (size){
+                case 0:
+                    mmOutputStream.write(cc);
+                    break;
+                case 1:
+                    mmOutputStream.write(bb);
+                    break;
+                case 2:
+                    mmOutputStream.write(bb2);
+                    break;
+                case 3:
+                    mmOutputStream.write(bb3);
+                    break;
+            }
+
+            switch (align){
+                case 0:
+                    //left align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
+                    break;
+                case 1:
+                    //center align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                    break;
+                case 2:
+                    //right align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                    break;
+            }
+            mmOutputStream.write(msg.getBytes());
+            mmOutputStream.write(PrinterCommands.LF);
+            //outputStream.write(cc);
+            //printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //print photo
+    public static void printPhoto(Context context, Bitmap bmp) {
+        try {
+
+            if(bmp!=null){
+                byte[] command = Utils.decodeBitmap(bmp);
+                mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                printText(command);
+            }else{
+                Log.e("Print Photo error", "the file isn't exists");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PrintTools", "the file isn't exists");
+        }
+    }
+
+    //print unicode
+    public void printUnicode(){
+        try {
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+            printText(Utils.UNICODE_TEXT);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static String leftRightAlign(String str1, String str2) {
+        String ans = str1 +str2;
+        if(ans.length() <31){
+            int n = (31 - str1.length() + str2.length());
+            ans = str1 + new String(new char[n]).replace("\0", " ") + str2;
+        }
+        return ans;
+    }
+
+
+    private static String[] getDateTime() {
+        final Calendar c = Calendar.getInstance();
+        String dateTime [] = new String[2];
+        dateTime[0] = c.get(Calendar.DAY_OF_MONTH) +"/"+ c.get(Calendar.MONTH) +"/"+ c.get(Calendar.YEAR);
+        dateTime[1] = c.get(Calendar.HOUR_OF_DAY) +":"+ c.get(Calendar.MINUTE);
+        return dateTime;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if(mmSocket!= null){
+                mmOutputStream.close();
+                mmSocket.close();
+                mmSocket = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            mmSocket = DeviceList.getSocket();
+            if(mmSocket != null){
+                byte[] logoByte = UserPreferences.get().getRestaurantLogoBitmap(getActivity());
+                Bitmap logo = null;
+                if (logoByte != null) {
+                    logo = BitmapFactory.decodeByteArray(logoByte, 0, logoByte.length);
+                }
+              //  printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

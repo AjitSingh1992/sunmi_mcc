@@ -1,10 +1,15 @@
 package com.easyfoodvone.controller.fragment;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.easyfoodvone.MySingleTon;
+import com.easyfoodvone.DeviceList;
+import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
@@ -24,6 +30,9 @@ import com.easyfoodvone.app_common.utility.NewConstants;
 import com.easyfoodvone.app_common.viewdata.DataPageOrderReport;
 import com.easyfoodvone.app_ui.view.ViewOrderReport;
 import com.easyfoodvone.dialogs.PinDialog;
+import com.easyfoodvone.utility.Helper;
+import com.easyfoodvone.utility.PrinterCommands;
+import com.easyfoodvone.utility.printerutil.AidlUtil;
 import com.easyfoodvone.utility.printerutil.PrintEsayFood;
 import com.easyfoodvone.models.LoginResponse;
 import com.easyfoodvone.models.OrderReportRequest;
@@ -32,9 +41,20 @@ import com.easyfoodvone.utility.Constants;
 import com.easyfoodvone.utility.LoadingDialog;
 import com.easyfoodvone.utility.PrefManager;
 import com.easyfoodvone.utility.UserPreferences;
+import com.easyfoodvone.utility.printerutil.Utils;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,6 +65,18 @@ import io.reactivex.schedulers.Schedulers;
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
 
 public class ControllerOrderReport extends Fragment {
+    BluetoothAdapter mBluetoothAdapter;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+    byte FONT_TYPE;
+    // needed for communication to bluetooth device / network
+    static OutputStream mmOutputStream;
+    InputStream mmInputStream;
+    Thread workerThread;
+
+    byte[] readBuffer;
+    int readBufferPosition;
+    volatile boolean stopWorker;
 
     public interface ParentInterface {
         void goToHome();
@@ -189,7 +221,11 @@ public class ControllerOrderReport extends Fragment {
 
         @Override
         public void onClickPrintReport() {
-            printReport();
+            try {
+                printReport();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -381,7 +417,7 @@ public class ControllerOrderReport extends Fragment {
         data.getDeclinedPercent().set("");
     }
 
-    private void printReport() {
+    private void printReport() throws IOException {
         if (lastSuccessfulResponse == null) {
             return;
         }
@@ -392,9 +428,343 @@ public class ControllerOrderReport extends Fragment {
             logo = BitmapFactory.decodeByteArray(logoByte, 0, logoByte.length);
         }
 
-        boolean serviceReady = PrintEsayFood.printSummaryOrdersReport(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), lastSuccessfulResponse.getData());
-        if ( ! serviceReady) {
-            parentInterface.showToastLong("The print service is not connected");
+            boolean serviceReady = PrintEsayFood.printSummaryOrdersReport(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), lastSuccessfulResponse.getData());
+            if ( ! serviceReady) {
+                parentInterface.showToastLong("The print service is not connected");
+            }
+
+    }
+
+    protected void printBill() {
+        if(mmSocket == null){
+            Intent BTIntent = new Intent(getActivity(), DeviceList.class);
+            this.startActivityForResult(BTIntent, DeviceList.REQUEST_CONNECT_BT);
+        }
+        else{
+            OutputStream opstream = null;
+            try {
+                opstream = mmSocket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mmOutputStream = opstream;
+
+            //print command
+            try {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mmOutputStream = mmSocket.getOutputStream();
+                byte[] printformat = new byte[]{0x1B,0x21,0x03};
+                mmOutputStream.write(printformat);
+
+
+                printCustom("Fair Group BD",2,1);
+                printCustom("Pepperoni Foods Ltd.",0,1);
+               // printPhoto(logo);
+                printCustom("H-123, R-123, Dhanmondi, Dhaka-1212",0,1);
+                printCustom("Hot Line: +88000 000000",0,1);
+                printCustom("Vat Reg : 0000000000,Mushak : 11",0,1);
+                String dateTime[] = getDateTime();
+                printText(leftRightAlign(dateTime[0], dateTime[1]));
+                printText(leftRightAlign("Qty: Name" , "Price "));
+                printCustom(new String(new char[32]).replace("\0", "."),0,1);
+                printText(leftRightAlign("Total" , "2,0000/="));
+                printNewLine();
+                printCustom("Thank you for coming & we look",0,1);
+                printCustom("forward to serve you again",0,1);
+                printNewLine();
+                printNewLine();
+
+                mmOutputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    public void printSummaryOrdersReportBluetooth(Context context, Bitmap logo, LoginResponse.Data restaurantData, OrderReportResponse.Data reportData) {
+        if (mmDevice != null) {
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+            DateFormat timeFormat = new SimpleDateFormat("HH:mma");
+
+            String line20 = "--------------------------------------";//38 char
+            String line20Bold = "--------------------------------------";//38 char
+            String line22 = "----------------------------------";//34 char
+            String line22Bold = "----------------------------------";//34 char
+            String line24 = "--------------------------------";//32 char
+            String line24Bold = "--------------------------------";//32 char
+            String line26 = "-----------------------------";//29 char
+            String line26Bold = "-----------------------------";//29 char
+
+            String _date = dateFormat.format(date);
+            String _time = timeFormat.format(date);
+
+            if (logo != null)
+                AidlUtil.getInstance().printBitmap(logo, 1, 1, 1);
+
+            AidlUtil.getInstance().printText(restaurantData.getRestaurant_name(), 26, true, false, 1, 2);
+            AidlUtil.getInstance().printText(line24Bold, 24, true, false, 1);
+            AidlUtil.getInstance().printText("DATE: " + _date + "  TIME: " + _time, 22, true, false, 1, 1);
+            AidlUtil.getInstance().printText(line24Bold, 24, true, false, 1);
+
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("TOTAL ORDER", reportData.getTotal_orders(), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("TOTAL ITEMS", reportData.getTotal_items(), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("TOTAL REVENUE", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_revenue())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("TOTAL DISCOUNT", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_discount())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("WALLET BALANCE", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getWallet_balance())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("CREDIT(" + reportData.getTotal_orders_by_credit_card() + ")", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_orders_by_credit_card_amount())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("ACCEPTED(" + reportData.getTotal_orders_accepted() + ")", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_orders_accepted_amount())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("DECLINED(" + reportData.getTotal_orders_declined() + ")", context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_orders_declined_amount())), 32), 24, true, false, 1);
+            AidlUtil.getInstance().printText(printSpaceBetweenTwoString("CASH(" + reportData.getTotal_orders_by_cash() + ")" + context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(reportData.getTotal_orders_by_cash_amount())), Constants.decimalFormat(Double.parseDouble(reportData.getTotal_orders_by_cash_per())) + "%", 32), 24, true, false, 1);
+
+            AidlUtil.getInstance().printText(line24Bold, 24, true, false, 1);
+
+            String dataReport = reportData(context, reportData.getOrder_list(), 32);
+            AidlUtil.getInstance().printText(dataReport, 20, true, false, 4);
+
+
+
+        }
+    }
+
+
+    private static String reportData(Context context, List<OrderReportResponse.OrdersList> item, int charCount) {
+        StringBuilder data = new StringBuilder();
+        int orderNoShowCount = 8;
+        int postCodeCount = 7;
+        int dateCount = 11;
+        int itemQtyCount = 2;
+        int amountCount = 6;
+        for (int i = 0; i < item.size(); i++) {
+            String orderId = item.get(i).getOrder_id();
+            if (orderId.length() > 10) {
+                data.append(orderId.substring((orderId.length() - orderNoShowCount), orderId.length()));
+            } else {
+                data.append(orderId);
+            }
+            if (item.get(i).getCustomer_post_code().length() == 0) {
+                data.append("         ");
+
+            } else {
+                data.append("  " + item.get(i).getCustomer_post_code());
+            }
+            String[] date = item.get(i).getOrder_date().split(" ");
+            data.append(" ");
+            for (int j = 0; j < date.length; j++) {
+                data.append(date[j]);
+            }
+
+            data.append("  " + item.get(i).getTotal_items());
+            if (item.get(i).getOrder_total().length() < amountCount) {
+                int spacePrint = amountCount - item.get(i).getOrder_total().length();
+                data.append(" ");
+                for (int j = 0; j < spacePrint; j++) {
+                    data.append(" ");
+                }
+                data.append(context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+            } else {
+                data.append(" " + context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+            }
+        }
+
+        return data.toString();
+    }
+
+    private static String printSpaceBetweenTwoString(String str1, String str2, int charCount) {
+        String data = "";
+        int stringLength = (str1.length() + str2.length());
+
+        int spaceCount = charCount - stringLength;
+        String space = "";
+        for (int i = 0; i < (spaceCount - 1); i++) {
+            space += " ";
+        }
+        data = str1 + space + str2;
+        return data;
+    }
+    private void print_image(Bitmap bmp) throws IOException {
+        try {
+
+            if(bmp!=null){
+                byte[] command = Utils.decodeBitmap(bmp);
+                printText(command);
+            }else{
+                Log.e("Print Photo error", "the file isn't exists");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PrintTools", "the file isn't exists");
+        }
+    }
+    private void printText(String msg) {
+        try {
+            // Print normal text
+            mmOutputStream.write(msg.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    //print byte[]
+    private void printText(byte[] msg) {
+        try {
+            // Print normal text
+            mmOutputStream.write(msg);
+            printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //print new line
+    private void printNewLine() {
+        try {
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void resetPrint() {
+        try{
+            mmOutputStream.write(PrinterCommands.ESC_FONT_COLOR_DEFAULT);
+            mmOutputStream.write(PrinterCommands.FS_FONT_ALIGN);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mmOutputStream.write(PrinterCommands.ESC_CANCEL_BOLD);
+            mmOutputStream.write(PrinterCommands.LF);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //print custom
+    private void printCustom(String msg, int size, int align) {
+        //Print config "mode"
+        byte[] cc = new byte[]{0x1B,0x21,0x03};  // 0- normal size text
+        //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
+        byte[] bb = new byte[]{0x1B,0x21,0x08};  // 1- only bold text
+        byte[] bb2 = new byte[]{0x1B,0x21,0x20}; // 2- bold with medium text
+        byte[] bb3 = new byte[]{0x1B,0x21,0x10}; // 3- bold with large text
+        try {
+            switch (size){
+                case 0:
+                    mmOutputStream.write(cc);
+                    break;
+                case 1:
+                    mmOutputStream.write(bb);
+                    break;
+                case 2:
+                    mmOutputStream.write(bb2);
+                    break;
+                case 3:
+                    mmOutputStream.write(bb3);
+                    break;
+            }
+
+            switch (align){
+                case 0:
+                    //left align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
+                    break;
+                case 1:
+                    //center align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                    break;
+                case 2:
+                    //right align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                    break;
+            }
+            mmOutputStream.write(msg.getBytes());
+            mmOutputStream.write(PrinterCommands.LF);
+            //outputStream.write(cc);
+            //printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //print photo
+    public void printPhoto(Bitmap bmp) {
+        try {
+
+            if(bmp!=null){
+                byte[] command = Utils.decodeBitmap(bmp);
+                mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                printText(command);
+            }else{
+                Log.e("Print Photo error", "the file isn't exists");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PrintTools", "the file isn't exists");
+        }
+    }
+
+    //print unicode
+    public void printUnicode(){
+        try {
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+            printText(Utils.UNICODE_TEXT);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private String leftRightAlign(String str1, String str2) {
+        String ans = str1 +str2;
+        if(ans.length() <31){
+            int n = (31 - str1.length() + str2.length());
+            ans = str1 + new String(new char[n]).replace("\0", " ") + str2;
+        }
+        return ans;
+    }
+
+
+    private String[] getDateTime() {
+        final Calendar c = Calendar.getInstance();
+        String dateTime [] = new String[2];
+        dateTime[0] = c.get(Calendar.DAY_OF_MONTH) +"/"+ c.get(Calendar.MONTH) +"/"+ c.get(Calendar.YEAR);
+        dateTime[1] = c.get(Calendar.HOUR_OF_DAY) +":"+ c.get(Calendar.MINUTE);
+        return dateTime;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            if(mmSocket!= null){
+                mmOutputStream.close();
+                mmSocket.close();
+                mmSocket = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            mmSocket = DeviceList.getSocket();
+            if(mmSocket != null){
+                printBill();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
