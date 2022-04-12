@@ -115,7 +115,7 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.0.0'
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.10'
 }
 
 repositories {

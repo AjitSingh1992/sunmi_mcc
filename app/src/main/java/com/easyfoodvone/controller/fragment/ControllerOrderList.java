@@ -63,12 +63,16 @@ import com.easyfoodvone.utility.UserPreferences;
 import com.easyfoodvone.utility.printerutil.Utils;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.codec.binary.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -88,6 +92,7 @@ import retrofit2.Call;
 
 import static com.easyfoodvone.utility.Constants.NOTIFICATION_TYPE_ACCEPTED;
 import static com.easyfoodvone.utility.UserContants.AUTH_TOKEN;
+import static com.itextpdf.text.pdf.BaseFont.CP1250;
 
 public class ControllerOrderList extends Fragment {
     BluetoothAdapter mBluetoothAdapter;
@@ -273,7 +278,7 @@ public class ControllerOrderList extends Fragment {
                 } else {
                         /*findBT(logo);
                         openBT();*/
-                       printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()),orderDetail);
+                    printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()),orderDetail);
                 }
 
 
@@ -342,7 +347,7 @@ public class ControllerOrderList extends Fragment {
                                         data.getData().getTotal_accepted_order(),
                                         data.getData().getTotal_rejected_order(),
                                         data.getData().getTotal_refunded_order()
-                                        );
+                                );
 
                                 parentInterface.updateStoreOpen(data.getData().isIs_open());
 
@@ -867,7 +872,10 @@ public class ControllerOrderList extends Fragment {
                 }
                 mmOutputStream = mmSocket.getOutputStream();
                 byte[] printformat = new byte[]{0x1B,0x21,0x03};
-                mmOutputStream.write(printformat);
+                //final byte[] Init = {27, 29, 116, 32};//for star micronics
+                final byte[] InitTM = {27,  116, 16};
+                //mmOutputStream.write(InitTM);
+                mmOutputStream.write(InitTM);
 
                 Date date = new Date();
                 DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
@@ -876,6 +884,10 @@ public class ControllerOrderList extends Fragment {
 
                 String _date = dateFormat.format(date);
                 String _time = timeFormat.format(date);
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.pound1216);
+               // printCustom( "£20.00",2,1);
+
                 new MakeData(context, logo, orderDetail, restaurantData).execute();
               /*  if (logo != null)
                     printPhoto(getActivity(),logo);
@@ -1092,25 +1104,25 @@ public class ControllerOrderList extends Fragment {
 
                     makeCartDataNew(context, charCount, orderDetail.getCart());
                     printCustom(line24Bold,1,1);
-                    printCustom(printSpaceBetweenTwoString("DISCOUNT",context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(orderDetail.getDiscount_amount())),29),1,1);
+                    printCustom(printSpaceBetweenTwoString("DISCOUNT",context.getResources().getString(R.string.currency2) +  Constants.decimalFormat(Double.parseDouble(orderDetail.getDiscount_amount())),29),1,1);
 
                     if (orderDetail.getDelivery_option().toUpperCase().equals("DELIVERY")) {
-                        printCustom(printSpaceBetweenTwoString("DELIVERY FEE",context.getResources().getString(R.string.currency) + Constants.decimalFormat(Double.parseDouble(orderDetail.getDelivery_charge())), 29),0,1);
+                        printCustom(printSpaceBetweenTwoString("DELIVERY FEE",context.getResources().getString(R.string.currency2) +  Constants.decimalFormat(Double.parseDouble(orderDetail.getDelivery_charge())), 29),0,1);
                     }
                     printCustom("",2,1);
 
 
-                    printCustom("TOTAL    " + "£" + Constants.decimalFormat(Double.parseDouble(orderDetail.getOrder_total())),2,1);
+                    printCustom("TOTAL    " +context.getResources().getString(R.string.currency2) +  Constants.decimalFormat(Double.parseDouble(orderDetail.getOrder_total())),2,1);
 
                     if (orderDetail.getOrder_notes() != null && !orderDetail.getOrder_notes().trim().isEmpty()) {
                         printCustom("NOTES",3,1);
                         printCustom(orderDetail.getOrder_notes(),3,1);
 
                     }
-                    printCustom(line24Bold,2,1);
+                    printCustom(line24Bold,1,1);
                     printCustom("PAYMENT BY "+ orderDetail.getPayment_mode().toUpperCase(),2,1);
 
-                    printCustom(line24Bold,2,1);
+                    printCustom(line24Bold,1,1);
 
                 }
             }
@@ -1140,7 +1152,7 @@ public class ControllerOrderList extends Fragment {
 
 
             if (data.getMenu().get(i) != null)
-            printCustom(data.getMenu().get(i).getQty() + "x " + data.getMenu().get(i).getName(),1,1);
+                printCustom(data.getMenu().get(i).getQty() + "x " + data.getMenu().get(i).getName(),1,1);
 
             /*--------------Menu Product Modifiers----------------------------------------*/
 
@@ -1171,7 +1183,7 @@ public class ControllerOrderList extends Fragment {
 
                                 menuOrderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
                                                 + "\n"
                                 );
                             } else {
@@ -1179,7 +1191,7 @@ public class ControllerOrderList extends Fragment {
 
                                 menuOrderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
                                         + "\n"
                                 );
                             }
@@ -1219,13 +1231,13 @@ public class ControllerOrderList extends Fragment {
                             if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
                                 menuOrderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
                                                 + "\n"
                                 );
                             } else {
                                 menuOrderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble("0"))
                                                 + "\n"
                                 );
                             }
@@ -1236,13 +1248,13 @@ public class ControllerOrderList extends Fragment {
                             if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
                                 menuOrderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
                                         + "\n"
                                 );
                             } else {
                                 menuOrderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble("0"))
                                         + "\n"
                                 );
                             }
@@ -1273,7 +1285,7 @@ public class ControllerOrderList extends Fragment {
 
                                     menuOrderItemData.append(
                                             productFirstLine
-                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
                                                     + "\n"
                                     );
                                 } else {
@@ -1281,7 +1293,7 @@ public class ControllerOrderList extends Fragment {
 
                                     menuOrderItemData.append(productFirstLine
 
-                                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                            + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
                                             + "\n"
                                     );
                                 }
@@ -1316,7 +1328,7 @@ public class ControllerOrderList extends Fragment {
 
                         menuOrderItemData.append(
                                 productFirstLine
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
                                         + "\n"
                         );
                     } else {
@@ -1324,7 +1336,7 @@ public class ControllerOrderList extends Fragment {
 
                         menuOrderItemData.append(productFirstLine
 
-                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
                                 + "\n"
                         );
                     }
@@ -1356,7 +1368,7 @@ public class ControllerOrderList extends Fragment {
 
                                 menuOrderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
                                                 + "\n"
                                 );
                             } else {
@@ -1364,7 +1376,7 @@ public class ControllerOrderList extends Fragment {
 
                                 menuOrderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
                                         + "\n"
                                 );
                             }
@@ -1374,7 +1386,8 @@ public class ControllerOrderList extends Fragment {
             }
 
             printCustom(menuOrderItemData.toString(),0,1);
-            printCustom(String.format(context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice()),0,1);
+            printCustom(String.format(context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getPrice())+"     ",0,2);
+            printNewLine();
 
         }
     }
@@ -1413,14 +1426,14 @@ public class ControllerOrderList extends Fragment {
                     String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
                     orderItemData.append(
                             productFirstLine
-                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice())
+                                    + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getPrice())
                                     + "\n"
                     );
                 } else {
                     String amountSpace = createPriceSpace(priceCharCount, data.getMenu().get(i).getPrice());
                     orderItemData.append(productFirstLine
 
-                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getPrice())
+                            + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getPrice())
                             + "\n"
                     );
                     orderItemData.append("    " + productSecondLine + "\n");
@@ -1454,7 +1467,7 @@ public class ControllerOrderList extends Fragment {
 
                                 orderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
                                                 + "\n"
                                 );
                             } else {
@@ -1462,7 +1475,7 @@ public class ControllerOrderList extends Fragment {
 
                                 orderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getProductModifiers().get(j).getModifierProducts().get(k).getModifierProductPrice())
                                         + "\n"
                                 );
                                 orderItemData.append("    " + productSecondLine + "\n");
@@ -1506,14 +1519,14 @@ public class ControllerOrderList extends Fragment {
                                 orderItemData.append(
 
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
                                                 + "\n"
                                 );
                             } else {
                                 orderItemData.append(
 
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble("0"))
                                                 + "\n"
                                 );
                             }
@@ -1523,13 +1536,13 @@ public class ControllerOrderList extends Fragment {
                             if (data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount() != null) {
                                 orderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getAmount()))
                                         + "\n"
                                 );
                             } else {
                                 orderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble("0"))
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble("0"))
                                         + "\n"
                                 );
                             }
@@ -1561,7 +1574,7 @@ public class ControllerOrderList extends Fragment {
 
                                     orderItemData.append(
                                             productFirstLine
-                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                                    + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
                                                     + "\n"
                                     );
                                 } else {
@@ -1569,7 +1582,7 @@ public class ControllerOrderList extends Fragment {
 
                                     orderItemData.append(productFirstLine
 
-                                            + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
+                                            + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", Double.parseDouble(data.getMenu().get(i).getOptions().getMealProducts().get(j).getSizeModifiers().get(k).getSizeModifierProducts().get(l).getAmount()))
                                             + "\n"
                                     );
                                     orderItemData.append("    " + productSecondLine + "\n");
@@ -1604,7 +1617,7 @@ public class ControllerOrderList extends Fragment {
 
                         orderItemData.append(
                                 productFirstLine
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
                                         + "\n"
                         );
                     } else {
@@ -1612,7 +1625,7 @@ public class ControllerOrderList extends Fragment {
 
                         orderItemData.append(productFirstLine
 
-                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
+                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getProductSizePrice())
                                 + "\n"
                         );
                         orderItemData.append("    " + productSecondLine + "\n");
@@ -1644,7 +1657,7 @@ public class ControllerOrderList extends Fragment {
 
                                 orderItemData.append(
                                         productFirstLine
-                                                + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                                + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
                                                 + "\n"
                                 );
                             } else {
@@ -1652,7 +1665,7 @@ public class ControllerOrderList extends Fragment {
 
                                 orderItemData.append(productFirstLine
 
-                                        + String.format(amountSpace + context.getResources().getString(R.string.currency) + "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
+                                        + String.format(amountSpace + context.getResources().getString(R.string.currency2) +  "%.2f", data.getMenu().get(i).getOptions().getSize().getSizemodifiers().get(j).getSizeModifierProducts().get(k).getAmount())
                                         + "\n"
                                 );
                                 orderItemData.append("    " + productSecondLine + "\n");
@@ -1797,9 +1810,9 @@ public class ControllerOrderList extends Fragment {
                 for (int j = 0; j < spacePrint; j++) {
                     data.append(" ");
                 }
-                data.append(context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+                data.append(context.getResources().getString(R.string.currency2) +  item.get(i).getOrder_total() + "\n");
             } else {
-                data.append(" " + context.getResources().getString(R.string.currency) + item.get(i).getOrder_total() + "\n");
+                data.append(" " + context.getResources().getString(R.string.currency2) +  item.get(i).getOrder_total() + "\n");
             }
         }
 
@@ -1845,7 +1858,18 @@ public class ControllerOrderList extends Fragment {
     private static void printText(byte[] msg) {
         try {
             // Print normal text
+            mmOutputStream.write(msg );
+            printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+  private static void printTextWithImage(byte[] msg,String msg2) {
+        try {
+            // Print normal text
             mmOutputStream.write(msg);
+            mmOutputStream.write(msg2.getBytes());
             printNewLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -1877,6 +1901,7 @@ public class ControllerOrderList extends Fragment {
 
     //print custom
     private static void printCustom(String msg, int size, int align) {
+
         //Print config "mode"
         byte[] cc = new byte[]{0x1B,0x21,0x03};  // 0- normal size text
         //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
@@ -1913,7 +1938,13 @@ public class ControllerOrderList extends Fragment {
                     mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
                     break;
             }
-            mmOutputStream.write(msg.getBytes());
+            byte[] b = new byte[0];
+            try {
+                b = msg.getBytes("windows-1252");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            mmOutputStream.write(b);
             mmOutputStream.write(PrinterCommands.LF);
             //outputStream.write(cc);
             //printNewLine();
@@ -1931,6 +1962,21 @@ public class ControllerOrderList extends Fragment {
                 byte[] command = Utils.decodeBitmap(bmp);
                 mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
                 printText(command);
+            }else{
+                Log.e("Print Photo error", "the file isn't exists");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("PrintTools", "the file isn't exists");
+        }
+    }
+   public static void printPhotoAndText(Context context, Bitmap bmp,String text) {
+        try {
+
+            if(bmp!=null){
+                byte[] command = Utils.decodeBitmap(bmp);
+                mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                printTextWithImage(command,text);
             }else{
                 Log.e("Print Photo error", "the file isn't exists");
             }
@@ -1995,7 +2041,7 @@ public class ControllerOrderList extends Fragment {
                 if (logoByte != null) {
                     logo = BitmapFactory.decodeByteArray(logoByte, 0, logoByte.length);
                 }
-              //  printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()));
+                //  printBill(getActivity(),logo,userPreferences.getLoggedInResponse(getActivity()));
             }
 
         } catch (Exception e) {

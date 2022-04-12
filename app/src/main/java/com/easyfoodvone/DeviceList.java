@@ -1,10 +1,14 @@
 package com.easyfoodvone;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -14,42 +18,75 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class DeviceList  extends ListActivity {
+public class DeviceList  extends AppCompatActivity {
     private static String TAG = "---DeviceList";
     public static final int REQUEST_COARSE_LOCATION = 200;
 
     static public final int REQUEST_CONNECT_BT = 0*2300;
     static private final int REQUEST_ENABLE_BT = 0*1000;
     static private BluetoothAdapter mBluetoothAdapter = null;
-    static private ArrayAdapter<String> mArrayAdapter = null;
 
     static private ArrayAdapter<BluetoothDevice> btDevices = null;
-
+    ArrayList<Names> namesArray = new ArrayList<>();
+    NameAdapter nameAdapter;
     private static final UUID SPP_UUID = UUID
             .fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
     // UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     static private BluetoothSocket mbtSocket = null;
-
+    ImageView backButton,refreshIcon;
+    ListView listView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_of_devices);
+        backButton = findViewById(R.id.backButton);
+        listView = findViewById(R.id.listView);
+        refreshIcon = findViewById(R.id.refreshIcon);
 
-        setTitle("Bluetooth Devices");
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+        refreshIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDevicesList();
+            }
+        });
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#ff5200"));
+        }
+*/
         try {
             if (initDevicesList() != 0) {
                 finish();
@@ -59,11 +96,16 @@ public class DeviceList  extends ListActivity {
             finish();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+        || ContextCompat.checkSelfPermission(DeviceList.this,
+                Manifest.permission.BLUETOOTH_ADMIN)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.BLUETOOTH_ADMIN},
                     REQUEST_COARSE_LOCATION);
         }else {
             proceedDiscovery();
@@ -72,8 +114,10 @@ public class DeviceList  extends ListActivity {
 
 
     protected void proceedDiscovery() {
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothDevice.ACTION_NAME_CHANGED);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         registerReceiver(mBTReceiver, filter);
 
         mBluetoothAdapter.startDiscovery();
@@ -99,11 +143,12 @@ public class DeviceList  extends ListActivity {
                 btDevices = null;
             }
 
-            if (mArrayAdapter != null) {
-                mArrayAdapter.clear();
-                mArrayAdapter.notifyDataSetChanged();
-                mArrayAdapter.notifyDataSetInvalidated();
-                mArrayAdapter = null;
+
+            if (nameAdapter != null) {
+                nameAdapter.clear();
+                nameAdapter.notifyDataSetChanged();
+                nameAdapter.notifyDataSetInvalidated();
+                nameAdapter = null;
             }
 
             //finalize();
@@ -126,10 +171,68 @@ public class DeviceList  extends ListActivity {
             mBluetoothAdapter.cancelDiscovery();
         }
 
-        mArrayAdapter = new ArrayAdapter<String>(getApplicationContext(),
-                R.layout.layout_list);
 
-        setListAdapter(mArrayAdapter);
+        nameAdapter = new NameAdapter(this,namesArray);
+        listView.setAdapter(nameAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mBluetoothAdapter == null) {
+                    return;
+                }
+
+                if (mBluetoothAdapter.isDiscovering()) {
+                    mBluetoothAdapter.cancelDiscovery();
+                }
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Connecting to " + btDevices.getItem(position).getName() + ","
+                                + btDevices.getItem(position).getAddress(),
+                        Toast.LENGTH_SHORT).show();
+
+                Thread connectThread = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try {
+                            boolean gotuuid = btDevices.getItem(position)
+                                    .fetchUuidsWithSdp();
+                            if(btDevices.getItem(position)!=null) {
+                                if(btDevices.getItem(position).getUuids()[0]!=null) {
+                                    UUID uuid = btDevices.getItem(position).getUuids()[0]
+                                            .getUuid();
+                                    mbtSocket = btDevices.getItem(position)
+                                            .createRfcommSocketToServiceRecord(uuid);
+
+                                    mbtSocket.connect();
+                                }
+                            }
+                        } catch (IOException ex) {
+                            runOnUiThread(socketErrorRunnable);
+                            try {
+                                mbtSocket.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            mbtSocket = null;
+                        } finally {
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    finish();
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+                connectThread.start();
+            }
+        });
 
         Intent enableBtIntent = new Intent(
                 BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -165,10 +268,10 @@ public class DeviceList  extends ListActivity {
                                 if (btDeviceList.contains(device) == false) {
 
                                     btDevices.add(device);
+                                    Names names = new Names(device.getName(),device.getAddress());
+                                    namesArray.add(names);
+                                    nameAdapter.notifyDataSetChanged();
 
-                                    mArrayAdapter.add(device.getName() + "\n"
-                                            + device.getAddress());
-                                    mArrayAdapter.notifyDataSetInvalidated();
                                 }
                             }
                         }
@@ -199,9 +302,10 @@ public class DeviceList  extends ListActivity {
 
                     if (btDevices.getPosition(device) < 0) {
                         btDevices.add(device);
-                        mArrayAdapter.add(device.getName() + "\n"
-                                + device.getAddress() + "\n" );
-                        mArrayAdapter.notifyDataSetInvalidated();
+                        Names names = new Names(device.getName(),device.getAddress());
+                        namesArray.add(names);
+                        nameAdapter.notifyDataSetChanged();
+
                     }
                 } catch (Exception ex) {
                     ex.fillInStackTrace();
@@ -210,61 +314,6 @@ public class DeviceList  extends ListActivity {
         }
     };
 
-    @Override
-    protected void onListItemClick(ListView l, View v, final int position,
-                                   long id) {
-        super.onListItemClick(l, v, position, id);
-
-        if (mBluetoothAdapter == null) {
-            return;
-        }
-
-        if (mBluetoothAdapter.isDiscovering()) {
-            mBluetoothAdapter.cancelDiscovery();
-        }
-
-        Toast.makeText(
-                getApplicationContext(),
-                "Connecting to " + btDevices.getItem(position).getName() + ","
-                        + btDevices.getItem(position).getAddress(),
-                Toast.LENGTH_SHORT).show();
-
-        Thread connectThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    boolean gotuuid = btDevices.getItem(position)
-                            .fetchUuidsWithSdp();
-                    UUID uuid = btDevices.getItem(position).getUuids()[0]
-                            .getUuid();
-                    mbtSocket = btDevices.getItem(position)
-                            .createRfcommSocketToServiceRecord(uuid);
-
-                    mbtSocket.connect();
-                } catch (IOException ex) {
-                    runOnUiThread(socketErrorRunnable);
-                    try {
-                        mbtSocket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mbtSocket = null;
-                } finally {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            finish();
-
-                        }
-                    });
-                }
-            }
-        });
-
-        connectThread.start();
-    }
 
     private Runnable socketErrorRunnable = new Runnable() {
 
@@ -295,27 +344,9 @@ public class DeviceList  extends ListActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
 
-        menu.add(0, Menu.FIRST, Menu.NONE, "Refresh Scanning");
 
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        switch (item.getItemId()) {
-            case Menu.FIRST:
-                initDevicesList();
-                break;
-        }
-
-        return true;
-    }
 
     @Override
     protected void onStop()
@@ -327,5 +358,70 @@ public class DeviceList  extends ListActivity {
             e.printStackTrace();
         }
     }
+    public class NameAdapter extends ArrayAdapter<Names> {
 
+        private Context mContext;
+        private List<Names> moviesList = new ArrayList<>();
+
+        public NameAdapter(@NonNull Context context,@NotNull ArrayList<Names> list) {
+            super(context, 0 , list);
+            mContext = context;
+            moviesList = list;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View listItem = convertView;
+            if(listItem == null)
+                listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false);
+
+            Names currentMovie = moviesList.get(position);
+
+
+
+            TextView name = (TextView) listItem.findViewById(R.id.textView_name);
+
+            if(currentMovie.getmName()!=null)
+                name.setText(currentMovie.getmName());
+            else
+                name.setText("Unknown");
+            TextView address = (TextView) listItem.findViewById(R.id.textView_address);
+            address.setText(currentMovie.getmAddress());
+
+            return listItem;
+        }
+    }
+
+    public class Names {
+
+        // Store the id of the  movie poster
+        // Store the name of the movie
+        private String mName;
+        // Store the release date of the movie
+        private String mAddress;
+
+        // Constructor that is used to create an instance of the Movie object
+        public Names(String mName, String mAddress) {
+            this.mName = mName;
+            this.mAddress = mAddress;
+        }
+
+
+        public String getmName() {
+            return mName;
+        }
+
+        public void setmName(String mName) {
+            this.mName = mName;
+        }
+
+        public String getmAddress() {
+            return mAddress;
+        }
+
+        public void setmAddress(String mAddress) {
+            this.mAddress = mAddress;
+        }
+    }
 }

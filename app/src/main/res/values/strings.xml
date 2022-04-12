@@ -3,6 +3,7 @@
 
     <!--**********************************Signin Activity************************************-->
     <string name="currency">\u00a3</string>
+    <string name="currency2">£</string>
 
 
     <string name="forgot_your_password">Forgot your password</string>
