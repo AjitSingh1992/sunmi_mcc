@@ -100,12 +100,12 @@ public class DeviceList  extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
         || ContextCompat.checkSelfPermission(DeviceList.this,
-                Manifest.permission.BLUETOOTH_ADMIN)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.BLUETOOTH_ADMIN},
+                            Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_COARSE_LOCATION);
         }else {
             proceedDiscovery();
@@ -116,8 +116,6 @@ public class DeviceList  extends AppCompatActivity {
     protected void proceedDiscovery() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         registerReceiver(mBTReceiver, filter);
 
         mBluetoothAdapter.startDiscovery();
@@ -200,13 +198,15 @@ public class DeviceList  extends AppCompatActivity {
                             boolean gotuuid = btDevices.getItem(position)
                                     .fetchUuidsWithSdp();
                             if(btDevices.getItem(position)!=null) {
-                                if(btDevices.getItem(position).getUuids()[0]!=null) {
-                                    UUID uuid = btDevices.getItem(position).getUuids()[0]
-                                            .getUuid();
-                                    mbtSocket = btDevices.getItem(position)
-                                            .createRfcommSocketToServiceRecord(uuid);
+                                if(btDevices.getItem(position).getUuids()!=null) {
+                                    if (btDevices.getItem(position).getUuids()[0] != null) {
+                                        UUID uuid = btDevices.getItem(position).getUuids()[0]
+                                                .getUuid();
+                                        mbtSocket = btDevices.getItem(position)
+                                                .createRfcommSocketToServiceRecord(uuid);
 
-                                    mbtSocket.connect();
+                                        mbtSocket.connect();
+                                    }
                                 }
                             }
                         } catch (IOException ex) {

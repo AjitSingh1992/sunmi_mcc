@@ -865,11 +865,7 @@ public class ControllerOrderList extends Fragment {
 
             //print command
             try {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 mmOutputStream = mmSocket.getOutputStream();
                 byte[] printformat = new byte[]{0x1B,0x21,0x03};
                 //final byte[] Init = {27, 29, 116, 32};//for star micronics
@@ -1120,9 +1116,20 @@ public class ControllerOrderList extends Fragment {
 
                     }
                     printCustom(line24Bold,1,1);
-                    printCustom("PAYMENT BY "+ orderDetail.getPayment_mode().toUpperCase(),2,1);
 
+                    printCustom("PAYMENT BY "+ orderDetail.getPayment_mode().toUpperCase(),2,1);
                     printCustom(line24Bold,1,1);
+
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
+                    printCustom("",2,1);
 
                 }
             }

@@ -17,7 +17,14 @@
         <activity
             android:name=".DeviceList"
             android:theme="@style/AppTheme2"
-            android:exported="true" />
+            android:configChanges="${allConfigChanges}"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.bluetooth.device.action.FOUND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".BluetoothActivity"
             android:configChanges="${allConfigChanges}"
@@ -28,6 +35,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".OrdersActivity"
@@ -82,6 +90,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!--
 <uses-feature android:name="android.hardware.camera" />
