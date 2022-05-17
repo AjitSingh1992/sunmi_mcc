@@ -9,6 +9,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        release  {
+            keyAlias 'key0'
+            keyPassword 'android@123'
+            storeFile file('F:\\Ajit Singh\\documents\\ManagerAppkestore\\easyFoodManager.jks')
+            storePassword 'android@123'
+            //Enable V1 signing
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     defaultConfig {
         applicationId "com.easyfoodvone"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -25,6 +37,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //Use the signing configuration we just defined
+            signingConfig signingConfigs.release
         }
         debug {
 
@@ -59,7 +73,6 @@ android {
         dataBinding true
     }
 }
-
 
 dependencies {
     implementation project(path: ':app_common')
