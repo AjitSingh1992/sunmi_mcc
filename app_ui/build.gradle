@@ -11,18 +11,39 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release  {
+            keyAlias 'key0'
+            keyPassword 'android@123'
+            storeFile file('G:\\JKS_Files\\manager\\manager.jks')
+            storePassword 'android@123'
+            //Enable V1 signing
+            v1SigningEnabled true
+            v2SigningEnabled false
 
+
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //Use the signing configuration we just defined
+            signingConfig signingConfigs.release
         }
+        debug {
+
+        }
+        /*unsignedRelease {
+            signingConfig signingConfigs.debug
+            initWith release
+            matchingFallbacks = ['release']
+        }*/
     }
+
     buildFeatures {
         dataBinding true
     }
@@ -33,6 +54,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES.txt', 'META-INF/NOTICE.txt', 'META-INF/NOTICE', 'META-INF/LICENSE', 'META-INF/DEPENDENCIES', 'META-INF/dependencies.txt', 'META-INF/LGPL2.1', 'META-INF/proguard/androidx-annotations.pro', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/main.kotlin_module']
+        }
+    }
+
+
 }
 
 dependencies {

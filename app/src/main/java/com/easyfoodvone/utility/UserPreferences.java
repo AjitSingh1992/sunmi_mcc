@@ -6,10 +6,15 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.easyfoodvone.OrdersActivity;
 import com.easyfoodvone.models.LoginResponse;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+
+import me.pushy.sdk.Pushy;
+import me.pushy.sdk.util.exceptions.PushyException;
 
 public class UserPreferences {
 
@@ -22,6 +27,8 @@ public class UserPreferences {
     private static final String KEY_LOGIN_RESPONSE = "login_response";
     private static final String KEY_IS_LOGGED_IN = "LoginCheck";
     private static final String KEY_FIREBASE_TOKEN = "firebase_token";
+    private static final String PUSHY_TOKEN = "pushy_token";
+    private static final String DEVICE_TYPE = "device_type";
     private static final String KEY_RESTAURANT_LOGO_BITMAP = "restaurant_logo";
 
     private UserPreferences() { }
@@ -45,6 +52,61 @@ public class UserPreferences {
         editor.clear();
         editor.putString(KEY_FIREBASE_TOKEN, firebaseToken);
         editor.commit();
+
+        if (Helper.getDeviceName().contains("Sunmi")) {
+            UserPreferences.get().setDEVICE_TYPE(context, "0");
+        } else if (Helper.getDeviceName().contains("DX8000")) {
+            Executors.newSingleThreadExecutor().execute(() -> {
+                try {
+                    String deviceToken = Pushy.register(context);
+                    UserPreferences.get().setPushyToken(context, deviceToken);
+                } catch (PushyException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+            UserPreferences.get().setDEVICE_TYPE(context, "2");
+        } else if (Helper.getDeviceName().contains("A920Pro") || Helper.getDeviceName().contains("Lephone")) {
+            UserPreferences.get().setDEVICE_TYPE(context, "3");
+            Executors.newSingleThreadExecutor().execute(() -> {
+                try {
+                    String deviceToken = Pushy.register(context);
+                    UserPreferences.get().setPushyToken(context, deviceToken);
+                } catch (PushyException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+        } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+            UserPreferences.get().setDEVICE_TYPE(context, "4");
+
+            Executors.newSingleThreadExecutor().execute(() -> {
+                try {
+                    String deviceToken = Pushy.register(context);
+                    UserPreferences.get().setPushyToken(context, deviceToken);
+                } catch (PushyException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+        } else {
+            UserPreferences.get().setDEVICE_TYPE(context, "4");
+
+            Executors.newSingleThreadExecutor().execute(() -> {
+                try {
+                    String deviceToken = Pushy.register(context);
+                    UserPreferences.get().setPushyToken(context, deviceToken);
+                } catch (PushyException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+        }
+
+
     }
 
     @Nullable
@@ -76,6 +138,27 @@ public class UserPreferences {
     public void setFirebaseToken(Context context, @Nullable String token) {
         SharedPreferences.Editor edit = getSharedPref(context).edit();
         edit.putString(KEY_FIREBASE_TOKEN, token);
+        edit.commit();
+    }
+    @Nullable
+    public String getPushyToken(Context context) {
+        return getSharedPref(context).getString(PUSHY_TOKEN, null);
+    }
+
+    public void setPushyToken(Context context, @Nullable String token) {
+        SharedPreferences.Editor edit = getSharedPref(context).edit();
+        edit.putString(PUSHY_TOKEN, token);
+        edit.commit();
+    }
+
+    @Nullable
+    public String getDEVICE_TYPE(Context context) {
+        return getSharedPref(context).getString(DEVICE_TYPE, null);
+    }
+
+    public void setDEVICE_TYPE(Context context, @Nullable String token) {
+        SharedPreferences.Editor edit = getSharedPref(context).edit();
+        edit.putString(DEVICE_TYPE, token);
         edit.commit();
     }
 

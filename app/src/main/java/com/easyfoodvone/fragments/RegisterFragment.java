@@ -110,7 +110,7 @@ public class RegisterFragment extends Fragment {
         binding.webPrivacyPolicy.getSettings().setDomStorageEnabled(true);
         binding.webPrivacyPolicy.getSettings().setAllowContentAccess(true);
         binding.webPrivacyPolicy.getSettings().setAllowFileAccess(true);
-        binding.webPrivacyPolicy.getSettings().setAppCacheEnabled(false);
+        //binding.webPrivacyPolicy.getSettings().setAppCacheEnabled(false);
         binding.webPrivacyPolicy.clearCache(true);
         binding.webPrivacyPolicy.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         binding.webPrivacyPolicy.loadUrl("https://www.easyfood.co.uk/restaurant-signup");

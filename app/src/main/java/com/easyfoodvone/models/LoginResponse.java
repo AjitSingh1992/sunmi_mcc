@@ -1,14 +1,37 @@
 package com.easyfoodvone.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class LoginResponse implements Serializable
 {
     boolean success;
     String message;
-    Data data;
+    String login_attempt;
 
+    public String getLogin_attempt() {
+        return login_attempt;
+    }
+
+    public void setLogin_attempt(String login_attempt) {
+        this.login_attempt = login_attempt;
+    }
+
+    Data data;
+    private Map<String, List<String>> errors;
+
+
+    public Map<String, List<String>> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(Map<String, List<String>> errors) {
+        this.errors = errors;
+    }
 
     public boolean isSuccess() {
         return success;
@@ -281,6 +304,21 @@ public class LoginResponse implements Serializable
                     ", restaurant_images=" + restaurant_images +
                     '}';
         }
+    }
+    public class Errors {
+
+        @SerializedName("email")
+        @Expose
+        private List<String> email;
+
+        public List<String> getEmail() {
+            return email;
+        }
+
+        public void setEmail(List<String> email) {
+            this.email = email;
+        }
+
     }
 
     public class RestaurantImages implements Serializable

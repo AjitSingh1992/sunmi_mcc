@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+//添加发布到jitpack脚本
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 101
+        versionName "${version}"
+
+        manifestPlaceholders = [versionName : "${version}"]
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // add sdk proguard to aar
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+}
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'org.slf4j:slf4j-android:1.7.25'
+    implementation ('io.jsonwebtoken:jjwt:0.9.0') {
+        exclude group : 'com.fasterxml.jackson.core'
+    }
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    api 'com.whatspos.sdk:paxstore-3rd-app-java-sdk:9.1.0'
+
+//    test
+    implementation 'commons-io:commons-io:2.7'
+    implementation 'org.dom4j:dom4j:2.1.3'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+//    api files('libs\\app-java-sdk-8.4.2.1.jar')
+}
+
+apply from :"../publishAndroidLib.gradle"

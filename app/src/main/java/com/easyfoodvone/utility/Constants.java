@@ -50,7 +50,7 @@ public class Constants {
         return format.parse(date);
     }
 
-    public static void alertDialog(String msg, Activity activity, final DialogClickedListener dialogClicked) {
+    public static void alertDialog(String msg, Activity activity,String flag) {
         LayoutInflater factory = LayoutInflater.from(activity);
         final View mDialogView = factory.inflate(R.layout.alert_dialog, null);
         final AlertDialog mDialog = new AlertDialog.Builder(activity).create();
@@ -60,9 +60,15 @@ public class Constants {
         mDialogView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(flag.equals("1")){
+
+                    mDialog.dismiss();
+
+                }else{
+                    mDialog.dismiss();
+
+                }
                 //your business logic
-                mDialog.dismiss();
-                dialogClicked.onDialogClicked();
             }
         });
 

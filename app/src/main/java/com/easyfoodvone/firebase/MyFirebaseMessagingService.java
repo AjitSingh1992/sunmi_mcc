@@ -85,7 +85,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // Nothing we can do, unexpected event type
 
             } else if (notif_type.equals(Constants.NOTIFICATION_TYPE_ACCEPTED)) {
-                ApplicationContext.getInstance().playNotificationSound();
+                if(UserPreferences.get().isLoggedIn(this)) {
+                    ApplicationContext.getInstance().playNotificationSound();
+                }
                 showNewOrderNotification(message == null ? "" : message, timestamp);
                 broadcastNewOrder(message == null ? "" : message, order_number == null ? "" : order_number);
                 if ( ! TextUtils.isEmpty(order_number)) {
@@ -136,8 +138,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        int pendingFlags;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+        final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, pendingFlags);
 
         Bitmap bitmap = null;
         if (useNewMethod)
@@ -310,7 +319,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // Nothing we can do, unexpected event type
 
             } else if (type.equals(Constants.NOTIFICATION_TYPE_ACCEPTED)) {
-                ApplicationContext.getInstance().playNotificationSound();
+                if(UserPreferences.get().isLoggedIn(this)) {
+                    ApplicationContext.getInstance().playNotificationSound();
+                }
                 showNewOrderNotification(message == null ? "" : message, timestamp);
                 //broadcastNewOrder(message == null ? "" : message, order_number == null ? "" : order_number);
                 if ( ! TextUtils.isEmpty(order_number)) {

@@ -2,6 +2,41 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easyfoodvone">
 
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--
+<uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.pax.permission.PRINTER" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+
+
 
     <application
         android:name=".utility.ApplicationContext"
@@ -12,19 +47,21 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".DeviceList"
-            android:theme="@style/AppTheme2"
             android:configChanges="${allConfigChanges}"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/AppTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.bluetooth.device.action.FOUND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--
         <activity
             android:name=".BluetoothActivity"
             android:configChanges="${allConfigChanges}"
@@ -37,9 +74,11 @@
             </intent-filter>
 
         </activity>
+        -->
         <activity
             android:name=".OrdersActivity"
             android:configChanges="${allConfigChanges}"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/FullscreenThemeWithSplash">
             <intent-filter>
@@ -48,6 +87,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PrinterTestActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!--
         screenOrientation is locked to portrait or landscape programmatically, in case we need exceptions for Clover devices
         Use all config changes, and handle them all within the activity
@@ -62,10 +113,31 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <receiver android:name="sunmi.ds.MsgReceiver">
+
+        <receiver
+            android:name="sunmi.ds.MsgReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sunmi.hcservice" />
                 <action android:name="com.sunmi.hcservice.status" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="PAXVAS_CloudMessage"
+            android:value="true" />
+        <receiver
+            android:name=".pax.PushMessageReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.paxstore.mpush.NOTIFY_DATA_MESSAGE_RECEIVED" />
+                <action android:name="com.paxstore.mpush.DATA_MESSAGE_RECEIVED" />
+                <action android:name="com.paxstore.mpush.NOTIFICATION_MESSAGE_RECEIVED" />
+                <action android:name="com.paxstore.mpush.NOTIFY_MEDIA_MESSAGE_RECEIVED" />
+                <action android:name="com.paxstore.mpush.NOTIFICATION_CLICK" />
+
+                <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
 
@@ -78,29 +150,48 @@
             </intent-filter>
         </service>
 
+
+
+        <!-- Pushy Declarations -->
+
+        <!-- Pushy Notification Receiver -->
+        <!-- Incoming push notifications will invoke the following BroadcastReceiver -->
+        <receiver android:name="com.easyfoodvone.ingenicoo.PushReceiver" android:exported="false">
+            <intent-filter>
+                <!-- Do not modify this -->
+                <action android:name="pushy.me" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Pushy Update Receiver -->
+        <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
+        <receiver android:name="me.pushy.sdk.receivers.PushyUpdateReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Pushy Boot Receiver -->
+        <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
+        <receiver android:name="me.pushy.sdk.receivers.PushyBootReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Pushy Socket Service -->
+        <!-- Do not modify - internal service -->
+        <service android:name="me.pushy.sdk.services.PushySocketService" android:stopWithTask="false" />
+
+        <!-- Pushy Job Service (added in Pushy SDK 1.0.35) -->
+        <!-- Do not modify - internal service -->
+        <service android:name="me.pushy.sdk.services.PushyJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:stopWithTask="false" />
+
+        <!-- End Pushy Declarations -->
+
+
     </application>
-    <uses-feature
-        android:name="android.hardware.bluetooth"
-        android:required="true" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <!--
-<uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-
-
 
 </manifest>

@@ -9,206 +9,209 @@
         <import type="com.easyfoodvone.app_common.viewdata.DataPageOrderList.ActiveTab" />
         <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataPageOrderList" />
     </data>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_grey">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/bg_white"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:background="@color/bg_grey">
         <LinearLayout
-            android:id="@+id/radioButtonContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:weightSum="4"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            
+            android:background="@color/bg_white"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
             <LinearLayout
-                android:id="@+id/tabNew"
-                android:orientation="vertical"
-                android:layout_width="0dp"
+                android:id="@+id/radioButtonContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{() -> data.activeTab != ActiveTab.NEW ? data.outputEvents.onClickTabSelector(ActiveTab.NEW) : void}"
-                >
+                android:layout_marginTop="18dp"
+                android:weightSum="4"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-
-                <CheckedTextView
-                    style="@style/__Phone_Text_Large_Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginRight="@dimen/_9sdp"
-                    android:layout_marginLeft="@dimen/_9sdp"
-                    android:checked="@{data.activeTab == ActiveTab.NEW, default=true}"
-                    android:text="@{data.tabNewCount == null ? `` : (`` + Math.min(999, data.tabNewCount)), default=`5`}"
-                    android:background="@{data.activeTab == ActiveTab.NEW ? @drawable/circle_orange : @drawable/circle_border}"
-                    android:textColor="@{data.activeTab == ActiveTab.NEW ? @color/txt_white : @color/txt_grey_hint}"
-                    android:textAlignment="gravity" />
-                <TextView
-                    style="@style/Phone_Text_Large_Bold_Black"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/tabNew"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
-
-                    android:text="New" />
+                    android:onClick="@{() -> data.activeTab != ActiveTab.NEW ? data.outputEvents.onClickTabSelector(ActiveTab.NEW) : void}"
+                    >
 
 
-            </LinearLayout>
+                    <CheckedTextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginRight="@dimen/_9sdp"
+                        android:layout_marginLeft="@dimen/_9sdp"
+                        android:checked="@{data.activeTab == ActiveTab.NEW, default=true}"
+                        android:text="@{data.tabNewCount == null ? `` : (`` + Math.min(999, data.tabNewCount)), default=`5`}"
+                        android:background="@{data.activeTab == ActiveTab.NEW ? @drawable/circle_orange : @drawable/circle_border}"
+                        android:textColor="@{data.activeTab == ActiveTab.NEW ? @color/txt_white : @color/txt_grey_hint}"
+                        android:textAlignment="gravity" />
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
 
-            <LinearLayout
-                android:id="@+id/tabAccepted"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{() -> data.activeTab != ActiveTab.ACCEPTED ? data.outputEvents.onClickTabSelector(ActiveTab.ACCEPTED) : void}"
-                >
+                        android:text="New" />
 
-                <CheckedTextView
-                    style="@style/__Phone_Text_Large_Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginRight="@dimen/_9sdp"
-                    android:layout_marginLeft="@dimen/_9sdp"
-                    android:checked="@{data.activeTab == ActiveTab.ACCEPTED}"
-                    android:text="@{data.tabAcceptedCount == null ? `` : (`` + Math.min(999, data.tabAcceptedCount)), default=`500`}"
-                    android:background="@{data.activeTab == ActiveTab.ACCEPTED ? @drawable/circle_orange : @drawable/circle_border}"
-                    android:textColor="@{data.activeTab == ActiveTab.ACCEPTED ? @color/txt_white : @color/txt_grey_hint}"
-                    android:textAlignment="gravity" />
 
-                <TextView
-                    style="@style/Phone_Text_Large_Bold_Black"
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabAccepted"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Accepted" />
+                    android:onClick="@{() -> data.activeTab != ActiveTab.ACCEPTED ? data.outputEvents.onClickTabSelector(ActiveTab.ACCEPTED) : void}"
+                    >
+
+                    <CheckedTextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginRight="@dimen/_9sdp"
+                        android:layout_marginLeft="@dimen/_9sdp"
+                        android:checked="@{data.activeTab == ActiveTab.ACCEPTED}"
+                        android:text="@{data.tabAcceptedCount == null ? `` : (`` + Math.min(999, data.tabAcceptedCount)), default=`500`}"
+                        android:background="@{data.activeTab == ActiveTab.ACCEPTED ? @drawable/circle_orange : @drawable/circle_border}"
+                        android:textColor="@{data.activeTab == ActiveTab.ACCEPTED ? @color/txt_white : @color/txt_grey_hint}"
+                        android:textAlignment="gravity" />
+
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="Accepted" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tabRejected"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{() -> data.activeTab != ActiveTab.REJECTED ? data.outputEvents.onClickTabSelector(ActiveTab.REJECTED) : void}"
-                >
-                <CheckedTextView
-                    style="@style/__Phone_Text_Large_Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginRight="@dimen/_9sdp"
-                    android:layout_marginLeft="@dimen/_9sdp"
-                    android:checked="@{data.activeTab == ActiveTab.REJECTED}"
-                    android:text="@{data.tabRejectedCount == null ? `` : (`` + Math.min(999, data.tabRejectedCount)), default=`50`}"
-                    android:background="@{data.activeTab == ActiveTab.REJECTED ? @drawable/circle_orange : @drawable/circle_border}"
-                    android:textColor="@{data.activeTab == ActiveTab.REJECTED ? @color/txt_white : @color/txt_grey_hint}"
-                    android:textAlignment="gravity" />
-
-                <TextView
-                    style="@style/Phone_Text_Large_Bold_Black"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/tabRejected"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:onClick="@{() -> data.activeTab != ActiveTab.REJECTED ? data.outputEvents.onClickTabSelector(ActiveTab.REJECTED) : void}"
+                    >
+                    <CheckedTextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginRight="@dimen/_9sdp"
+                        android:layout_marginLeft="@dimen/_9sdp"
+                        android:checked="@{data.activeTab == ActiveTab.REJECTED}"
+                        android:text="@{data.tabRejectedCount == null ? `` : (`` + Math.min(999, data.tabRejectedCount)), default=`50`}"
+                        android:background="@{data.activeTab == ActiveTab.REJECTED ? @drawable/circle_orange : @drawable/circle_border}"
+                        android:textColor="@{data.activeTab == ActiveTab.REJECTED ? @color/txt_white : @color/txt_grey_hint}"
+                        android:textAlignment="gravity" />
 
-                    android:text="Rejected" />
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
+
+                        android:text="Rejected" />
 
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tabRefunded"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> data.activeTab != ActiveTab.REFUNDED ? data.outputEvents.onClickTabSelector(ActiveTab.REFUNDED) : void}"
-               >
-                <CheckedTextView
-                    style="@style/__Phone_Text_Large_Bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="@dimen/_9sdp"
-                    android:layout_marginLeft="@dimen/_9sdp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:checked="@{data.activeTab == ActiveTab.REFUNDED}"
-                    android:text="@{data.tabRefundedCount == null ? `` : (`` + Math.min(999, data.tabRefundedCount)), default=`50`}"
-                    android:background="@{data.activeTab == ActiveTab.REFUNDED ? @drawable/circle_orange : @drawable/circle_border}"
-                    android:textColor="@{data.activeTab == ActiveTab.REFUNDED ? @color/txt_white : @color/txt_grey_hint}"
-                    android:textAlignment="gravity" />
-                <TextView
-                    style="@style/Phone_Text_Large_Bold_Black"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/tabRefunded"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:onClick="@{() -> data.activeTab != ActiveTab.REFUNDED ? data.outputEvents.onClickTabSelector(ActiveTab.REFUNDED) : void}"
+                    >
+                    <CheckedTextView
+                        style="@style/__Phone_Text_Large_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="@dimen/_9sdp"
+                        android:layout_marginLeft="@dimen/_9sdp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:checked="@{data.activeTab == ActiveTab.REFUNDED}"
+                        android:text="@{data.tabRefundedCount == null ? `` : (`` + Math.min(999, data.tabRefundedCount)), default=`50`}"
+                        android:background="@{data.activeTab == ActiveTab.REFUNDED ? @drawable/circle_orange : @drawable/circle_border}"
+                        android:textColor="@{data.activeTab == ActiveTab.REFUNDED ? @color/txt_white : @color/txt_grey_hint}"
+                        android:textAlignment="gravity" />
+                    <TextView
+                        style="@style/Phone_Text_Large_Bold_Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
 
-                    android:text="Refunded" />
+                        android:text="Refunded" />
 
 
 
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioButtonContainer"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <!-- 5dp margin hides the shadow of pull down refresh spinner which can stick out -->
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioButtonContainer"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerOrdersList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="28dp"
-                    android:layout_marginBottom="@dimen/_16sdp"
-                    android:clipToPadding="false"
-                    tools:listitem="@layout/row_order_overview_phone"
-                    android:orientation="vertical"/>
+                <!-- 5dp margin hides the shadow of pull down refresh spinner which can stick out -->
 
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    <androidx.coordinatorlayout.widget.CoordinatorLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerOrdersList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingBottom="28dp"
+                            android:layout_marginBottom="@dimen/_16sdp"
+                            android:clipToPadding="false"
+                            tools:listitem="@layout/row_order_overview_phone"
+                            android:orientation="vertical"/>
 
-    </LinearLayout>
-</RelativeLayout>
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

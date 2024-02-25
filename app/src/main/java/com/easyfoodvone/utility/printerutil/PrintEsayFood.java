@@ -361,7 +361,7 @@ public class PrintEsayFood {
 
             if (true) {
                 Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.receipt_bmp_easyfood_name);
+                        R.drawable.easyfood_slip_icon);
 
                 AidlUtil.getInstance().printBitmap(icon, 1, 1, 1);
 

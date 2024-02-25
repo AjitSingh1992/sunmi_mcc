@@ -1,3 +1,4 @@
+/*
 package com.easyfoodvone;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -248,4 +249,4 @@ public class BluetoothActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-}
+}*/

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="data" type="com.easyfoodvone.app_common.viewdata.DataRowOrderDetail" />
@@ -13,6 +14,7 @@
         android:id="@+id/expandingLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:background="@color/bg_grey">
 
         <androidx.core.widget.ContentLoadingProgressBar

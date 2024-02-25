@@ -22,6 +22,9 @@ public class LoginRequest implements Serializable
     @Expose
     @SerializedName("firebase_id")
     String firebase_id;
+    @Expose
+    @SerializedName("pos_id")
+    String pos_id;
 
     @Expose
     @SerializedName("device_type")
@@ -59,6 +62,13 @@ public class LoginRequest implements Serializable
     public void setFirebase_id(String firebase_id) {
         this.firebase_id = firebase_id;
     }
+    public String getPos_id() {
+        return pos_id;
+    }
+
+    public void setPos_id(String pos_id) {
+        this.pos_id = pos_id;
+    }
 
     public String getDevice_type() {
         return device_type;
@@ -76,6 +86,7 @@ public class LoginRequest implements Serializable
                 ", device_id='" + device_id + '\'' +
                 ", firebase_id='" + firebase_id + '\'' +
                 ", device_type='" + device_type + '\'' +
+                ", pos_id='" + pos_id + '\'' +
                 '}';
     }
 }

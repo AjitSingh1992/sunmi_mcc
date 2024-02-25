@@ -995,8 +995,22 @@ public class ControllerRootWithAuth extends Fragment {
             CommonRequest commonRequest = new CommonRequest();
             commonRequest.setUser_id(userPreferences.getLoggedInResponse(getActivity()).getUser_id());
 
-            @Nullable String storedFirebaseToken = userPreferences.getFirebaseToken(getActivity());
-            commonRequest.setFcm_id(storedFirebaseToken != null ? storedFirebaseToken : "");
+
+            if(userPreferences.getDEVICE_TYPE(getActivity()).equals("0")){
+                try {
+                    @Nullable String storedFirebaseToken = userPreferences.getFirebaseToken(getActivity());
+                    commonRequest.setFcm_id(storedFirebaseToken != null ? storedFirebaseToken : "");
+                } catch (Exception e) {
+                }
+
+            }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("2")) {
+                commonRequest.setFcm_id(userPreferences.getPushyToken(getContext()));
+            }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("3")) {
+                commonRequest.setFcm_id(userPreferences.getPushyToken(getContext()));
+            }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("4")) {
+                commonRequest.setFcm_id(userPreferences.getPushyToken(getContext()));
+            }
+
 
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             CompositeDisposable disposable = new CompositeDisposable();
@@ -1052,7 +1066,8 @@ public class ControllerRootWithAuth extends Fragment {
                 ApiClient.getClient().create(ApiInterface.class),
                 localBroadcastManager,
                 appVersionName,
-                isPhone);
+                isPhone,
+                getActivity());
 
         isDashBoard = true;
         data.getShowRestaurantHeader().set(true);
@@ -1072,13 +1087,34 @@ public class ControllerRootWithAuth extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
 
-        @Nullable String firebaseToken = UserPreferences.get().getFirebaseToken(getActivity());
-        firebaseToken = firebaseToken == null ? "" : firebaseToken;
 
-        RestaurantOpenCloseRequest restaurantOpenCloseRequest = new RestaurantOpenCloseRequest();
+
+        /*@Nullable String firebaseToken = UserPreferences.get().getFirebaseToken(getActivity());
+        firebaseToken = firebaseToken == null ? "" : firebaseToken;
+        */RestaurantOpenCloseRequest restaurantOpenCloseRequest = new RestaurantOpenCloseRequest();
         restaurantOpenCloseRequest.setOpen_close(openOrClose);
-        restaurantOpenCloseRequest.setDevice_id(firebaseToken);
+        //restaurantOpenCloseRequest.setDevice_id(firebaseToken);
         restaurantOpenCloseRequest.setRestaurant_id(restaurantId);
+
+        if(userPreferences.getDEVICE_TYPE(getActivity()).equals("0")){
+            try {
+                @Nullable String storedFirebaseToken = userPreferences.getFirebaseToken(getActivity());
+                restaurantOpenCloseRequest.setDevice_id(storedFirebaseToken != null ? storedFirebaseToken : "");
+            } catch (Exception e) {
+            }
+            //request.setFirebase_id(userPreferences.getPushyToken(getContext()));
+
+
+        }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("2")) {
+            restaurantOpenCloseRequest.setDevice_id(userPreferences.getPushyToken(getContext()));
+        }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("3")) {
+            restaurantOpenCloseRequest.setDevice_id(userPreferences.getPushyToken(getContext()));
+        }else if(userPreferences.getDEVICE_TYPE(getActivity()).equals("4")) {
+            restaurantOpenCloseRequest.setDevice_id(userPreferences.getPushyToken(getContext()));
+        }else{
+            restaurantOpenCloseRequest.setDevice_id(userPreferences.getPushyToken(getContext()));
+
+        }
 
         try {
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
