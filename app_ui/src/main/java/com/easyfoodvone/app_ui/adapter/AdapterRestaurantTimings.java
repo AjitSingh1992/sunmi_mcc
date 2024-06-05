@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.easyfoodvone.app_common.ws.AllDaysRestaurantTiming;
 import com.easyfoodvone.app_ui.R;
@@ -44,6 +45,13 @@ public class AdapterRestaurantTimings extends RecyclerView.Adapter<AdapterRestau
         final ImageView addTiming;
         final ImageView editTiming;
         final ImageView deleteTiming;
+        final TextView openingTime2;
+        final TextView collectionTime2;
+        final TextView deliveryTime2;
+        final ImageView addTiming2;
+        final ImageView editTiming2;
+        final ImageView deleteTiming2;
+        final LinearLayout timing2;
 
         public MyViewHolder(View view) {
             super(view);
@@ -54,6 +62,13 @@ public class AdapterRestaurantTimings extends RecyclerView.Adapter<AdapterRestau
             addTiming = view.findViewById(R.id.restaurant_timings_btn_add);
             editTiming = view.findViewById(R.id.restaurant_timings_btn_edit);
             deleteTiming = view.findViewById(R.id.restaurant_timings_btn_del);
+            openingTime2 = view.findViewById(R.id.restaurant_timings_item_opening_time2);
+            collectionTime2 = view.findViewById(R.id.restaurant_timings_item_collection_time2);
+            deliveryTime2 = view.findViewById(R.id.restaurant_timings_item_delivery_time2);
+            addTiming2 = view.findViewById(R.id.restaurant_timings_btn_add2);
+            editTiming2 = view.findViewById(R.id.restaurant_timings_btn_edit2);
+            deleteTiming2 = view.findViewById(R.id.restaurant_timings_btn_del2);
+            timing2 = view.findViewById(R.id.timing2);
         }
     }
 
@@ -71,17 +86,29 @@ public class AdapterRestaurantTimings extends RecyclerView.Adapter<AdapterRestau
         AllDaysRestaurantTiming.Data currentDay = allDaysList.get(position);
         holder.daysName.setText(currentDay.getDay());
 
+        String collectiontime="",openingTime="",deliveryTime="";
         if (currentDay.getData().size() > 0) {
             holder.addTiming.setVisibility(View.GONE);
+            holder.addTiming2.setVisibility(View.GONE);
             holder.editTiming.setVisibility(View.VISIBLE);
             holder.deleteTiming.setVisibility(View.VISIBLE);
 
-            AllDaysRestaurantTiming.Data.TimingData timing = currentDay.getData().get(0);
+           for(int i=0;i<currentDay.getData().size();i++) {
+                AllDaysRestaurantTiming.Data.TimingData timing = currentDay.getData().get(i);
+                if(i==0){
+                       holder.collectionTime.setText(timing.getCollection_start_time() + "-" + timing.getCollection_end_time());
+                       holder.openingTime.setText(timing.getOpening_start_time() + "-" + timing.getOpening_end_time());
+                       holder.deliveryTime.setText(timing.getDelivery_start_time() + "-" + timing.getDelivery_end_time());
+                }else if(i==1){
+                    holder.collectionTime2.setText(timing.getCollection_start_time() + "-" + timing.getCollection_end_time());
+                    holder.openingTime2.setText(timing.getOpening_start_time() + "-" + timing.getOpening_end_time());
+                    holder.deliveryTime2.setText(timing.getDelivery_start_time() + "-" + timing.getDelivery_end_time());
+                    holder.timing2.setVisibility(View.VISIBLE);
+                    holder.editTiming2.setVisibility(View.VISIBLE);
+                    holder.deleteTiming2.setVisibility(View.VISIBLE);
 
-            holder.collectionTime.setText(timing.getCollection_start_time() + "-" + timing.getCollection_end_time());
-            holder.openingTime.setText(timing.getOpening_start_time() + "-" + timing.getOpening_end_time());
-            holder.deliveryTime.setText(timing.getDelivery_start_time() + "-" + timing.getDelivery_end_time());
-
+                }
+            }
             holder.editTiming.setOnClickListener(v -> {
                 int positionNow = holder.getAdapterPosition();
                 onAdapterItemClickListener.onEditClick(positionNow, currentDay.getData().get(0));
@@ -90,6 +117,15 @@ public class AdapterRestaurantTimings extends RecyclerView.Adapter<AdapterRestau
             holder.deleteTiming.setOnClickListener(v -> {
                 int positionNow = holder.getAdapterPosition();
                 onAdapterItemClickListener.onDeleteClick(positionNow, currentDay.getData().get(0));
+            });
+            holder.editTiming2.setOnClickListener(v -> {
+                int positionNow = holder.getAdapterPosition();
+                onAdapterItemClickListener.onEditClick(positionNow, currentDay.getData().get(1));
+            });
+
+            holder.deleteTiming2.setOnClickListener(v -> {
+                int positionNow = holder.getAdapterPosition();
+                onAdapterItemClickListener.onDeleteClick(positionNow, currentDay.getData().get(1));
             });
 
         } else {

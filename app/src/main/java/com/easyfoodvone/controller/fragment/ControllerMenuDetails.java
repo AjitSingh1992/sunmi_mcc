@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.R;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
@@ -101,15 +102,19 @@ public class ControllerMenuDetails extends Fragment {
                         new ObservableField<>(DataRowRestaurantMenuDetails.ToggleUI.CLICKABLE_IDLE),
                         new ObservableField<>(true), // Category Edit is always clickable
                         new ObservableField<>(false),
-                        categoryRowEventHandler),
+                        categoryRowEventHandler,
+                        new ObservableField<>(false)
+                        ),
+                new ObservableArrayListMoveable<>(),
                 new ObservableArrayListMoveable<>(),
                 new ObservableField<>(false),
                 viewEventHandler);
 
         dialogforCategoryIems = new LoadingDialog(getActivity(), "");
         dialogforCategoryIems.setCancelable(false);
-        ViewRestaurantMenuDetail view = new ViewRestaurantMenuDetail(new LifecycleSafe(this), isPhone, data);
+        ViewRestaurantMenuDetail view = new ViewRestaurantMenuDetail(new LifecycleSafe(this), isPhone, data, MySingleTon.getInstance().isMealItemON());
         view.onCreateView(inflater, container);
+
 
         ViewMenuPopupEditItemPinCheck.ParentInterface editItemPopupPinInterface =
                 new MenuPopupEditItemPinCheckParentInterface(view.getChildFragmentLayoutId());
@@ -124,6 +129,62 @@ public class ControllerMenuDetails extends Fragment {
     }
 
     private final DataPageRestaurantMenuDetails.OutputEvents viewEventHandler = new DataPageRestaurantMenuDetails.OutputEvents() {
+        @Override
+        public void onMealItemMoveDone() {
+            for(int i=0;i<data.getMealItems().size();i++){
+                OrderRequestForItem orderRequest = new OrderRequestForItem(""+i,""+data.getMealItems().get(i).getMenu_product_id());
+                orderRequests.add(orderRequest);
+            }
+            try {
+                if(callforCategoryItems!=null) {
+                    callforCategoryItems.cancel();
+                    callforCategoryItems=null;
+                    dialogforCategoryIems.hide();
+                    changeItemPosition(orderRequests);
+                }else{
+                    changeItemPosition(orderRequests);
+
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onMealItemMove(int fromPosition, int toPosition) {
+            try {
+                data.getMealItems().moveItem(fromPosition, toPosition);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onMealEditClicked(@NonNull MenuCategoryItemsResponse.Meals items) {
+            final char[] pin = UserPreferences.get().getLoggedInResponse(getActivity()).getPincode().toCharArray();
+            final String restaurantId = UserPreferences.get().getLoggedInResponse(getActivity()).getRestaurant_id();
+            viewMenuPopupEditItemPinCheck.alertDialogMPIN(pin, restaurantId, items.getMenu_product_id());
+
+        }
+
+        @Override
+        public void onSetMealProductActive(@NonNull MenuCategoryItemsResponse.Meals item, boolean isActive) {
+            if (isActive) {
+                saveMealProductActive(item, isActive, true);
+
+            } else {
+                viewMenuPopupDisableItemTimeChooser.alertDialog(
+                        new ViewMenuPopupDisableItemTimeChooser.ParentInterface() {
+                            @Override
+                            public void onClickDisableForToday() { saveMealProductActive(item, isActive, false); }
+                            @Override
+                            public void onClickDisableForEver() { saveMealProductActive(item, isActive, true); }
+                        });
+            }
+        }
+
         @Override
         public void onItemMoveDone() {
             for(int i=0;i<data.getMenuItems().size();i++){
@@ -271,7 +332,9 @@ public class ControllerMenuDetails extends Fragment {
                                 Collections.sort(data.getItems(), menuItemOrderingComparator);
 
                                 ControllerMenuDetails.this.data.getMenuItems().clear();
+                                ControllerMenuDetails.this.data.getMealItems().clear();
                                 ControllerMenuDetails.this.data.getMenuItems().addAll(data.getItems());
+                                ControllerMenuDetails.this.data.getMealItems().addAll(data.getMeals());
 
                             } else {
                                 Toast.makeText(getActivity(), "Loading failed", Toast.LENGTH_LONG).show();
@@ -482,6 +545,54 @@ public class ControllerMenuDetails extends Fragment {
                                     item.setActive(isActive ? "1" : "0");
 
                                     ObservableArrayListMoveable<MenuCategoryItemsResponse.Items> list = ControllerMenuDetails.this.data.getMenuItems();
+                                    list.getCachedRegistry().notifyChanged(list, itemIndex, 1);
+                                }
+
+                            } else {
+                                Toast.makeText(getActivity(), "Unable to change product status", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(getActivity(), "Unable to change product status", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    }));
+
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Cannot change product status", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+    private void saveMealProductActive(MenuCategoryItemsResponse.Meals item, final boolean isActive, final boolean isPermanent) {
+        try {
+            final String restaurantId = UserPreferences.get().getLoggedInResponse(getActivity()).getRestaurant_id();
+            final String authToken = prefManager.getPreference(AUTH_TOKEN, "");
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+            CommonRequest request = new CommonRequest();
+            request.setRestaurant_id(restaurantId);
+            request.setMenu_product_id(item.getMenu_product_id());
+            request.setMenu_status(isActive ? "1" : "0");
+            request.setIs_permanent(isPermanent ? "1" : "0");
+            request.setIs_meal("1");
+            Gson gson = new Gson();
+            gson.toJson(request);
+            CompositeDisposable disposable = new CompositeDisposable();
+            disposable.add(apiService.activeDeactiveMealProduct(authToken, request)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableSingleObserver<CommonResponse>() {
+                        @Override
+                        public void onSuccess(CommonResponse data) {
+                            if (data.isSuccess()) {
+                                int itemIndex = ControllerMenuDetails.this.data.getMealItems().indexOf(item);
+
+                                if (itemIndex >= 0) {
+                                    item.setActive(isActive ? "1" : "0");
+
+                                    ObservableArrayListMoveable<MenuCategoryItemsResponse.Meals> list = ControllerMenuDetails.this.data.getMealItems();
                                     list.getCachedRegistry().notifyChanged(list, itemIndex, 1);
                                 }
 

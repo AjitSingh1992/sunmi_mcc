@@ -351,7 +351,7 @@ public class ControllerOrderList extends Fragment {
 
             } else if (Helper.getDeviceName().contains("DX8000")) {
                 ingenico(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), orderDetail);
-            } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+            } else if (Helper.getDeviceName().contains("Saturn1000F2")) {
                 deviceName = "castle";
                 print = new CtPrint();
                 ingenico(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), orderDetail);
@@ -573,10 +573,10 @@ public class ControllerOrderList extends Fragment {
 
         data.isSwipeRefreshing().set(true);
 
-        final LoadingDialog dialog = new LoadingDialog(getActivity(), "");
+      /*  final LoadingDialog dialog = new LoadingDialog(getActivity(), "");
         dialog.setCancelable(false);
         dialog.show();
-
+*/
         try {
             LoginResponse.Data loginData = parentInterface.getLoginData();
 
@@ -595,8 +595,8 @@ public class ControllerOrderList extends Fragment {
                     .subscribeWith(new DisposableSingleObserver<OrdersListResponse>() {
                         @Override
                         public void onSuccess(OrdersListResponse data) {
-                            dialog.dismiss();
-
+  /*                          dialog.dismiss();
+*/
                             ControllerOrderList.this.data.isSwipeRefreshing().set(false);
                             if (data.isSuccess()) {
                                 if (/*com.easyfoodvone.BuildConfig.FORCE_UPDATE_TO_GOOGLE_PLAY_VERSION
@@ -627,16 +627,16 @@ public class ControllerOrderList extends Fragment {
 
                         @Override
                         public void onError(Throwable e) {
-                            dialog.dismiss();
-                            data.isSwipeRefreshing().set(false);
+  /*                          dialog.dismiss();
+  */                          data.isSwipeRefreshing().set(false);
                             parentInterface.showToast("Server connection failed");
                             Log.e("onError", "onError: " + e.getMessage());
                         }
                     }));
 
         } catch (Exception e) {
-            dialog.dismiss();
-            data.isSwipeRefreshing().set(false);
+  /*          dialog.dismiss();
+  */          data.isSwipeRefreshing().set(false);
 
             Log.e("Exception ", e.toString());
             parentInterface.showToast("Server not responding.");
@@ -815,7 +815,7 @@ public class ControllerOrderList extends Fragment {
 
             } else if (Helper.getDeviceName().contains("DX8000")) {
                 ingenico(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), orderDetailMain);
-            } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+            } else if (Helper.getDeviceName().contains("Saturn1000F2")) {
                 deviceName = "castle";
                 print = new CtPrint();
                 ingenico(getActivity(), logo, userPreferences.getLoggedInResponse(getActivity()), orderDetailMain);
@@ -1749,7 +1749,7 @@ public class ControllerOrderList extends Fragment {
                 } catch (IngenicoException e) {
                     e.printStackTrace();
                 }
-            } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+            } else if (Helper.getDeviceName().contains("Saturn1000F2")) {
                 print.initPage(bitmap2.getHeight()+100);
                 //bitmap2 = print.encodeToBitmap("12ASDFSS34", print.QR_CODE, 300, 3000);
                 print.drawImage(bitmap2, 0, 0);

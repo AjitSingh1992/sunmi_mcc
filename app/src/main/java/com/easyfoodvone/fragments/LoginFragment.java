@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.page_signin, container, false);
-        Toast.makeText(getActivity(), "" + Helper.getDeviceName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "" + Helper.getDeviceName(), Toast.LENGTH_SHORT).show();
 
         setOnClickListeners();
 
@@ -114,6 +114,9 @@ public class LoginFragment extends Fragment {
                     binding.editUsername.setError("Enter user name");
                 } else if (TextUtils.isEmpty(binding.editPassword.getText().toString())) {
                     binding.editPassword.setError("Enter password");
+                } else if (binding.editPassword.getText().toString().length()<6) {
+                    alertDialog("The password must be at least 6 characters.",
+                            getActivity(), "0",parentInterface);
                 } else {
                     binding.btnLogin.setClickable(false);
                     loginNow();
@@ -231,19 +234,18 @@ public class LoginFragment extends Fragment {
                                                         "Too many unsuccessful login attempts. Please reset your password.",
                                                         getActivity(),"1",parentInterface);
                                             }else if (jsonObject.has("errors")) {
-                                                    if (jsonObject.getAsJsonObject("errors").size() > .0) {
+                                                    if (jsonObject.getAsJsonObject("errors").size() > 0) {
                                                         JsonObject errorsObject = jsonObject.getAsJsonObject("errors");
                                                         JsonElement emailErrorElement = errorsObject.getAsJsonArray("email").get(0);
                                                         String emailError = emailErrorElement.getAsString();
-                                                        alertDialog(
-                                                                emailError,
+
+                                                                alertDialog(          emailError,
                                                                 getActivity(),"2",parentInterface);
 
                                                 }
                                             }
                                             // Handle the data as needed
-                                            System.out.println("Success: " + success);
-                                            System.out.println("Message: " + message);
+
                                         }
 
                                     }

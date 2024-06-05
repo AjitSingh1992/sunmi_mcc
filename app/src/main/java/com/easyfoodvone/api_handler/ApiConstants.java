@@ -24,6 +24,7 @@ public class ApiConstants {
     public static final String GET_MENU_CATEGORY_ITEM = "menu_category_items";
     public static final String SET_MENU_CATEGORY_ITEM_POSITION = "menu_product_position";
     public static final String ACTIVE_DEACTIVE_MENU_PRODUCT = "active_deactive_menu_product";
+    public static final String ACTIVE_DEACTIVE_MEAL_PRODUCT = "active_deactive_menu_product";
     public static final String ACTIVE_DEACTIVE_MENU = "active_deactive_menu_category";
     public static final String UPDAET_MENU_CATEGORY = "update_category";
     public static final String UPDATE_MENU_PRODUCT = "update_menu_product";

@@ -9,6 +9,15 @@ public class MySingleTon {
     private int Year = 0;
     private int month = 0;
     private int day = 0;
+    private boolean mealItemON = false;
+
+    public boolean isMealItemON() {
+        return mealItemON;
+    }
+
+    public void setMealItemON(boolean mealItemON) {
+        this.mealItemON = mealItemON;
+    }
 
     public int getYear() {
         return Year;

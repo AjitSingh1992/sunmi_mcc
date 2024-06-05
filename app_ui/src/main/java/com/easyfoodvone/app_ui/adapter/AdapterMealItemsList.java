@@ -22,27 +22,27 @@ import com.easyfoodvone.app_ui.view.ViewRestaurantMenuDetail;
 
 import java.util.List;
 
-public class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.ItemViewHolder> {
+public class AdapterMealItemsList extends RecyclerView.Adapter<AdapterMealItemsList.ItemViewHolder> {
 
     private final LifecycleSafe lifecycle;
-    private final List<MenuCategoryItemsResponse.Items> itemList;
+    private final List<MenuCategoryItemsResponse.Meals> itemList;
     private final ObservableField<Boolean> wholeCategoryActive;
     private final ParentInterface parentInterface;
     private final LayoutInflater inflater;
     private final boolean isPhone;
 
     public interface ParentInterface {
-        void onSetProductActive(MenuCategoryItemsResponse.Items menuCategories, boolean isActive);
-        void onEditClicked(MenuCategoryItemsResponse.Items items);
+        void onSetProductActive(MenuCategoryItemsResponse.Meals menuCategories, boolean isActive);
+        void onEditClicked(MenuCategoryItemsResponse.Meals items);
         void showToast(@NonNull String message);
         void startReorderDrag(@NonNull RecyclerView.ViewHolder item);
     }
 
-    public AdapterItemsList(
+    public AdapterMealItemsList(
             LifecycleSafe lifecycle,
             ParentInterface parentInterface,
             LayoutInflater inflater,
-            List<MenuCategoryItemsResponse.Items> itemList,
+            List<MenuCategoryItemsResponse.Meals> itemList,
             ObservableField<Boolean> wholeCategoryActive,
             boolean isPhone) {
         this.lifecycle = lifecycle;
@@ -81,7 +81,7 @@ public class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.Item
 
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, final int positionNow) {
-        MenuCategoryItemsResponse.Items bindItem = itemList.get(positionNow);
+        MenuCategoryItemsResponse.Meals bindItem = itemList.get(positionNow);
 
         holder.data.getOutputEvents().bind(positionNow);
 
@@ -91,7 +91,7 @@ public class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.Item
     private class DataHolder {
         private final @NonNull DataRowRestaurantMenuDetails data;
 
-        private @Nullable MenuCategoryItemsResponse.Items item = null;
+        private @Nullable MenuCategoryItemsResponse.Meals item = null;
 
         public DataHolder() {
             data = new DataRowRestaurantMenuDetails(
@@ -105,6 +105,7 @@ public class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.Item
                     new ObservableField<>(false),
                     viewEventHandler,
                     new ObservableField<>(false)
+
                     );
         }
 
@@ -115,12 +116,14 @@ public class AdapterItemsList extends RecyclerView.Adapter<AdapterItemsList.Item
 
                 data.getName().set(item.getMenu_product_name());
                 data.getPrice().set(NewConstants.POUND + item.getMenu_product_price());
+                data.isEditAllow().set(false);
+
 
                 if (wholeCategoryActive.get()) {
                     boolean itemActive = item.getActive().equals("1");
                     data.getToggleIsOn().set(itemActive);
                     data.getToggleUI().set(DataRowRestaurantMenuDetails.ToggleUI.CLICKABLE_IDLE);
-                    data.isEditClickable().set(true);
+                    data.isEditClickable().set(false);
 
                 } else {
                     data.getToggleIsOn().set(false);

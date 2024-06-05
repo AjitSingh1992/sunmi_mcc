@@ -35,8 +35,8 @@ android {
         applicationId "com.easyfoodvone"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 87
-        versionName "1.87"
+        versionCode 88
+        versionName "1.88"
         multiDexEnabled true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         manifestPlaceholders = [configChanges:"keyboard|keyboardHidden|orientation", // https://developer.android.com/guide/topics/manifest/activity-element#config
@@ -159,6 +159,7 @@ dependencies {
     implementation 'com.whatspos.sdk:paxstore-3rd-app-android-sdk:9.1.0'
     implementation 'com.ingenico.sdk:ingenico-api:3.5.1'
 
+    implementation 'com.google.android.play:core:1.10.3'
 
 /*
 

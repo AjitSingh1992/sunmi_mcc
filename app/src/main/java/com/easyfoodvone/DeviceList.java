@@ -9,6 +9,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -20,6 +22,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +37,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easyfoodvone.fragments.LoginFragment;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -45,6 +50,7 @@ import java.util.UUID;
 public class DeviceList  extends AppCompatActivity {
     private static String TAG = "---DeviceList";
     public static final int REQUEST_COARSE_LOCATION = 200;
+    public static final int REQUEST_BLUETOOTH_SCAN = 201;
 
     static public final int REQUEST_CONNECT_BT = 0*2300;
     static private final int REQUEST_ENABLE_BT = 0*1000;
@@ -107,9 +113,21 @@ public class DeviceList  extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_COARSE_LOCATION);
-        }else {
+        }else if (ContextCompat.checkSelfPermission(DeviceList.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                ActivityCompat.requestPermissions(DeviceList.this,
+                        new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                        REQUEST_BLUETOOTH_SCAN);
+            }
+        }else{
             proceedDiscovery();
         }
+
+
+
+
     }
 
 
@@ -274,16 +292,39 @@ public class DeviceList  extends AppCompatActivity {
 
                                 }
                             }
+                            if(namesArray.size()==0){
+                                alertDialog("No Printer Available",DeviceList.this);
+
+                            }
                         }
                     } catch (Exception ex) {
                         Log.e(TAG, ex.getMessage());
                     }
+
+
                 }
 
                 break;
         }
         mBluetoothAdapter.startDiscovery();
 
+    }
+    public static void alertDialog(String msg, Activity activity) {
+        LayoutInflater factory = LayoutInflater.from(activity);
+        final View mDialogView = factory.inflate(R.layout.alert_dialog, null);
+        final AlertDialog mDialog = new AlertDialog.Builder(activity).create();
+        mDialog.setView(mDialogView);
+        TextView msgText = mDialogView.findViewById(R.id.txt_message);
+        msgText.setText(msg);
+        mDialogView.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 mDialog.dismiss();
+//your business logic
+            }
+        });
+
+        mDialog.show();
     }
 
     private final BroadcastReceiver mBTReceiver = new BroadcastReceiver() {
@@ -331,6 +372,17 @@ public class DeviceList  extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_COARSE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    proceedDiscovery();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Permission is not granted!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            }
+            case REQUEST_BLUETOOTH_SCAN: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     proceedDiscovery();

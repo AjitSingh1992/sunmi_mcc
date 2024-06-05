@@ -16,13 +16,14 @@ import com.easyfoodvone.app_common.viewdata.DataPageRestaurantMenuDetails
 import com.easyfoodvone.app_common.ws.MenuCategoryItemsResponse
 import com.easyfoodvone.app_ui.R
 import com.easyfoodvone.app_ui.adapter.AdapterItemsList
+import com.easyfoodvone.app_ui.adapter.AdapterMealItemsList
 import com.easyfoodvone.app_ui.adapter.ItemTouchHelperAdapter
 import com.easyfoodvone.app_ui.adapter.SimpleItemTouchHelperCallback
 import com.easyfoodvone.app_ui.binding.UIVariationRestaurantMenuDetails
 import com.easyfoodvone.app_ui.databinding.PageRestaurantMenuDetailsBinding
 import com.easyfoodvone.app_ui.databinding.PageRestaurantMenuDetailsPhoneBinding
 
-class ViewRestaurantMenuDetail(val lifecycle: LifecycleSafe, val isPhone: Boolean, val data: DataPageRestaurantMenuDetails) {
+class ViewRestaurantMenuDetail(val lifecycle: LifecycleSafe, val isPhone: Boolean, val data: DataPageRestaurantMenuDetails,val isMeal:Boolean) {
 
     private var ui: UIVariationRestaurantMenuDetails<*>? = null
     private var itemTouchHelper: ItemTouchHelper? = null
@@ -46,10 +47,31 @@ class ViewRestaurantMenuDetail(val lifecycle: LifecycleSafe, val isPhone: Boolea
 
         }.apply {
             setData(data, Formatter(), lifecycle)
+            if(!isMeal) {
+                val adapter = AdapterItemsList(
+                    lifecycle,
+                    adapterParentInterface,
+                    inflater,
+                    data.menuItems,
+                    data.categoryRow.toggleIsOn,
+                    isPhone
+                )
+                recycler.setAdapter(adapter)
+                lifecycle.addObserverOnceUntilDestroy(data.menuItems, adapter, callNow=false)
 
-            val adapter = AdapterItemsList(lifecycle, adapterParentInterface, inflater, data.menuItems, data.categoryRow.toggleIsOn, isPhone)
-            recycler.setAdapter(adapter)
-            lifecycle.addObserverOnceUntilDestroy(data.menuItems, adapter, callNow=false)
+            }else{
+                val adapter = AdapterMealItemsList(
+                    lifecycle,
+                    adapterMealParentInterface,
+                    inflater,
+                    data.mealItems,
+                    data.categoryRow.toggleIsOn,
+                    isPhone
+                )
+                recycler.setAdapter(adapter)
+                lifecycle.addObserverOnceUntilDestroy(data.mealItems, adapter, callNow=false)
+
+            }
 
             itemTouchHelper = ItemTouchHelper(
                 object : SimpleItemTouchHelperCallback(touchHelperItemCallback) {
@@ -89,6 +111,24 @@ class ViewRestaurantMenuDetail(val lifecycle: LifecycleSafe, val isPhone: Boolea
 
         override fun onEditClicked(items: MenuCategoryItemsResponse.Items?) {
             data.outputEvents.onEditClicked(items ?: return)
+        }
+
+        override fun showToast(message: String) {
+            Toast.makeText(getRoot().context, message, Toast.LENGTH_SHORT).show();
+        }
+
+        override fun startReorderDrag(item: RecyclerView.ViewHolder) {
+            itemTouchHelper?.startDrag(item)
+        }
+    }
+
+    private val adapterMealParentInterface = object : AdapterMealItemsList.ParentInterface {
+        override fun onSetProductActive(item: MenuCategoryItemsResponse.Meals?, isActive: Boolean) {
+            data.outputEvents.onSetMealProductActive(item ?: return, isActive)
+        }
+
+        override fun onEditClicked(items: MenuCategoryItemsResponse.Meals?) {
+            data.outputEvents.onMealEditClicked(items ?: return)
         }
 
         override fun showToast(message: String) {

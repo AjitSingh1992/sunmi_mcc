@@ -13,6 +13,8 @@ class DataRowOrderDetail(
         val gbpSubTotal: ObservableField<String>,
         val gbpDeliveryCharges: ObservableField<String>,
         val gbpDiscount: ObservableField<String>,
+        val deliveryPIN: ObservableField<String>,
+        val customerDeliveryPINTitle: ObservableField<String>,
         val gbpTotal: ObservableField<String>,
         val notes: ObservableField<String>,
         val deliveryTableNumber: ObservableField<String>,

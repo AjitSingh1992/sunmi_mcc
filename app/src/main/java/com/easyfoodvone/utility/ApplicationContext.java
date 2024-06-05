@@ -96,7 +96,7 @@ public class ApplicationContext extends Application {
                 Log.i("Test","get dal cost:"+(System.currentTimeMillis() - start)+" ms");
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(appContext, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(appContext, "error occurred,DAL is null.", Toast.LENGTH_LONG).show();
             }
         }
         return dal;

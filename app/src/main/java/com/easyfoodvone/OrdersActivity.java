@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -57,6 +58,10 @@ import me.pushy.sdk.Pushy;
 import me.pushy.sdk.util.exceptions.PushyException;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 public class OrdersActivity extends AppCompatActivity {
 
@@ -72,6 +77,8 @@ public class OrdersActivity extends AppCompatActivity {
     private static final Random RANDOM = new Random(SystemClock.currentThreadTimeMillis());
 
     private Account account;
+    private AppUpdateManager appUpdate = null;
+    private static final int REQUEST_CODE = 100;
 
 
     @Override
@@ -91,6 +98,7 @@ public class OrdersActivity extends AppCompatActivity {
         // Swap from FullscreenThemeWithSplash (in the manifest) to FullscreenTheme
         setTheme(R.style.FullscreenTheme);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        appUpdate = AppUpdateManagerFactory.create(this);
 
         // Disable automatic fragment restoration, it is not worth the trouble
         savedInstanceState = null;
@@ -124,7 +132,7 @@ public class OrdersActivity extends AppCompatActivity {
                 }
 
             });
-        } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+        } else if (Helper.getDeviceName().contains("Saturn1000F2")) {
             UserPreferences.get().setDEVICE_TYPE(OrdersActivity.this, "4");
             Executors.newSingleThreadExecutor().execute(() -> {
                 try {
@@ -191,6 +199,8 @@ public class OrdersActivity extends AppCompatActivity {
                 requestPermissions();
             }
         }
+        checkUpdate();
+        inProgressUpdate();
     }
 
     @Override
@@ -385,6 +395,33 @@ public class OrdersActivity extends AppCompatActivity {
                     .setMessage(message)
                     .setPositiveButton(android.R.string.ok, null)
                     .show();
+        }
+    }
+    public void inProgressUpdate() {
+        if (appUpdate != null) {
+            appUpdate.getAppUpdateInfo().addOnSuccessListener(updateInfo -> {
+                if (updateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    try {
+                        appUpdate.startUpdateFlowForResult(updateInfo, AppUpdateType.IMMEDIATE, this, REQUEST_CODE);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+    public void checkUpdate() {
+        if (appUpdate != null) {
+            appUpdate.getAppUpdateInfo().addOnSuccessListener(updateInfo -> {
+                if (updateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                        && updateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    try {
+                        appUpdate.startUpdateFlowForResult(updateInfo, AppUpdateType.IMMEDIATE, this, REQUEST_CODE);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 

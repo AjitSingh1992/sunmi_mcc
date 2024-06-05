@@ -264,6 +264,29 @@
                 app:layout_constraintTop_toBottomOf="@+id/headingNotes"
                 app:layout_constraintStart_toStartOf="@+id/guideColumn1"
                 app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:id="@+id/customerDeliveryPINTitle"
+                android:text="@{data.customerDeliveryPINTitle, default=``}"
+
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn1"
+                app:layout_constraintTop_toBottomOf="@+id/textNotes"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn1" />
+
+            <TextView
+                style="@style/Phone_Text_Large_Bold_Black"
+                android:id="@+id/deliveryPIN"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="end"
+                android:text="@{data.deliveryPIN, default=``}"
+                app:layout_constraintTop_toBottomOf="@+id/textNotes"
+                app:layout_constraintStart_toStartOf="@+id/guideColumn3"
+                app:layout_constraintEnd_toEndOf="@+id/guideColumn3" />
 
             <include
                 layout="@layout/include_order_detail_heading"
@@ -271,7 +294,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                app:layout_constraintTop_toBottomOf="@+id/textNotes"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryPIN"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 bind:headingColumn1="@{`Delivery Details`}"

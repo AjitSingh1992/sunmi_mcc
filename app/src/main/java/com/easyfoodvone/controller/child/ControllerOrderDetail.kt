@@ -41,6 +41,8 @@ class ControllerOrderDetail(
             ObservableField(""),
             ObservableField(""),
             ObservableField(""),
+            ObservableField(""),
+            ObservableField(""),
             this.ViewEventHandler())
 
     private inner class ViewEventHandler : DataRowOrderDetail.OutputEvents {
@@ -83,6 +85,8 @@ class ControllerOrderDetail(
         data.gbpSubTotal.set(detail?.getSub_total()?.let { NewConstants.POUND + String.format("%.2f", it) } ?: "")
         data.gbpDeliveryCharges.set(detail?.getDelivery_charge()?.let { NewConstants.POUND + it } ?: "")
         data.gbpDiscount.set(detail?.getDiscount_amount()?.let { NewConstants.POUND + it } ?: "")
+        data.deliveryPIN.set(detail?.getDelivery_pin()?.let { NewConstants.BLANK + it } ?: "")
+        data.customerDeliveryPINTitle.set(detail?.getDelivery_pin()?.let { "Customer Delivery PIN" } ?: "")
         data.gbpTotal.set(detail?.getOrder_total()?.let { NewConstants.POUND + it } ?: "")
         data.notes.set(detail?.let { it.getOrder_notes()?.trim().let { if (TextUtils.isEmpty(it)) "-" else it } ?: "-" } ?: "")
         data.deliveryTableNumber.set(detail?.getUnitId()?.let { if (isDeliveryOptionTable) it else ""} ?: "")

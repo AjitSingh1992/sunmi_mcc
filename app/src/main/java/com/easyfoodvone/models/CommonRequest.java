@@ -71,6 +71,10 @@ public class CommonRequest {
     @SerializedName("is_permanent")
     String is_permanent;
 
+    @Expose
+    @SerializedName("is_meal")
+    String is_meal;
+
 
 
     public String getOffer_type() {
@@ -209,6 +213,14 @@ public class CommonRequest {
 
     public void setIs_permanent(String is_permanent) {
         this.is_permanent = is_permanent;
+    }
+
+   public String getIs_meal() {
+        return is_meal;
+    }
+
+    public void setIs_meal(String is_meal) {
+        this.is_meal = is_meal;
     }
 
     @Override

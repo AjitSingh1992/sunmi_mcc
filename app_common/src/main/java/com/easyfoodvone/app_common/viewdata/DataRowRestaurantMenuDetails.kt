@@ -12,7 +12,10 @@ class DataRowRestaurantMenuDetails(
         val toggleUI: ObservableField<ToggleUI>,
         val isEditClickable: ObservableField<Boolean>,
         val dragInProgress: ObservableField<Boolean>,
-        val outputEvents: OutputEvents) {
+        val outputEvents: OutputEvents,
+        val isEditAllow: ObservableField<Boolean>,
+
+        ) {
 
     enum class ToggleUI {
         CLICKABLE_IDLE,

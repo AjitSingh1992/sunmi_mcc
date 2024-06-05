@@ -59,6 +59,7 @@ public class NewDetailBean {
         private String delivery_date_time;
         private String delivery_charge;
         private String discount_amount;
+        private String delivery_pin;
         private Double sub_total;
         private String order_phone_number;
         private String voucher_id;
@@ -231,6 +232,13 @@ public class NewDetailBean {
 
         public void setDiscount_amount(String discount_amount) {
             this.discount_amount = discount_amount;
+        }
+        public String getDelivery_pin() {
+            return delivery_pin;
+        }
+
+        public void setDelivery_pin(String delivery_pin) {
+            this.delivery_pin = delivery_pin;
         }
 
         public Double getSub_total() {

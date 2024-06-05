@@ -103,6 +103,90 @@
             </LinearLayout>
 
         </LinearLayout>
+<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timing2"
+    android:visibility="gone"
+    android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@color/button_orange"/>
+
+            <TextView
+                style="@style/Phone_Text_Small_Regular_Black"
+                android:id="@+id/restaurant_timings_item_opening_time2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                tools:text="00:45-23:45"/>
+
+            <TextView
+                style="@style/Phone_Text_Small_Regular_Black"
+                android:id="@+id/restaurant_timings_item_collection_time2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                tools:text="00:45-23:45"/>
+
+            <TextView
+                style="@style/Phone_Text_Small_Regular_Black"
+                android:id="@+id/restaurant_timings_item_delivery_time2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="center"
+                tools:text="00:45-23:45"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/restaurant_timings_btn_edit2"
+                    android:contentDescription="Edit Button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_baseline_edit_24"
+                    android:background="?selectableItemBackgroundBorderless" />
+
+                <ImageView
+                    android:id="@+id/restaurant_timings_btn_del2"
+                    android:contentDescription="Delete Button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="12dp"
+                    android:visibility="gone"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_baseline_delete_outline_24" />
+
+                <ImageView
+                    android:id="@+id/restaurant_timings_btn_add2"
+                    android:contentDescription="Add Button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="12dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_baseline_add_circle_outline_24"
+                    app:tint="@color/button_orange" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

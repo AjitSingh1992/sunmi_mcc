@@ -123,6 +123,9 @@ public interface ApiInterface {
     @POST(ApiConstants.ACTIVE_DEACTIVE_MENU_PRODUCT)
     Single<MenuCategoryItemsResponse> activeDeactiveMenuProduct(@Header("Authorization") String Authorization,@Body CommonRequest request);
 
+    @POST(ApiConstants.ACTIVE_DEACTIVE_MEAL_PRODUCT)
+    Single<MenuCategoryItemsResponse> activeDeactiveMealProduct(@Header("Authorization") String Authorization,@Body CommonRequest request);
+
     @POST(ApiConstants.ACTIVE_DEACTIVE_MENU)
     Single<CommonResponse> activeDeactiveMenu(@Header("Authorization") String Authorization,@Body CommonRequest request);
 

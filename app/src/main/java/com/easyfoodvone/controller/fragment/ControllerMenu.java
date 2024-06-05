@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.easyfoodvone.MySingleTon;
 import com.easyfoodvone.api_handler.ApiClient;
 import com.easyfoodvone.api_handler.ApiInterface;
 import com.easyfoodvone.app_common.separation.LifecycleSafe;
@@ -109,6 +110,11 @@ public class ControllerMenu extends Fragment {
         @Override
         public void openMenuDetails(@NonNull MenuCategoryList.MenuCategories item) {
             parentInterface.openMenuDetails(item);
+            if(item.getMenu_category_name().equals("Meals")){
+                MySingleTon.getInstance().setMealItemON(true);
+            }else{
+                MySingleTon.getInstance().setMealItemON(false);
+            }
         }
 
         @Override

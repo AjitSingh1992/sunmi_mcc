@@ -79,7 +79,7 @@ public class UserPreferences {
 
             });
 
-        } else if (Helper.getDeviceName().contains("Qualcomm Saturn1000F2")) {
+        } else if (Helper.getDeviceName().contains("Saturn1000F2")) {
             UserPreferences.get().setDEVICE_TYPE(context, "4");
 
             Executors.newSingleThreadExecutor().execute(() -> {
